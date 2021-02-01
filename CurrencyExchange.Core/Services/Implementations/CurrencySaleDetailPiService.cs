@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CurrencyExchange.Core.Dtos.Paging;
-using CurrencyExchange.Core.Dtos.Sales.CurrencySaleExDec;
 using CurrencyExchange.Core.Dtos.Sales.CurrencySalePi;
 using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Core.Utilities.Extensions;
@@ -18,10 +17,14 @@ namespace CurrencyExchange.Core.Services.Implementations
         #region Costructor
 
         private readonly ICurrencySalePiDetailRepository _piDetailRepository;
+        private readonly ICurrencySaleRepository _currencySaleRepository;
+        private readonly IPiRepository _piRepository;
 
-        public CurrencySaleDetailPiService(ICurrencySalePiDetailRepository piDetailRepository)
+        public CurrencySaleDetailPiService(ICurrencySalePiDetailRepository piDetailRepository, ICurrencySaleRepository currencySaleRepository, IPiRepository piRepository)
         {
             _piDetailRepository = piDetailRepository;
+            _currencySaleRepository = currencySaleRepository;
+            _piRepository = piRepository;
         }
 
         #endregion
@@ -41,13 +44,18 @@ namespace CurrencyExchange.Core.Services.Implementations
             filterDto.CurrencySaleDetailPi = new List<CurrencySaleDetailPiDto>();
             foreach (var item in list)
             {
+                var currencySaleItem = await _currencySaleRepository.GetByIdIncludes(item.CurrencySaleId);
+
+                var piDetail = await _piRepository.GetEntityById(item.PeroformaInvoiceDetailId??1);
                 filterDto.CurrencySaleDetailPi.Add(new CurrencySaleDetailPiDto()
                 {
                     Id = item.Id,
-                    CurrencySaleId = item.CurrencySaleId,
+                    BrokerName = currencySaleItem.Broker.Name + " ("+ currencySaleItem.Broker.Title + ") " ,
+                    CurrSaleDate = currencySaleItem.SaleDate,
+                    CustomerName = currencySaleItem.Customer.Name,
                     Price = item.Price,
-                    PeroformaInvoiceDetailId = item.PeroformaInvoiceDetailId ?? 0,
-                    ProfitLossAmount = item.ProfitLossAmount
+                    ProfitLossAmount = item.ProfitLossAmount,
+                    PiCode = piDetail.PiCode
                 });
             }
             return filterDto.SetCurrencySaleExDec(filterDto.CurrencySaleDetailPi).SetPaging(pager);
@@ -72,13 +80,18 @@ namespace CurrencyExchange.Core.Services.Implementations
             filterDto.CurrencySaleDetailPi = new List<CurrencySaleDetailPiDto>();
             foreach (var item in list)
             {
+                var currencySaleItem = await _currencySaleRepository.GetByIdIncludes(item.CurrencySaleId);
+
+                var piDetail = await _piRepository.GetEntityById(item.PeroformaInvoiceDetailId ?? 1);
                 filterDto.CurrencySaleDetailPi.Add(new CurrencySaleDetailPiDto()
                 {
                     Id = item.Id,
-                    CurrencySaleId = item.CurrencySaleId,
+                    BrokerName = currencySaleItem.Broker.Name + " (" + currencySaleItem.Broker.Title + ") ",
+                    CurrSaleDate = currencySaleItem.SaleDate,
+                    CustomerName = currencySaleItem.Customer.Name,
                     Price = item.Price,
-                    PeroformaInvoiceDetailId = item.PeroformaInvoiceDetailId ?? 0,
-                    ProfitLossAmount = item.ProfitLossAmount
+                    ProfitLossAmount = item.ProfitLossAmount,
+                    PiCode = piDetail.PiCode
                 });
             }
             return filterDto.SetCurrencySaleExDec(filterDto.CurrencySaleDetailPi).SetPaging(pager);
@@ -90,6 +103,8 @@ namespace CurrencyExchange.Core.Services.Implementations
         public void Dispose()
         {
             _piDetailRepository?.Dispose();
+            _currencySaleRepository?.Dispose();
+            _piRepository?.Dispose();
         }
         #endregion
 

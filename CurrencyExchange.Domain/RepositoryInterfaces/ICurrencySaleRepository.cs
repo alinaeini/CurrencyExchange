@@ -7,6 +7,6 @@ namespace CurrencyExchange.Domain.RepositoryInterfaces
 {
     public interface ICurrencySaleRepository:IGenericRepository<CurrencySale>
     {
-       
+        Task<CurrencySale> GetByIdIncludes(long currSaleId);
     }
 }

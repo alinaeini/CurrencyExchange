@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 using CurrencyExchange.Core.Dtos.Paging;
 using CurrencyExchange.Core.Dtos.Pi.PiDetail;
 using CurrencyExchange.Core.Dtos.Sales.CurrencySaleExDec;
@@ -18,11 +19,14 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         #region Costructor
 
-        //private readonly ICurrencySaleRepository _currencySaleRepository;
+        private readonly IExDeclarationRepository _declarationRepository;
+        private readonly ICurrencySaleRepository _currencySaleRepository;
         private readonly ICurrencySaleExDecRepository _currencySaleExDecRepository;
 
-        public CurrencySaleDetailExDecService(ICurrencySaleExDecRepository currencySaleExDecRepository)
+        public CurrencySaleDetailExDecService(IExDeclarationRepository declarationRepository, ICurrencySaleRepository currencySaleRepository, ICurrencySaleExDecRepository currencySaleExDecRepository)
         {
+            _declarationRepository = declarationRepository;
+            _currencySaleRepository = currencySaleRepository;
             _currencySaleExDecRepository = currencySaleExDecRepository;
         }
 
@@ -45,12 +49,16 @@ namespace CurrencyExchange.Core.Services.Implementations
             filterDto.CurrencySaleExDecs = new List<CurrencySaleExDecDto>();
             foreach (var item in list)
             {
+                var currencySaleItem = await _currencySaleRepository.GetByIdIncludes(item.CurrencySaleId);
+
+                var exDec = await _declarationRepository.GetEntityById(item.ExDeclarationId);
                 filterDto.CurrencySaleExDecs.Add(new CurrencySaleExDecDto()
                 {
                     Id=item.Id,
-                    CurrSaleExDecId = item.Id,
-                    CurrencySaleId = item.CurrencySaleId,
-                    ExDeclarationId = item.ExDeclarationId,
+                    CurrSaleDate = currencySaleItem.SaleDate,
+                    BrokerName = currencySaleItem.Broker.Name + " ("+ currencySaleItem.Broker.Title + ") " ,
+                    CustomerName = currencySaleItem.Customer.Name,
+                    ExDecCode = exDec.ExchangeDeclarationCode,
                     Price = item.Price
                 });
             }
@@ -77,12 +85,15 @@ namespace CurrencyExchange.Core.Services.Implementations
             filterDto.CurrencySaleExDecs = new List<CurrencySaleExDecDto>();
             foreach (var item in list)
             {
+                var currencySaleItem = await _currencySaleRepository.GetEntityById(item.CurrencySaleId);
+
                 filterDto.CurrencySaleExDecs.Add(new CurrencySaleExDecDto()
                 {
                     Id = item.Id,
-                    CurrSaleExDecId = item.Id,
-                    CurrencySaleId = item.CurrencySaleId,
-                    ExDeclarationId = item.ExDeclarationId,
+                    CurrSaleDate = currencySaleItem.SaleDate,
+                    BrokerName = currencySaleItem.Broker.Name + " (" + currencySaleItem.Broker.Title + ") ",
+                    CustomerName = currencySaleItem.Customer.Name,
+                    ExDecCode = item.ExDeclaration.ExchangeDeclarationCode,
                     Price = item.Price
                 });
             }
@@ -95,6 +106,8 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         public void Dispose()
         {
+            _declarationRepository?.Dispose();
+            _currencySaleRepository?.Dispose();
             _currencySaleExDecRepository?.Dispose();
         }
 

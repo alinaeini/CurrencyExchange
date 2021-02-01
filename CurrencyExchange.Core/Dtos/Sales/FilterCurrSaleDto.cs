@@ -1,22 +1,21 @@
 ﻿using System.Collections.Generic;
 using CurrencyExchange.Core.Dtos.Paging;
+using CurrencyExchange.Core.Dtos.Sales.CurrencySalePi;
 
-namespace CurrencyExchange.Core.Dtos.Sales.CurrencySaleExDec
+namespace CurrencyExchange.Core.Dtos.Sales
 {
-    public class FilterCurrSaleExDecDto : BasePaging
+    public class FilterCurrSaleDto : BasePaging
     {
         #region Properties
 
         public string SearchText { get; set; }
-        public long Id { get; set; }
-        public List<CurrencySaleExDecDto> CurrencySaleExDecs { get; set; }
-
+        public List<CurrencySaleDto> CurrencySale { get; set; }
 
         #endregion
 
         #region Methods
 
-        public FilterCurrSaleExDecDto SetPaging(BasePaging paging)
+        public FilterCurrSaleDto SetPaging(BasePaging paging)
         {
             this.PageId = paging.PageId;
             this.PageCount = paging.PageCount;
@@ -29,9 +28,9 @@ namespace CurrencyExchange.Core.Dtos.Sales.CurrencySaleExDec
 
         }
 
-        public FilterCurrSaleExDecDto SetCurrencySaleExDec(List<CurrencySaleExDecDto> currencySaleExDecs)
+        public FilterCurrSaleDto SetCurrencySale(List<CurrencySaleDto> currencySale)
         {
-            this.CurrencySaleExDecs = currencySaleExDecs;
+            this.CurrencySale = currencySale;
             return this;
 
         }

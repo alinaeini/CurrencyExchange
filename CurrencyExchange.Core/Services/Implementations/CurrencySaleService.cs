@@ -1,10 +1,16 @@
-﻿using CurrencyExchange.Core.Dtos.Sales;
+﻿using System;
+using CurrencyExchange.Core.Dtos.Sales;
 using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Domain.EntityModels.Sales;
 using CurrencyExchange.Domain.RepositoryInterfaces;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using CurrencyExchange.Core.Dtos.Paging;
+using CurrencyExchange.Core.Dtos.Sales.CurrencySalePi;
+using CurrencyExchange.Core.Utilities.Extensions;
 using CurrencyExchange.Domain.EntityModels.PeroformaInvoices;
+using Microsoft.EntityFrameworkCore;
 
 namespace CurrencyExchange.Core.Services.Implementations
 {
@@ -53,7 +59,6 @@ namespace CurrencyExchange.Core.Services.Implementations
                     TransferPrice = createPiDto.TransferPrice,
                     Description = createPiDto.Description
                 };
-                //var insertedCurrencySale = await _saleRepository.CustomeAddEntity(currencySale);
                 await _saleRepository.AddEntity(currencySale);
                 await _saleRepository.SaveChanges();
 
@@ -71,6 +76,40 @@ namespace CurrencyExchange.Core.Services.Implementations
             }
             return result;
         }
+
+        #region Filter Currency Sale 
+
+        public async Task<FilterCurrSaleDto> GetListSales(FilterCurrSaleDto filterDto)
+        {
+            var asQueryable = _saleRepository
+                .GetEntities()
+                .AsQueryable();
+
+            var count = (int)Math.Ceiling(asQueryable.Count() / (double)filterDto.TakeEntity);
+            var pager = Pager.Builder(count, filterDto.PageId, filterDto.TakeEntity);
+            var list = await asQueryable.Paging(pager).ToListAsync();
+            filterDto.CurrencySale = new List<CurrencySaleDto>();
+            foreach (var item in list)
+            {
+                var currencySaleItem = await _saleRepository.GetByIdIncludes(item.Id);
+
+                var sumProfit = await _salePiDetailRepository.GetSumProfitLost(item.Id);
+                filterDto.CurrencySale.Add(new CurrencySaleDto
+                {
+                    Id = item.Id,
+                    BrokerName = currencySaleItem.Broker.Name + " (" + currencySaleItem.Broker.Title + ") ",
+                    CurrSaleDate = currencySaleItem.SaleDate,
+                    CustomerName = currencySaleItem.Customer.Name,
+                    Price = item.SalePrice,
+                    ProfitLossAmount = sumProfit,
+                    SalePricePerUnit = item.SalePricePerUnit,
+                    TransferPrice = item.TransferPrice,
+                });
+            }
+            return filterDto.SetCurrencySale(filterDto.CurrencySale).SetPaging(pager);
+        }
+
+        #endregion
 
         #endregion
 
@@ -134,7 +173,7 @@ namespace CurrencyExchange.Core.Services.Implementations
 
                 var exdecEntity = await _declarationRepository.GetEntityById(exdec.Id);
                 var usedPriceOfExdecCode = await _saleExDecRepository.GetSumExCodeUsedById(exdec.Id);
-                var remaindPriceOfExdecCode = exdecEntity.Price - usedPriceOfExdecCode;
+                var remaindPriceOfExdecCode = exdec.Price - usedPriceOfExdecCode;
                 //if (exdecEntity.Price < exdec.Price)
                 //{
                 //    return SalesResult.ExDecAccountBalanceIsLowerThanPrice;
@@ -169,7 +208,7 @@ namespace CurrencyExchange.Core.Services.Implementations
                     Price = price,
                     ExDeclarationId = exdec.Id
                 };
-                 await _saleExDecRepository.AddEntity(currencySaleDetailEx);
+                await _saleExDecRepository.AddEntity(currencySaleDetailEx);
                 await _saleExDecRepository.SaveChanges();
 
                 #endregion
@@ -177,7 +216,7 @@ namespace CurrencyExchange.Core.Services.Implementations
                
 
                 #region Update Sold In ExDeclaration
-                if (price + usedPriceOfExdecCode == exdecEntity.Price)
+                if (price + usedPriceOfExdecCode >= exdecEntity.Price)
                 {               
                     var updateSoldExdec = await _declarationRepository.SoldedDeclaration(exdecEntity.Id);
                     if (!updateSoldExdec)
@@ -207,8 +246,9 @@ namespace CurrencyExchange.Core.Services.Implementations
             {
                 #region Validation - PiDetail Price Is Ok
 
-                var usedPriceOfExdecCode = await _salePiDetailRepository.GetSumPiCodeUsedById(piDetailDto.Id);
-                var remaindPriceOfExdecCode = piDetailDto.DepositPrice - usedPriceOfExdecCode;
+                var usedPriceOfPiCode = await _salePiDetailRepository.GetSumPiCodeUsedById(piDetailDto.Id);
+                var remaindPriceOfPiCode = piDetailDto.DepositPrice - usedPriceOfPiCode;
+                var priceOfSales = saleDto.SalePrice + saleDto.TransferPrice;
                 //if (piDetailDto.DepositPrice < remaindPriceOfExdecCode)
                 //{
                 //    return SalesResult.PiAccountBalanceIsLowerThanPrice;
@@ -216,18 +256,24 @@ namespace CurrencyExchange.Core.Services.Implementations
 
                 long price;
                 long profit;
-                if ( saleDto.SalePrice >= remaindPriceOfExdecCode)
-                    price = remaindPriceOfExdecCode;
+                var piBasePrice = piDetailDto.PeroformaInvoice.BasePrice;
+                if (priceOfSales >= remaindPriceOfPiCode)
+                    price = remaindPriceOfPiCode;
                 else
                     price = piDetailDto.DepositPrice;
 
-                if (price + totalInserted > saleDto.SalePrice)
+                if (price + totalInserted > priceOfSales)
                 {
-                    price = saleDto.SalePrice - totalInserted;
+                    price = priceOfSales - totalInserted;
+                    profit = (saleDto.SalePricePerUnit - piBasePrice) * (price- saleDto.TransferPrice);
+                }
+                else
+                {
+                    profit = (saleDto.SalePricePerUnit - piBasePrice) * price;
                 }
 
-                var piBasePrice =  piDetailDto.PeroformaInvoice.BasePrice;
-                profit = (saleDto.SalePricePerUnit - piBasePrice) * price;
+                
+                
 
                 #endregion
 
@@ -247,7 +293,7 @@ namespace CurrencyExchange.Core.Services.Implementations
 
                 #region Update Sold In PiDetail
 
-                if (price + usedPriceOfExdecCode == piDetailDto.DepositPrice)
+                if (price + usedPriceOfPiCode == piDetailDto.DepositPrice)
                 {
                     var updateSold = await _piDetailRepository.SoldedPiDetail(piDetailDto.Id);
                     if (!updateSold)
@@ -260,7 +306,7 @@ namespace CurrencyExchange.Core.Services.Implementations
                 #endregion
 
                 totalInserted += price;
-                if (totalInserted == saleDto.SalePrice)
+                if (totalInserted == priceOfSales)
                 {
                     return SalesResult.Success;
                 }

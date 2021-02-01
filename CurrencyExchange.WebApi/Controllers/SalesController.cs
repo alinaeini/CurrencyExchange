@@ -113,5 +113,16 @@ namespace CurrencyExchange.WebApi.Controllers
 
         #endregion
 
+        #region Filter On CurrencySale
+
+        [HttpGet("sale-filter-currSale")]
+        public async Task<IActionResult> GetFilterCurrencySale([FromQuery] FilterCurrSaleDto filterPiDto)
+        {
+            var piDetail = await _saleService.GetListSales(filterPiDto);
+            return JsonResponseStatus.Success(piDetail);
+
+        }
+
+        #endregion
     }
 }

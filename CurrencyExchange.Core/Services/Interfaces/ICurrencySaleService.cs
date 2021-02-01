@@ -7,6 +7,7 @@ namespace CurrencyExchange.Core.Services.Interfaces
     public interface ICurrencySaleService :IDisposable
     {
         Task<SalesResult> Create(CreateSaleDto createPiDto);
+        Task<FilterCurrSaleDto> GetListSales(FilterCurrSaleDto filterPiDto);
     }
 }
 

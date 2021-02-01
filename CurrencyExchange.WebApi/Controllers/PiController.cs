@@ -52,6 +52,8 @@ namespace CurrencyExchange.WebApi.Controllers
 
         #region Filter Pi
 
+        #region Filter Pi Is Not Sold
+
         [HttpGet("filter-pi")]
         public async Task<IActionResult> GetPi([FromQuery] FilterPiDto filterPiDto)
         {
@@ -59,7 +61,18 @@ namespace CurrencyExchange.WebApi.Controllers
             return JsonResponseStatus.Success(pi);
         }
 
+        #endregion
 
+        #region GetPiAll
+
+        [HttpGet("filter-pi-all")]
+        public async Task<IActionResult> GetPiAll([FromQuery] FilterPiDto filterPiDto)
+        {
+            var pi = await _piService.GetPiesByFiltersIsSold(filterPiDto);
+            return JsonResponseStatus.Success(pi);
+        }
+
+        #endregion
 
         #endregion
 

@@ -30,7 +30,12 @@ namespace CurrencyExchange.Data.Repositories
                 .SumAsync(entity => entity.Price);
         }
 
-
+        public async Task<long> GetSumProfitLost(long currId)
+        {
+            return await _context.CurrencySaleDetailPis
+                .Where(entity => entity.CurrencySaleId == currId)
+                .SumAsync(entity => entity.ProfitLossAmount);
+        }
 
         #endregion
     }

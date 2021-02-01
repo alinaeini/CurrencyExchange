@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CurrencyExchange.Core.Dtos.Sales.CurrencySalePi
 {
@@ -17,9 +18,11 @@ namespace CurrencyExchange.Core.Dtos.Sales.CurrencySalePi
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public long ProfitLossAmount { get; set; }
 
-        public long CurrencySaleId { get; set; }
-        public long PeroformaInvoiceDetailId { get; set; }
 
+        public DateTime CurrSaleDate { get; set; }
+        public string PiCode { get; set; }
+        public string BrokerName { get; set; }
+        public string CustomerName { get; set; }
 
 
         #endregion
