@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CurrencyExchange.Data.Context;
-using CurrencyExchange.Data.Repositories.Generics;
 using CurrencyExchange.Domain.EntityModels.PeroformaInvoices;
 using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data_Base.Context;
+using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Data.Repositories
+namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
 {
     public class PiDetailRepository : GenericRepository<PeroformaInvoiceDetail>, IPiDetailRepository
     {
@@ -30,7 +30,7 @@ namespace CurrencyExchange.Data.Repositories
             var piDetail = await _context.PeroformaInvoiceDetails.FirstOrDefaultAsync(x => x.Id == id);
             piDetail.IsSold = true;
             _context.PeroformaInvoiceDetails.Update(piDetail);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
             return true;
 
         }

@@ -7,6 +7,6 @@ namespace CurrencyExchange.Domain.RepositoryInterfaces
     public interface IUserRoleRepository:IGenericRepository<UserRole>
     {
         public  bool CheckAdminRoleByUserId(long userId);
-         public Task<Role> GetUserRoleByUserId(long userId);
+         public Task<UserRole> GetUserRoleByUserId(long userId);
     }
 }

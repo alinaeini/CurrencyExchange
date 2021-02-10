@@ -12,7 +12,7 @@ namespace CurrencyExchange.WebApi.Controllers
         #region Constructor
 
         private IExDeclarationService exDeclarationService;
-        
+
         public ExdeclarationController(IExDeclarationService exDeclarationService)
         {
             this.exDeclarationService = exDeclarationService;
@@ -23,25 +23,20 @@ namespace CurrencyExchange.WebApi.Controllers
         #region Create
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateExdec([FromBody]  CreateExDecDto exDeclarationDto)
+        public async Task<IActionResult> CreateExdec([FromBody] CreateExDecDto exDeclarationDto)
         {
             if (ModelState.IsValid)
             {
                 var res = await exDeclarationService.CreateExDec(exDeclarationDto);
                 switch (res)
                 {
-
                     case ExDeclarationResult.ExDecIsExist:
-                        return JsonResponseStatus.Error(new { Info = "شماره اظهارنامه وارد شده قبلا در سیستم ثبت شده" });
-
-
+                        return JsonResponseStatus.Error(new {Info = "شماره اظهارنامه وارد شده قبلا در سیستم ثبت شده"});
                 }
             }
+
             return JsonResponseStatus.Success();
         }
-
-
-
 
         #endregion
 
@@ -69,7 +64,6 @@ namespace CurrencyExchange.WebApi.Controllers
 
         #endregion
 
-
         #endregion
 
         #region Edit ExDec
@@ -83,13 +77,11 @@ namespace CurrencyExchange.WebApi.Controllers
                 switch (result)
                 {
                     case ExDeclarationResult.ExDecCanNotUpdate:
-                        return JsonResponseStatus.Error(new { info = "اظهارنامه ویرایش نشد " });
-
+                        return JsonResponseStatus.Error(new {info = "اظهارنامه ویرایش نشد "});
                 }
-
             }
-            return JsonResponseStatus.Success();
 
+            return JsonResponseStatus.Success();
         }
 
 
@@ -103,8 +95,9 @@ namespace CurrencyExchange.WebApi.Controllers
                 return JsonResponseStatus.Success(exDec);
             }
 
-            return JsonResponseStatus.Error(new { info = "اظهارنامه ویرایش نشد " });
+            return JsonResponseStatus.Error(new {info = "اظهارنامه ویرایش نشد "});
         }
+
         #endregion
 
         #region Get ExDeclaration List
@@ -118,7 +111,7 @@ namespace CurrencyExchange.WebApi.Controllers
                 return JsonResponseStatus.Success(exDecList);
             }
 
-            return JsonResponseStatus.Error(new { info = "هیچ اظهارنامه ای دریافت نشد " });
+            return JsonResponseStatus.Error(new {info = "هیچ اظهارنامه ای دریافت نشد "});
         }
 
         #endregion
@@ -136,8 +129,7 @@ namespace CurrencyExchange.WebApi.Controllers
                 switch (exDec)
                 {
                     case ExDeclarationResult.ExDecCanNotDelete:
-                        return JsonResponseStatus.Error(new { info = "اظهارنامه حذف نشد " });
-
+                        return JsonResponseStatus.Error(new {info = "اظهارنامه حذف نشد "});
                 }
             }
 

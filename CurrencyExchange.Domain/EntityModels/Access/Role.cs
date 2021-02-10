@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using CurrencyExchange.Domain.EntityModels.Common;
 
 namespace CurrencyExchange.Domain.EntityModels.Access
@@ -19,7 +20,7 @@ namespace CurrencyExchange.Domain.EntityModels.Access
         #endregion
 
         #region Relations
-
+        //[ForeignKey("UserRoleId")]
         public ICollection<UserRole> UserRoles { get; set; }
 
         #endregion

@@ -17,6 +17,7 @@ namespace CurrencyExchange.WebApi.Controllers
         {
             this._brokerService = brokerService;
         }
+
         #endregion
 
         #region Create
@@ -29,12 +30,11 @@ namespace CurrencyExchange.WebApi.Controllers
                 var res = await _brokerService.Create(broker);
                 switch (res)
                 {
-
                     case BrokerResult.BrokerIsExist:
-                        return JsonResponseStatus.Error(new { Info = "کارگزار مورد نظر , قبلا در سیستم ثبت شده" });
-
+                        return JsonResponseStatus.Error(new {Info = "کارگزار مورد نظر , قبلا در سیستم ثبت شده"});
                 }
             }
+
             return JsonResponseStatus.Success();
         }
 
@@ -48,8 +48,6 @@ namespace CurrencyExchange.WebApi.Controllers
             var Broker = await _brokerService.GetBrokersByFiltersList(filterBrokerDto);
             return JsonResponseStatus.Success(Broker);
         }
-        
-
 
         #endregion
 
@@ -64,13 +62,11 @@ namespace CurrencyExchange.WebApi.Controllers
                 switch (result)
                 {
                     case BrokerResult.CanNotUpdate:
-                        return JsonResponseStatus.Error(new { info = "کارگزار ویرایش نشد " });
-
+                        return JsonResponseStatus.Error(new {info = "کارگزار ویرایش نشد "});
                 }
-
             }
-            return JsonResponseStatus.Success();
 
+            return JsonResponseStatus.Success();
         }
 
 
@@ -84,8 +80,9 @@ namespace CurrencyExchange.WebApi.Controllers
                 return JsonResponseStatus.Success(Broker);
             }
 
-            return JsonResponseStatus.Error(new { info = "کارگزار ویرایش نشد " });
+            return JsonResponseStatus.Error(new {info = "کارگزار ویرایش نشد "});
         }
+
         #endregion
 
         #region GetBrokerList
@@ -99,7 +96,7 @@ namespace CurrencyExchange.WebApi.Controllers
                 return JsonResponseStatus.Success(brokerList);
             }
 
-            return JsonResponseStatus.Error(new { info = "هیچ کارگزاری دریافت نشد " });
+            return JsonResponseStatus.Error(new {info = "هیچ کارگزاری دریافت نشد "});
         }
 
         #endregion
@@ -117,8 +114,7 @@ namespace CurrencyExchange.WebApi.Controllers
                 switch (Broker)
                 {
                     case BrokerResult.CanNotDelete:
-                        return JsonResponseStatus.Error(new { info = "کارگزار حذف نشد " });
-
+                        return JsonResponseStatus.Error(new {info = "کارگزار حذف نشد "});
                 }
             }
 
@@ -126,6 +122,5 @@ namespace CurrencyExchange.WebApi.Controllers
         }
 
         #endregion
-       
     }
 }

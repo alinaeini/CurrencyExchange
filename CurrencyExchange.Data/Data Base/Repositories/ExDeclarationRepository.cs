@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CurrencyExchange.Data.Context;
-using CurrencyExchange.Data.Repositories.Generics;
 using CurrencyExchange.Domain.EntityModels.ExchangeDeclaration;
-using CurrencyExchange.Domain.EntityModels.PeroformaInvoices;
 using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data_Base.Context;
+using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Data.Repositories
+namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
 {
     public class ExDeclarationRepository : GenericRepository<ExDeclaration>, IExDeclarationRepository
     {
@@ -41,7 +40,7 @@ namespace CurrencyExchange.Data.Repositories
             var declaration = await _context.ExDeclarations.FirstOrDefaultAsync(x => x.Id == id);
             declaration.IsSold = true;
             _context.ExDeclarations.Update(declaration);
-            await _context.SaveChangesAsync();
+           // await _context.SaveChangesAsync();
             return true;
 
         }

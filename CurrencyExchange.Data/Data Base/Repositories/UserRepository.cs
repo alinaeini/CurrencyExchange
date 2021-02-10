@@ -1,12 +1,13 @@
-﻿using CurrencyExchange.Data.Context;
-using CurrencyExchange.Domain.EntityModels.Account;
-using CurrencyExchange.Domain.RepositoryInterfaces;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CurrencyExchange.Data.Repositories.Generics;
+using CurrencyExchange.Domain.EntityModels.Account;
+using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data_Base.Context;
+using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Data.Repositories
+namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
 {
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
@@ -57,6 +58,16 @@ namespace CurrencyExchange.Data.Repositories
         {
             return await _context.Users.Where(x => x.UserName == userName)
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task<List<User>> GetUsersAnyRoles(long userId)
+        {
+            //var userNotRole = await _context.Users.Where(x => 
+            //        !_context.UserRoles.Select(x => x.UserId).Contains(x.Id))
+            //            .ToListAsync();
+            var userNotRole = await _context.Users.Where(x => x.Id != userId && x.IsActivated && !x.IsDelete)
+                        .ToListAsync();
+            return userNotRole;
         }
 
         #endregion

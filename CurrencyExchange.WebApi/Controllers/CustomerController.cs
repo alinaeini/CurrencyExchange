@@ -11,7 +11,7 @@ namespace CurrencyExchange.WebApi.Controllers
     {
         #region Constructor
 
-        private readonly ICustomerService _customerService ;
+        private readonly ICustomerService _customerService;
 
         public CustomerController(ICustomerService customerService)
         {
@@ -30,16 +30,13 @@ namespace CurrencyExchange.WebApi.Controllers
                 var res = await _customerService.Create(customer);
                 switch (res)
                 {
-
                     case CustomerResult.CustomerIsExist:
-                        return JsonResponseStatus.Error(new { Info = "مشتری مورد نظر , قبلا در سیستم ثبت شده" });
-
-
+                        return JsonResponseStatus.Error(new {Info = "مشتری مورد نظر , قبلا در سیستم ثبت شده"});
                 }
             }
+
             return JsonResponseStatus.Success();
         }
-
 
         #endregion
 
@@ -54,8 +51,6 @@ namespace CurrencyExchange.WebApi.Controllers
             return JsonResponseStatus.Success(customers);
         }
 
-
-
         #endregion
 
         #region Edit Customer
@@ -69,13 +64,11 @@ namespace CurrencyExchange.WebApi.Controllers
                 switch (result)
                 {
                     case CustomerResult.CanNotUpdate:
-                        return JsonResponseStatus.Error(new { info = "مشتری ویرایش نشد " });
-
+                        return JsonResponseStatus.Error(new {info = "مشتری ویرایش نشد "});
                 }
-
             }
-            return JsonResponseStatus.Success();
 
+            return JsonResponseStatus.Success();
         }
 
 
@@ -85,12 +78,13 @@ namespace CurrencyExchange.WebApi.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 long customerId = long.Parse(id);
-                var customer =await _customerService.GetCustomerById(customerId);
+                var customer = await _customerService.GetCustomerById(customerId);
                 return JsonResponseStatus.Success(customer);
             }
 
-            return JsonResponseStatus.Error(new { info = "مشتری ویرایش نشد " });
+            return JsonResponseStatus.Error(new {info = "مشتری ویرایش نشد "});
         }
+
         #endregion
 
         #region GetCustomerList
@@ -104,7 +98,7 @@ namespace CurrencyExchange.WebApi.Controllers
                 return JsonResponseStatus.Success(customerList);
             }
 
-            return JsonResponseStatus.Error(new { info = "هیچ مشتری ارزی دریافت نشد " });
+            return JsonResponseStatus.Error(new {info = "هیچ مشتری ارزی دریافت نشد "});
         }
 
         #endregion
@@ -117,16 +111,15 @@ namespace CurrencyExchange.WebApi.Controllers
             var customer = CustomerResult.Success;
             if (User.Identity.IsAuthenticated)
             {
-                long customerId = long.Parse(id); 
+                long customerId = long.Parse(id);
                 customer = await _customerService.DeleteCustomerInfo(customerId);
                 switch (customer)
                 {
                     case CustomerResult.CanNotDelete:
-                        return JsonResponseStatus.Error(new { info = "مشتری حذف نشد " });
-
+                        return JsonResponseStatus.Error(new {info = "مشتری حذف نشد "});
                 }
             }
-            
+
             return JsonResponseStatus.Success(customer);
         }
 

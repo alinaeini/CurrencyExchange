@@ -1,10 +1,10 @@
 ﻿using System.Linq;
-using CurrencyExchange.Data.Context;
-using CurrencyExchange.Data.Repositories.Generics;
 using CurrencyExchange.Domain.EntityModels.Customers;
 using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data_Base.Context;
+using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;
 
-namespace CurrencyExchange.Data.Repositories
+namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
 {
     public class CustomerRepository : GenericRepository<Customer>, ICustomerRepository
     {

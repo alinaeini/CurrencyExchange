@@ -85,7 +85,7 @@ namespace CurrencyExchange.Core.Services.Implementations
             filterDto.CurrencySaleExDecs = new List<CurrencySaleExDecDto>();
             foreach (var item in list)
             {
-                var currencySaleItem = await _currencySaleRepository.GetEntityById(item.CurrencySaleId);
+                var currencySaleItem = await _currencySaleRepository.GetByIdIncludes(item.CurrencySaleId);
 
                 filterDto.CurrencySaleExDecs.Add(new CurrencySaleExDecDto()
                 {

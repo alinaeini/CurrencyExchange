@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CurrencyExchange.Data.Context;
-using CurrencyExchange.Data.Repositories.Generics;
 using CurrencyExchange.Domain.EntityModels.Sales;
 using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data_Base.Context;
+using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Data.Repositories
+namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
 {
     public class CurrencySaleExDecRepository : GenericRepository<CurrencySaleDetailExDec>, ICurrencySaleExDecRepository
     {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using CurrencyExchange.Domain.EntityModels.Access;
 using CurrencyExchange.Domain.EntityModels.Account;
 using CurrencyExchange.Domain.EntityModels.Broker;
@@ -11,7 +10,7 @@ using CurrencyExchange.Domain.EntityModels.PeroformaInvoices;
 using CurrencyExchange.Domain.EntityModels.Sales;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Data.Context
+namespace CurrencyExchange.Infrastructure.Data_Base.Context
 {
     public class CurrencyExchangeDbContext : DbContext
     {
@@ -28,6 +27,8 @@ namespace CurrencyExchange.Data.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<UserRolePermission> UserRolePermissions { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Broker> Brokers { get; set; }
         public DbSet<PeroformaInvoice> PeroformaInvoices { get; set; }

@@ -1,4 +1,4 @@
-﻿using CurrencyExchange.Data.Context;
+﻿using CurrencyExchange.Infrastructure.Data_Base.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

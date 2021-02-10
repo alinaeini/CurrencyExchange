@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using CurrencyExchange.Data.Context;
 using CurrencyExchange.Domain.EntityModels.Common;
 using CurrencyExchange.Domain.RepositoryInterfaces.Generics;
+using CurrencyExchange.Infrastructure.Data_Base.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Data.Repositories.Generics
+namespace CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity ,new()
     {
@@ -87,7 +87,23 @@ namespace CurrencyExchange.Data.Repositories.Generics
 
         public virtual async Task SaveChanges()
         {
-            await _context.SaveChangesAsync();
+            //var str = new List<string>();
+            //foreach (var entry in _context.ChangeTracker.Entries())
+            //{
+
+            //    str.Add("Name :  " + entry.Entity.GetType().Name + "State: " + entry.State.ToString());
+            //}
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+           
         }
 
         #endregion

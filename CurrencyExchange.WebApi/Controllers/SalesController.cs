@@ -9,10 +9,8 @@ using CurrencyExchange.WebApi.Controllers.Base;
 
 namespace CurrencyExchange.WebApi.Controllers
 {
-
     public class SalesController : AppBaseController
     {
-
         #region Constructor
 
         private readonly ICurrencySaleService _saleService;
@@ -20,15 +18,17 @@ namespace CurrencyExchange.WebApi.Controllers
         private readonly ICurrencySaleDetailPiService _saleDetailPiService;
 
 
-        public SalesController(ICurrencySaleService saleService, ICurrencySaleDetailExDecService saleDetailExDecService, ICurrencySaleDetailPiService saleDetailPiService)
+        public SalesController(ICurrencySaleService saleService, ICurrencySaleDetailExDecService saleDetailExDecService,
+            ICurrencySaleDetailPiService saleDetailPiService)
         {
             _saleService = saleService;
             _saleDetailExDecService = saleDetailExDecService;
-            _saleDetailPiService = saleDetailPiService; 
+            _saleDetailPiService = saleDetailPiService;
         }
+
         #endregion
 
-        #region Create 
+        #region Create
 
         [HttpPost("create")]
         public async Task<IActionResult> CreateSales([FromBody] CreateSaleDto createSaleDto)
@@ -39,19 +39,22 @@ namespace CurrencyExchange.WebApi.Controllers
                 switch (res)
                 {
                     case SalesResult.CanNotUpdateSoldExDecInDataBase:
-                        return JsonResponseStatus.Error(new { Info = "هنوز اظهارنامه به لیست فروش رفته ها وارد نشده است " });
+                        return JsonResponseStatus.Error(new
+                            {Info = "هنوز اظهارنامه به لیست فروش رفته ها وارد نشده است "});
 
                     case SalesResult.CanNotUpdateSoldPiDetailInDataBase:
-                        return JsonResponseStatus.Error(new { Info = "هنوز PI به لیست فروش رفته ها وارد نشده است " });
+                        return JsonResponseStatus.Error(new {Info = "هنوز PI به لیست فروش رفته ها وارد نشده است "});
 
                     case SalesResult.SumBrokerAccountBalanceIsLowerThanPrice:
-                        return JsonResponseStatus.Error(new { Info = " مقدار انتخاب شده برای فروش از مقدار موجودی کارگزار بیشتر است" });
+                        return JsonResponseStatus.Error(new
+                            {Info = " مقدار انتخاب شده برای فروش از مقدار موجودی کارگزار بیشتر است"});
 
                     case SalesResult.ExDecAccountBalanceIsLowerThanPrice:
-                        return JsonResponseStatus.Error(new { Info = "مقدارانتخاب شده برای فروش از مقدار  موجودی اظهارنامه بیشتر است" });
-
+                        return JsonResponseStatus.Error(new
+                            {Info = "مقدارانتخاب شده برای فروش از مقدار  موجودی اظهارنامه بیشتر است"});
                 }
             }
+
             return JsonResponseStatus.Success();
         }
 
@@ -66,7 +69,6 @@ namespace CurrencyExchange.WebApi.Controllers
         {
             var exdec = await _saleDetailExDecService.GetListExDecSalesByCurrencyId(filterPiDto);
             return JsonResponseStatus.Success(exdec);
-
         }
 
         #endregion
@@ -78,7 +80,6 @@ namespace CurrencyExchange.WebApi.Controllers
         {
             var exDec = await _saleDetailExDecService.GetListExDecSalesByExdecId(filterPiDto);
             return JsonResponseStatus.Success(exDec);
-
         }
 
         #endregion
@@ -94,7 +95,6 @@ namespace CurrencyExchange.WebApi.Controllers
         {
             var piDetail = await _saleDetailPiService.GetListPiSalesByCurrencyId(filterPiDto);
             return JsonResponseStatus.Success(piDetail);
-
         }
 
         #endregion
@@ -106,7 +106,6 @@ namespace CurrencyExchange.WebApi.Controllers
         {
             var piDetail = await _saleDetailPiService.GetListExDecSalesByPiDetailId(filterPiDto);
             return JsonResponseStatus.Success(piDetail);
-
         }
 
         #endregion
@@ -120,7 +119,6 @@ namespace CurrencyExchange.WebApi.Controllers
         {
             var piDetail = await _saleService.GetListSales(filterPiDto);
             return JsonResponseStatus.Success(piDetail);
-
         }
 
         #endregion

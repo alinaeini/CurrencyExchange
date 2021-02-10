@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AngleSharp.Css.Dom;
-using CurrencyExchange.Data.Context;
-using CurrencyExchange.Data.Repositories.Generics;
+﻿using System.Threading.Tasks;
 using CurrencyExchange.Domain.EntityModels.Sales;
 using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data_Base.Context;
+using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Data.Repositories
+namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
 {
     public class CurrencySaleRepository : GenericRepository<CurrencySale>, ICurrencySaleRepository
     {

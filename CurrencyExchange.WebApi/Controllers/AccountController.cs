@@ -15,10 +15,10 @@ using System.Threading.Tasks;
 
 namespace CurrencyExchange.WebApi.Controllers
 {
-
     public class AccountController : AppBaseController
     {
         #region Constructor
+
         private IUserService userService;
 
         public AccountController(IUserService userService)
@@ -38,13 +38,11 @@ namespace CurrencyExchange.WebApi.Controllers
                 var res = await userService.RegisterUser(registerUserDto);
                 switch (res)
                 {
-
                     case RegisterUserDto.RegisterUserResult.UserExist:
-                        return JsonResponseStatus.Error(new { Info = "نام کاربری شما در سیستم قبلا ثبت شده است" });
-
-
+                        return JsonResponseStatus.Error(new {Info = "نام کاربری شما در سیستم قبلا ثبت شده است"});
                 }
             }
+
             return JsonResponseStatus.Success();
         }
 
@@ -64,12 +62,14 @@ namespace CurrencyExchange.WebApi.Controllers
                     return JsonResponseStatus.Success();
                 }
             }
+
             return JsonResponseStatus.NotFound();
         }
 
         #endregion
 
         #region Login
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDto loginUserDtOs)
         {
@@ -78,25 +78,25 @@ namespace CurrencyExchange.WebApi.Controllers
                 var res = await userService.LoginUser(loginUserDtOs);
                 switch (res)
                 {
-
                     case LoginUserResult.UserAndPassAreNotValid:
-                        return JsonResponseStatus.Error(new { Info = "اطلاعات وارد شده نادرست میباشد" });
+                        return JsonResponseStatus.Error(new {Info = "اطلاعات وارد شده نادرست میباشد"});
 
                     case LoginUserResult.UserIsNotActive:
-                        return JsonResponseStatus.Error(new { Info = "نام کاربری وارد شده فعال نیست" });
+                        return JsonResponseStatus.Error(new {Info = "نام کاربری وارد شده فعال نیست"});
 
                     case LoginUserResult.UserDoesNotHAveAnyRoles:
-                        return JsonResponseStatus.Error(new { Info = "هیچ نقشی به کاربر انتخاب شده , اختصاص داده نشده است" });
+                        return JsonResponseStatus.Error(new
+                            {Info = "هیچ نقشی به کاربر انتخاب شده , اختصاص داده نشده است"});
 
                     case LoginUserResult.Success:
                         var user = await userService.GetUserByUserName(loginUserDtOs.UserName);
-                        var roleName =await userService.GetRoleByUserId(user.Id);
+                        var roleName = await userService.GetRoleByUserId(user.Id);
                         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AngularExchangeJwtBearer"));
                         var signinCredential = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                         var claimList = new List<Claim>()
                         {
                             new Claim(ClaimTypes.Name, user.UserName),
-                            new Claim(ClaimTypes.NameIdentifier , user.Id.ToString() )
+                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                         };
                         var userIdentity = new ClaimsIdentity(user.Id.ToString());
                         userIdentity.AddClaims(claimList);
@@ -104,11 +104,11 @@ namespace CurrencyExchange.WebApi.Controllers
                             issuer: "https://localhost:5001/",
                             expires: DateTime.Now.AddDays(1),
                             signingCredentials: signinCredential,
-                            claims:claimList
-                            );
-                        
-                        var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                            claims: claimList
+                        );
 
+                        var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                        var userPermissions = await userService.GetUserPermissions(user.Id);
                         return JsonResponseStatus.Success(new
                         {
                             token = tokenString,
@@ -116,38 +116,43 @@ namespace CurrencyExchange.WebApi.Controllers
                             firstName = user.FirstName,
                             lastName = user.LastName,
                             userId = user.Id,
-                            userRole = roleName
+                            userRole = roleName,
+                            userPermissions= userPermissions
                         });
                 }
             }
+
             return JsonResponseStatus.Success();
         }
 
         #endregion
 
         #region Check User Authentication
+
         [HttpPost("check-auth")]
         public async Task<IActionResult> CheckUserAuth()
         {
-            
             if (User.Identity.IsAuthenticated)
             {
-
                 var userId = User.GetUserId();
                 var userInfo = await userService.GetUserById(userId);
                 var roleName = await userService.GetRoleByUserId(userId);
+                var userPermissions = await userService.GetUserPermissions(userId);
                 var returnJson = JsonResponseStatus.Success(new
                 {
                     id = userInfo.Id,
                     firstName = userInfo.FirstName,
                     lastName = userInfo.LastName,
                     userName = userInfo.UserName,
-                    userRole = roleName
+                    userRole = roleName,
+                    userPermissions = userPermissions
                 });
                 return returnJson;
             }
-            return JsonResponseStatus.Error(new { Info = "کاربر مورد نظر در سیستم لاگین نیست" });
+
+            return JsonResponseStatus.Error(new {Info = "کاربر مورد نظر در سیستم لاگین نیست"});
         }
+
         #endregion
 
         #region Sgin Out
@@ -159,12 +164,10 @@ namespace CurrencyExchange.WebApi.Controllers
             {
                 await HttpContext.SignOutAsync();
                 return JsonResponseStatus.Success();
-
             }
+
             return JsonResponseStatus.Error();
         }
-
-
 
         #endregion
 
@@ -185,8 +188,25 @@ namespace CurrencyExchange.WebApi.Controllers
                 }
             }
 
-            return JsonResponseStatus.Error(new { Info = "کاربر ویرایش نشد " });
+            return JsonResponseStatus.Error(new {Info = "کاربر ویرایش نشد "});
         }
+
+        #endregion
+
+        #region userRole
+
+        [HttpPost("users-any-roles")]
+        public async Task<IActionResult> UsersHaveNotRoles()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userList = await userService.GetUsersThatAnyRoles(User.GetUserId());
+                if (userList.Count > 0 )
+                    return JsonResponseStatus.Success(userList);
+            }
+            return JsonResponseStatus.Error(new { Info = "کاربر مورد نظر در سیستم یافت نشد" });
+        }
+
         #endregion
     }
 }

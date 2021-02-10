@@ -19,7 +19,7 @@ namespace CurrencyExchange.WebApi
     {
         #region Constructor
 
-        public Startup(IConfiguration configuration,IWebHostEnvironment hostingEnvironment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             Configuration = configuration;
             HostingEnvironment = hostingEnvironment;
@@ -29,6 +29,7 @@ namespace CurrencyExchange.WebApi
         public IWebHostEnvironment HostingEnvironment { get; }
 
         #endregion
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -36,40 +37,38 @@ namespace CurrencyExchange.WebApi
                 new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile($"appsettings.json")
                     .Build()
-                );
+            );
 
             #region Application Services
 
-                services.RegisterServices();
+            services.RegisterServices();
 
             #endregion
 
             #region Add DbContext
 
-                services.AddApplicationDbContext(Configuration);
+            services.AddApplicationDbContext(Configuration);
 
             #endregion
 
             #region Authentication
 
-                services.AddAuthenticationAndJwtBearer();
+            services.AddAuthenticationAndJwtBearer();
 
             #endregion
 
             #region CORS
 
-                services.AddCorsPolicy();
+            services.AddCorsPolicy();
 
             #endregion
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -93,10 +92,6 @@ namespace CurrencyExchange.WebApi
                     name: "default",
                     template: "{controller=Broker}/{action=brokers}/{id?}");
             });
-
-
         }
-
-
     }
 }

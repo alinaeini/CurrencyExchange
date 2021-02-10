@@ -4,14 +4,16 @@ using CurrencyExchange.Infrastructure.Data_Base.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CurrencyExchange.Infrastructure.Migrations
 {
     [DbContext(typeof(CurrencyExchangeDbContext))]
-    partial class CurrencyExchangeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210207111851_CreateDb2")]
+    partial class CreateDb2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,7 +21,7 @@ namespace CurrencyExchange.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.1");
 
-            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Access.Permission", b =>
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Access.MenuItem", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +53,7 @@ namespace CurrencyExchange.Infrastructure.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Permissions");
+                    b.ToTable("MenuItems");
                 });
 
             modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Access.Role", b =>
@@ -88,36 +90,36 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2021, 2, 7, 14, 52, 13, 13, DateTimeKind.Local).AddTicks(1398),
+                            CreateDate = new DateTime(2021, 2, 7, 14, 48, 50, 568, DateTimeKind.Local).AddTicks(5339),
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 2, 7, 14, 52, 13, 13, DateTimeKind.Local).AddTicks(1432),
+                            LastUpdateDate = new DateTime(2021, 2, 7, 14, 48, 50, 568, DateTimeKind.Local).AddTicks(5386),
                             Name = "Admin",
                             Title = "راهبر سیستم"
                         },
                         new
                         {
                             Id = 2L,
-                            CreateDate = new DateTime(2021, 2, 7, 14, 52, 13, 13, DateTimeKind.Local).AddTicks(1522),
+                            CreateDate = new DateTime(2021, 2, 7, 14, 48, 50, 568, DateTimeKind.Local).AddTicks(5473),
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 2, 7, 14, 52, 13, 13, DateTimeKind.Local).AddTicks(1530),
+                            LastUpdateDate = new DateTime(2021, 2, 7, 14, 48, 50, 568, DateTimeKind.Local).AddTicks(5481),
                             Name = "Manager",
                             Title = "مدیر سیستم"
                         },
                         new
                         {
                             Id = 3L,
-                            CreateDate = new DateTime(2021, 2, 7, 14, 52, 13, 13, DateTimeKind.Local).AddTicks(1536),
+                            CreateDate = new DateTime(2021, 2, 7, 14, 48, 50, 568, DateTimeKind.Local).AddTicks(5487),
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 2, 7, 14, 52, 13, 13, DateTimeKind.Local).AddTicks(1540),
+                            LastUpdateDate = new DateTime(2021, 2, 7, 14, 48, 50, 568, DateTimeKind.Local).AddTicks(5491),
                             Name = "Fnc",
                             Title = "کاربر مالی "
                         },
                         new
                         {
                             Id = 4L,
-                            CreateDate = new DateTime(2021, 2, 7, 14, 52, 13, 13, DateTimeKind.Local).AddTicks(1546),
+                            CreateDate = new DateTime(2021, 2, 7, 14, 48, 50, 568, DateTimeKind.Local).AddTicks(5495),
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 2, 7, 14, 52, 13, 13, DateTimeKind.Local).AddTicks(1550),
+                            LastUpdateDate = new DateTime(2021, 2, 7, 14, 48, 50, 568, DateTimeKind.Local).AddTicks(5499),
                             Name = "Bsn",
                             Title = "کاربر بازرگانی"
                         });
@@ -170,7 +172,7 @@ namespace CurrencyExchange.Infrastructure.Migrations
                     b.Property<DateTime>("LastUpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("PermissionId")
+                    b.Property<long>("MenuItemId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("UserRoleId")
@@ -178,7 +180,7 @@ namespace CurrencyExchange.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PermissionId");
+                    b.HasIndex("MenuItemId");
 
                     b.HasIndex("UserRoleId");
 
@@ -303,11 +305,11 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         {
                             Id = 1L,
                             Address = "ندارد",
-                            CreateDate = new DateTime(2021, 2, 7, 14, 52, 13, 6, DateTimeKind.Local).AddTicks(4978),
+                            CreateDate = new DateTime(2021, 2, 7, 14, 48, 50, 562, DateTimeKind.Local).AddTicks(1121),
                             Description = "ندارد",
                             IsActive = true,
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 2, 7, 14, 52, 13, 10, DateTimeKind.Local).AddTicks(7405),
+                            LastUpdateDate = new DateTime(2021, 2, 7, 14, 48, 50, 566, DateTimeKind.Local).AddTicks(1401),
                             Name = "شرکت تضامنی علی نائیج حقیقی و شرکا",
                             ServiceChargeAccount = 0m,
                             ServiceChargeCash = 0m,
@@ -318,11 +320,11 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         {
                             Id = 2L,
                             Address = "ندارد",
-                            CreateDate = new DateTime(2021, 2, 7, 14, 52, 13, 11, DateTimeKind.Local).AddTicks(351),
+                            CreateDate = new DateTime(2021, 2, 7, 14, 48, 50, 566, DateTimeKind.Local).AddTicks(4157),
                             Description = "ندارد",
                             IsActive = true,
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 2, 7, 14, 52, 13, 11, DateTimeKind.Local).AddTicks(395),
+                            LastUpdateDate = new DateTime(2021, 2, 7, 14, 48, 50, 566, DateTimeKind.Local).AddTicks(4197),
                             Name = "شرکت تضامنی محمد رستمی و شرکا",
                             ServiceChargeAccount = 0m,
                             ServiceChargeCash = 0m,
@@ -614,9 +616,9 @@ namespace CurrencyExchange.Infrastructure.Migrations
                     b.ToTable("CurrencySaleDetailPis");
                 });
 
-            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Access.Permission", b =>
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Access.MenuItem", b =>
                 {
-                    b.HasOne("CurrencyExchange.Domain.EntityModels.Access.Permission", "Parent")
+                    b.HasOne("CurrencyExchange.Domain.EntityModels.Access.MenuItem", "Parent")
                         .WithMany()
                         .HasForeignKey("ParentId");
 
@@ -644,9 +646,9 @@ namespace CurrencyExchange.Infrastructure.Migrations
 
             modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Access.UserRolePermission", b =>
                 {
-                    b.HasOne("CurrencyExchange.Domain.EntityModels.Access.Permission", "Permission")
+                    b.HasOne("CurrencyExchange.Domain.EntityModels.Access.MenuItem", "MenuItem")
                         .WithMany("RolePermissions")
-                        .HasForeignKey("PermissionId")
+                        .HasForeignKey("MenuItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -656,7 +658,7 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Permission");
+                    b.Navigation("MenuItem");
 
                     b.Navigation("UserRole");
                 });
@@ -735,7 +737,7 @@ namespace CurrencyExchange.Infrastructure.Migrations
                     b.Navigation("PeroformaInvoiceDetails");
                 });
 
-            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Access.Permission", b =>
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Access.MenuItem", b =>
                 {
                     b.Navigation("RolePermissions");
                 });

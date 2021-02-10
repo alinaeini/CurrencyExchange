@@ -60,20 +60,22 @@ namespace CurrencyExchange.Core.Services.Implementations
                     Description = createPiDto.Description
                 };
                 await _saleRepository.AddEntity(currencySale);
-                await _saleRepository.SaveChanges();
-
                 #endregion
 
                 #region Insert Data To CurrencySalesDetail By System
 
-                var resulTask = await FillAutomaticCurrSaleDetail(createPiDto, currencySale.Id);
+                var resulTask = await FillAutomaticCurrSaleDetail(createPiDto, currencySale);
                 if (resulTask != SalesResult.Success)
                 {
+                    
                     return resulTask;
                 }
 
                 #endregion
             }
+
+
+            await _saleRepository.SaveChanges();
             return result;
         }
 
@@ -117,7 +119,7 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         #region FillAutomaticCurrSaleDetail
 
-        private async Task<SalesResult> FillAutomaticCurrSaleDetail(CreateSaleDto saleDto, long currencySalesId)
+        private async Task<SalesResult> FillAutomaticCurrSaleDetail(CreateSaleDto saleDto, CurrencySale currencySales)
         {
 
 
@@ -147,11 +149,11 @@ namespace CurrencyExchange.Core.Services.Implementations
 
             #region Insert Into  CurrencySalePi And CurrencySaleDetailExDec
 
-            var saleexDecResult = await InserSaleCurrExDec(exDecList, saleDto, currencySalesId);
+            var saleexDecResult = await InserSaleCurrExDec(exDecList, saleDto, currencySales);
             if (saleexDecResult != SalesResult.Success)
                 return saleexDecResult;
 
-            var salePiDetailResult = await InserSaleCurrPiDetail(piDetails, saleDto, currencySalesId);
+            var salePiDetailResult = await InserSaleCurrPiDetail(piDetails, saleDto, currencySales);
             if (salePiDetailResult != SalesResult.Success)
                 return salePiDetailResult;
 
@@ -164,7 +166,7 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         #region Insert Into CurrencySaleDetailExDec
 
-        private async Task<SalesResult> InserSaleCurrExDec(List<ExDecExport> exDecList, CreateSaleDto saleDto, long currencySalesId)
+        private async Task<SalesResult> InserSaleCurrExDec(List<ExDecExport> exDecList, CreateSaleDto saleDto, CurrencySale currencySales)
         {
             long totalInserted = 0;
             foreach (var exdec in exDecList)
@@ -204,20 +206,20 @@ namespace CurrencyExchange.Core.Services.Implementations
 
                 var currencySaleDetailEx = new CurrencySaleDetailExDec
                 {
-                    CurrencySaleId = currencySalesId,
+                    CurrencySale = currencySales,
                     Price = price,
                     ExDeclarationId = exdec.Id
                 };
                 await _saleExDecRepository.AddEntity(currencySaleDetailEx);
-                await _saleExDecRepository.SaveChanges();
+                //await _saleExDecRepository.SaveChanges();
 
                 #endregion
 
-               
+
 
                 #region Update Sold In ExDeclaration
                 if (price + usedPriceOfExdecCode >= exdecEntity.Price)
-                {               
+                {
                     var updateSoldExdec = await _declarationRepository.SoldedDeclaration(exdecEntity.Id);
                     if (!updateSoldExdec)
                         return SalesResult.CanNotUpdateSoldExDecInDataBase;
@@ -239,7 +241,7 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         #region Insert Into CurrencySaleDetailPi
 
-        private async Task<SalesResult> InserSaleCurrPiDetail(List<PeroformaInvoiceDetail> peroformaInvoiceDetails, CreateSaleDto saleDto, long currencySalesId)
+        private async Task<SalesResult> InserSaleCurrPiDetail(List<PeroformaInvoiceDetail> peroformaInvoiceDetails, CreateSaleDto saleDto, CurrencySale currencySales)
         {
             long totalInserted = 0;
             foreach (var piDetailDto in peroformaInvoiceDetails)
@@ -281,13 +283,13 @@ namespace CurrencyExchange.Core.Services.Implementations
 
                 var currencySaleDetailPi = new CurrencySaleDetailPi()
                 {
-                    CurrencySaleId = currencySalesId,
+                    CurrencySale = currencySales,
                     Price = price,
                     ProfitLossAmount = profit,
                     PeroformaInvoiceDetailId = piDetailDto.Id
                 };
                 await _salePiDetailRepository.AddEntity(currencySaleDetailPi);
-                await _salePiDetailRepository.SaveChanges();
+                //await _salePiDetailRepository.SaveChanges();
 
                 #endregion
 
@@ -300,7 +302,7 @@ namespace CurrencyExchange.Core.Services.Implementations
                         return SalesResult.CanNotUpdateSoldPiDetailInDataBase;
                 }
 
-                var updateBrokerAmount = await _brokerRepository.UpdateBrokerAmount(saleDto.BrokerId,price,false);
+                var updateBrokerAmount = await _brokerRepository.UpdateBrokerAmount(saleDto.BrokerId, price, false);
                 if (!updateBrokerAmount)
                     return SalesResult.CannotUpdateBrokerAmountBalance;
                 #endregion

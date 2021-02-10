@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CurrencyExchange.Data.Migrations
+namespace CurrencyExchange.Infrastructure.Migrations
 {
-    public partial class createDb : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,6 +21,7 @@ namespace CurrencyExchange.Data.Migrations
                     IsActive = table.Column<bool>(type: "bit", maxLength: 500, nullable: false),
                     ServiceChargeAccount = table.Column<decimal>(type: "decimal(6,3)", precision: 6, scale: 3, nullable: false),
                     ServiceChargeCash = table.Column<decimal>(type: "decimal(6,3)", precision: 6, scale: 3, nullable: false),
+                    AmountBalanceBroker = table.Column<long>(type: "bigint", nullable: true),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -68,6 +69,30 @@ namespace CurrencyExchange.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExDeclarations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MenuItems",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PersianName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    AccessLink = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ParentId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MenuItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MenuItems_MenuItems_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "MenuItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -286,13 +311,42 @@ namespace CurrencyExchange.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserRolePermissions",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserRoleId = table.Column<long>(type: "bigint", nullable: false),
+                    MenuItemId = table.Column<long>(type: "bigint", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRolePermissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRolePermissions_MenuItems_MenuItemId",
+                        column: x => x.MenuItemId,
+                        principalTable: "MenuItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRolePermissions_UserRoles_UserRoleId",
+                        column: x => x.UserRoleId,
+                        principalTable: "UserRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Brokers",
-                columns: new[] { "Id", "Address", "CreateDate", "Description", "IsActive", "IsDelete", "LastUpdateDate", "Name", "ServiceChargeAccount", "ServiceChargeCash", "Tel", "Title" },
+                columns: new[] { "Id", "Address", "AmountBalanceBroker", "CreateDate", "Description", "IsActive", "IsDelete", "LastUpdateDate", "Name", "ServiceChargeAccount", "ServiceChargeCash", "Tel", "Title" },
                 values: new object[,]
                 {
-                    { 1L, "ندارد", new DateTime(2021, 1, 24, 14, 15, 33, 324, DateTimeKind.Local).AddTicks(216), "ندارد", true, false, new DateTime(2021, 1, 24, 14, 15, 33, 328, DateTimeKind.Local).AddTicks(8051), "شرکت تضامنی علی نائیج حقیقی و شرکا", 0m, 0m, "ندارد", "صرافی اریکه" },
-                    { 2L, "ندارد", new DateTime(2021, 1, 24, 14, 15, 33, 329, DateTimeKind.Local).AddTicks(1197), "ندارد", true, false, new DateTime(2021, 1, 24, 14, 15, 33, 329, DateTimeKind.Local).AddTicks(1239), "شرکت تضامنی محمد رستمی و شرکا", 0m, 0m, "ندارد", "صرافی نماد" }
+                    { 1L, "ندارد", null, new DateTime(2021, 2, 7, 14, 45, 23, 158, DateTimeKind.Local).AddTicks(5946), "ندارد", true, false, new DateTime(2021, 2, 7, 14, 45, 23, 162, DateTimeKind.Local).AddTicks(7633), "شرکت تضامنی علی نائیج حقیقی و شرکا", 0m, 0m, "ندارد", "صرافی اریکه" },
+                    { 2L, "ندارد", null, new DateTime(2021, 2, 7, 14, 45, 23, 163, DateTimeKind.Local).AddTicks(373), "ندارد", true, false, new DateTime(2021, 2, 7, 14, 45, 23, 163, DateTimeKind.Local).AddTicks(414), "شرکت تضامنی محمد رستمی و شرکا", 0m, 0m, "ندارد", "صرافی نماد" }
                 });
 
             migrationBuilder.InsertData(
@@ -300,10 +354,10 @@ namespace CurrencyExchange.Data.Migrations
                 columns: new[] { "Id", "CreateDate", "IsDelete", "LastUpdateDate", "Name", "Title" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2021, 1, 24, 14, 15, 33, 331, DateTimeKind.Local).AddTicks(1187), false, new DateTime(2021, 1, 24, 14, 15, 33, 331, DateTimeKind.Local).AddTicks(1212), "Admin", "راهبر سیستم" },
-                    { 2L, new DateTime(2021, 1, 24, 14, 15, 33, 331, DateTimeKind.Local).AddTicks(1292), false, new DateTime(2021, 1, 24, 14, 15, 33, 331, DateTimeKind.Local).AddTicks(1300), "Manager", "مدیر سیستم" },
-                    { 3L, new DateTime(2021, 1, 24, 14, 15, 33, 331, DateTimeKind.Local).AddTicks(1306), false, new DateTime(2021, 1, 24, 14, 15, 33, 331, DateTimeKind.Local).AddTicks(1310), "Fnc", "کاربر مالی " },
-                    { 4L, new DateTime(2021, 1, 24, 14, 15, 33, 331, DateTimeKind.Local).AddTicks(1314), false, new DateTime(2021, 1, 24, 14, 15, 33, 331, DateTimeKind.Local).AddTicks(1318), "Bsn", "کاربر بازرگانی" }
+                    { 1L, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(8986), false, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9012), "Admin", "راهبر سیستم" },
+                    { 2L, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9087), false, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9094), "Manager", "مدیر سیستم" },
+                    { 3L, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9100), false, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9104), "Fnc", "کاربر مالی " },
+                    { 4L, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9108), false, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9112), "Bsn", "کاربر بازرگانی" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -314,7 +368,7 @@ namespace CurrencyExchange.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CurrencySaleDetailExDecs_ExDeclarationId",
                 table: "CurrencySaleDetailExDecs",
-                column: "Id");
+                column: "ExDeclarationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CurrencySaleDetailPis_CurrencySaleId",
@@ -337,6 +391,11 @@ namespace CurrencyExchange.Data.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MenuItems_ParentId",
+                table: "MenuItems",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PeroformaInvoiceDetails_BrokerId",
                 table: "PeroformaInvoiceDetails",
                 column: "BrokerId");
@@ -345,6 +404,16 @@ namespace CurrencyExchange.Data.Migrations
                 name: "IX_PeroformaInvoiceDetails_PeroformaInvoiceId",
                 table: "PeroformaInvoiceDetails",
                 column: "PeroformaInvoiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRolePermissions_MenuItemId",
+                table: "UserRolePermissions",
+                column: "MenuItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRolePermissions_UserRoleId",
+                table: "UserRolePermissions",
+                column: "UserRoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
@@ -366,7 +435,7 @@ namespace CurrencyExchange.Data.Migrations
                 name: "CurrencySaleDetailPis");
 
             migrationBuilder.DropTable(
-                name: "UserRoles");
+                name: "UserRolePermissions");
 
             migrationBuilder.DropTable(
                 name: "ExDeclarations");
@@ -378,10 +447,10 @@ namespace CurrencyExchange.Data.Migrations
                 name: "PeroformaInvoiceDetails");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "MenuItems");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "UserRoles");
 
             migrationBuilder.DropTable(
                 name: "Customers");
@@ -391,6 +460,12 @@ namespace CurrencyExchange.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "PeroformaInvoices");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CurrencyExchange.Core.Dtos.Account;
 using CurrencyExchange.Core.Sequrity;
@@ -16,23 +18,26 @@ namespace CurrencyExchange.Core.Services.Implementations
         #region Constructor
         private readonly IUserRepository _userRepository;
         private readonly IUserRoleRepository _userRoleRepository;
+        private readonly IUserRolePermissionRepository _userRolePermissionRepository;
         private readonly IPasswordHelper _passwordHelper;
         private readonly IMailSender _mailSender;
         private readonly IViewRenderService _renderView;
 
 
-        public UserService(IUserRepository userRepository,
-                            IUserRoleRepository userRoleRepository,
-                            IPasswordHelper passwordHelper,
-                            IMailSender mailSender
-                            , IViewRenderService renderView
-                            )
+        public UserService(
+            IUserRepository userRepository, 
+            IUserRoleRepository userRoleRepository, 
+            IUserRolePermissionRepository userRolePermissionRepository, 
+            IPasswordHelper passwordHelper, 
+            IMailSender mailSender, 
+            IViewRenderService renderView)
         {
-            this._userRepository = userRepository;
-            this._userRoleRepository = userRoleRepository;
-            this._passwordHelper = passwordHelper;
-            this._mailSender = mailSender;
-            this._renderView = renderView;
+            _userRepository = userRepository;
+            _userRoleRepository = userRoleRepository;
+            _userRolePermissionRepository = userRolePermissionRepository;
+            _passwordHelper = passwordHelper;
+            _mailSender = mailSender;
+            _renderView = renderView;
         }
         #endregion
 
@@ -86,13 +91,49 @@ namespace CurrencyExchange.Core.Services.Implementations
         public async Task<string> GetRoleByUserId(long userId)
         {
             const string roleName = "";
-            Role role;
-            role = await _userRoleRepository.GetUserRoleByUserId(userId);
-            if (role != null)
-                return role.Name;
+           var userRole = await _userRoleRepository.GetUserRoleByUserId(userId);
+            if (userRole != null)
+                return userRole.Role.Name;
             else
                 return roleName;
         }
+
+        public async Task<List<UserPermissionDto>> GetUserPermissions(long userId)
+        {
+            var userRolePermissionDto = new List<UserPermissionDto>();
+            var userRole = await _userRoleRepository.GetUserRoleByUserId(userId);
+            if (userRole != null)
+            {
+                var userPermissions =await _userRolePermissionRepository.GetUserRolePermissionsByUserRoleId(userRole.Id);
+                foreach (var item in userPermissions)
+                {
+                    if (item.Permission.ParentId == null)
+                    {
+                        var list = userPermissions.Where(x=>x.Permission.ParentId == item.PermissionId) ;
+                        var listSubMenus = new List<UserRolePermissionDto>();
+                        foreach (var subDetail in list)
+                        {
+                            listSubMenus.Add(new UserRolePermissionDto { AccessLink = subDetail.Permission.AccessLink , PersianName = subDetail.Permission.PersianName });
+                        }
+                        userRolePermissionDto.Add(new UserPermissionDto{DetaiList = listSubMenus , ParentName =item.Permission.PersianName});
+                    } 
+                }
+            }
+            return userRolePermissionDto;
+        }
+
+        public async Task<List<UserInfoDto>> GetUsersThatAnyRoles(long userId)
+        {
+            var userListDto = new List<UserInfoDto>();
+            var users = await _userRepository.GetUsersAnyRoles(userId);
+            foreach (var itemUser in users)
+            {
+                userListDto.Add(new UserInfoDto{Id = itemUser.Id , FirstName = itemUser.FirstName , LastName = itemUser.LastName , UserName = itemUser.UserName});
+            }
+
+            return userListDto;
+        }
+
         public async Task EditUSerInfo(UserInfoDto userInfo)
         {
             var user =await _userRepository.GetEntityById(userInfo.Id);
@@ -169,12 +210,13 @@ namespace CurrencyExchange.Core.Services.Implementations
         #endregion
 
         #region Dispose
+
         public void Dispose()
         {
             _userRepository?.Dispose();
             _userRoleRepository?.Dispose();
+            _userRolePermissionRepository?.Dispose();
         }
-
 
         #endregion
 

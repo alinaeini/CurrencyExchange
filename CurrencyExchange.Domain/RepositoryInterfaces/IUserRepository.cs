@@ -12,9 +12,9 @@ namespace CurrencyExchange.Domain.RepositoryInterfaces
         Task<User> UserExistByCheckEmail(string email, string password);
         Task<User> UserExistByCheckUserName(string userName, string password);
         Task<User> GetUserByUserName(string userName);
-       
-        
-        
+
+        Task<List<User>> GetUsersAnyRoles(long userId);
+
 
     }
 }

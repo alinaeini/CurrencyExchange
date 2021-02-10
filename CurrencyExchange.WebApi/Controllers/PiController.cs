@@ -30,7 +30,6 @@ namespace CurrencyExchange.WebApi.Controllers
 
         #region Create
 
-
         [HttpPost("create")]
         public async Task<IActionResult> CreatePi([FromBody] CreatePiDto createPiDto)
         {
@@ -39,12 +38,11 @@ namespace CurrencyExchange.WebApi.Controllers
                 var res = await _piService.Create(createPiDto);
                 switch (res)
                 {
-
                     case PiResult.ProformaInvoiceIsExist:
-                        return JsonResponseStatus.Error(new { Info = "شماره PI مورد نظر , قبلا در سیستم ثبت شده" });
-
+                        return JsonResponseStatus.Error(new {Info = "شماره PI مورد نظر , قبلا در سیستم ثبت شده"});
                 }
             }
+
             return JsonResponseStatus.Success();
         }
 
@@ -87,13 +85,11 @@ namespace CurrencyExchange.WebApi.Controllers
                 switch (result)
                 {
                     case PiResult.CanNotUpdate:
-                        return JsonResponseStatus.Error(new { info = "PI ویرایش نشد " });
-
+                        return JsonResponseStatus.Error(new {info = "PI ویرایش نشد "});
                 }
-
             }
-            return JsonResponseStatus.Success();
 
+            return JsonResponseStatus.Success();
         }
 
 
@@ -107,8 +103,9 @@ namespace CurrencyExchange.WebApi.Controllers
                 return JsonResponseStatus.Success(pi);
             }
 
-            return JsonResponseStatus.Error(new { info = "PI ویرایش نشد " });
+            return JsonResponseStatus.Error(new {info = "PI ویرایش نشد "});
         }
+
         #endregion
 
         #region Delete
@@ -124,8 +121,7 @@ namespace CurrencyExchange.WebApi.Controllers
                 switch (pi)
                 {
                     case PiResult.CanNotDelete:
-                        return JsonResponseStatus.Error(new { info = "PI حذف نشد " });
-
+                        return JsonResponseStatus.Error(new {info = "PI حذف نشد "});
                 }
             }
 
@@ -148,12 +144,11 @@ namespace CurrencyExchange.WebApi.Controllers
                 var res = await _piDetailService.Create(createPiDetailDto);
                 switch (res)
                 {
-
                     case PiDetailResult.ProformaInvoiceDetailIsExist:
-                        return JsonResponseStatus.Error(new { Info = "شماره PI مورد نظر , قبلا در سیستم ثبت شده" });
-
+                        return JsonResponseStatus.Error(new {Info = "شماره PI مورد نظر , قبلا در سیستم ثبت شده"});
                 }
             }
+
             return JsonResponseStatus.Success();
         }
 
@@ -168,8 +163,6 @@ namespace CurrencyExchange.WebApi.Controllers
             return JsonResponseStatus.Success(piDetail);
         }
 
-
-
         #endregion
 
         #region Edit Pi Detail
@@ -183,13 +176,11 @@ namespace CurrencyExchange.WebApi.Controllers
                 switch (result)
                 {
                     case PiDetailResult.CanNotUpdate:
-                        return JsonResponseStatus.Error(new { info = "PI ویرایش نشد " });
-
+                        return JsonResponseStatus.Error(new {info = "PI ویرایش نشد "});
                 }
-
             }
-            return JsonResponseStatus.Success();
 
+            return JsonResponseStatus.Success();
         }
 
 
@@ -203,8 +194,9 @@ namespace CurrencyExchange.WebApi.Controllers
                 return JsonResponseStatus.Success(piDetailDto);
             }
 
-            return JsonResponseStatus.Error(new { info = "PI ویرایش نشد " });
+            return JsonResponseStatus.Error(new {info = "PI ویرایش نشد "});
         }
+
         #endregion
 
         #region Delete Detail
@@ -220,8 +212,7 @@ namespace CurrencyExchange.WebApi.Controllers
                 switch (piDetailResult)
                 {
                     case PiDetailResult.CanNotDelete:
-                        return JsonResponseStatus.Error(new { info = "PI حذف نشد " });
-
+                        return JsonResponseStatus.Error(new {info = "PI حذف نشد "});
                 }
             }
 
@@ -231,6 +222,5 @@ namespace CurrencyExchange.WebApi.Controllers
         #endregion
 
         #endregion
-
     }
 }

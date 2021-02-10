@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.WebApi", "CurrencyExchange.WebApi\CurrencyExchange.WebApi.csproj", "{939279C7-40AA-4F77-992D-CCF03980D2CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Data", "CurrencyExchange.Data\CurrencyExchange.Data.csproj", "{8D8CAB80-65AD-437C-AD88-B83A248A0307}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Infrastructure", "CurrencyExchange.Data\CurrencyExchange.Infrastructure.csproj", "{8D8CAB80-65AD-437C-AD88-B83A248A0307}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Core", "CurrencyExchange.Core\CurrencyExchange.Core.csproj", "{12B415E1-7847-4E62-801C-729A75125A8A}"
 EndProject
@@ -45,26 +45,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F43A6540-A59E-44ED-A412-63CCC61E7880}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://dev.azure.com/aliaen110
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = CurrencyExchange.Core\\CurrencyExchange.Core.csproj
-		SccProjectName1 = CurrencyExchange.Core
-		SccLocalPath1 = CurrencyExchange.Core
-		SccProjectUniqueName2 = CurrencyExchange.Data\\CurrencyExchange.Data.csproj
-		SccProjectName2 = CurrencyExchange.Data
-		SccLocalPath2 = CurrencyExchange.Data
-		SccProjectUniqueName3 = CurrencyExchange.Domain\\CurrencyExchange.Domain.csproj
-		SccProjectName3 = CurrencyExchange.Domain
-		SccLocalPath3 = CurrencyExchange.Domain
-		SccProjectUniqueName4 = CurrencyExchange.Ioc\\CurrencyExchange.Ioc.csproj
-		SccProjectName4 = CurrencyExchange.Ioc
-		SccLocalPath4 = CurrencyExchange.Ioc
-		SccProjectUniqueName5 = CurrencyExchange.WebApi\\CurrencyExchange.WebApi.csproj
-		SccProjectName5 = CurrencyExchange.WebApi
-		SccLocalPath5 = CurrencyExchange.WebApi
 	EndGlobalSection
 EndGlobal

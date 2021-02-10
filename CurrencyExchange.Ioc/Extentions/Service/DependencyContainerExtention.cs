@@ -2,8 +2,8 @@
 using CurrencyExchange.Core.Services.Implementations;
 using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Core.Utilities.Convertors;
-using CurrencyExchange.Data.Repositories;
 using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data_Base.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CurrencyExchange.Ioc.Extentions.Service
@@ -36,6 +36,7 @@ namespace CurrencyExchange.Ioc.Extentions.Service
 
             service.AddScoped<IUserRepository, UserRepository>();
             service.AddScoped<IUserRoleRepository, UserRoleRepository>();
+            service.AddScoped<IUserRolePermissionRepository, UserRolePermissionRepository>();
             service.AddScoped<IPiRepository, PiRepository>();
             service.AddScoped<IPiDetailRepository, PiDetailRepository>();
             service.AddScoped<IBrokerRepository, BrokerRepository>();
