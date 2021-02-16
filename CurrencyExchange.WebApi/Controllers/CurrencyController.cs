@@ -122,5 +122,17 @@ namespace CurrencyExchange.WebApi.Controllers
         }
 
         #endregion
+
+
+        #region Currency By Customers
+
+        [HttpGet("currency-by-customer")]
+        public async Task<IActionResult> GetCustomersSold([FromQuery] FilterCurrSalePiDto filterPiDto)
+        {
+            var piDetail = await _saleDetailPiService.GetListPiSalesByCurrencyId(filterPiDto);
+            return JsonResponseStatus.Success(piDetail);
+        }
+
+        #endregion
     }
 }

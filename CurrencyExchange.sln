@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.WebApi", "CurrencyExchange.WebApi\CurrencyExchange.WebApi.csproj", "{939279C7-40AA-4F77-992D-CCF03980D2CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Infrastructure", "CurrencyExchange.Data\CurrencyExchange.Infrastructure.csproj", "{8D8CAB80-65AD-437C-AD88-B83A248A0307}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Infrastructure", "CurrencyExchange.Infrastructure\CurrencyExchange.Infrastructure.csproj", "{8D8CAB80-65AD-437C-AD88-B83A248A0307}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Core", "CurrencyExchange.Core\CurrencyExchange.Core.csproj", "{12B415E1-7847-4E62-801C-729A75125A8A}"
 EndProject

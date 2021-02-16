@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CurrencyExchange.Core.Dtos.BaseFilter
 {
-    public interface IBaseFilter
+    public interface IBaseFilter2
     {
 
         public long StartPrice { get; set; }
