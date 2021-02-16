@@ -31,7 +31,7 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Context
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Broker> Brokers { get; set; }
-        public DbSet<PeroformaInvoice> PeroformaInvoices { get; set; }
+        public DbSet<PeroformaInvoice> PeroformaInvoices { get; set; } 
         public DbSet<PeroformaInvoiceDetail> PeroformaInvoiceDetails { get; set; }
         public DbSet<ExDeclaration> ExDeclarations { get; set; }
         public DbSet<CurrencySale> CurrencySales { get; set; }
