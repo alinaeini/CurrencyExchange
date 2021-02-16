@@ -83,17 +83,27 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         public async Task<FilterCurrSaleDto> GetListSales(FilterCurrSaleDto filterDto)
         {
-            var asQueryable = _saleRepository
+            var currencyAsQueryable = _saleRepository
                 .GetEntities()
                 .AsQueryable();
+            if (filterDto.SearchText != null || !(string.IsNullOrEmpty(filterDto.SearchText)))
+            {
+                currencyAsQueryable = currencyAsQueryable
+                    .Include(x => x.Customer)
+                    .Include(c => c.Broker)
+                    .Where(x => x.Customer.Name.Contains(filterDto.SearchText.Trim()) ||
+                                x.Customer.Title.Contains(filterDto.SearchText.Trim()) ||
+                                x.Broker.Name.Contains(filterDto.SearchText.Trim()) 
+                    );
 
-            var count = (int)Math.Ceiling(asQueryable.Count() / (double)filterDto.TakeEntity);
+            }
+            var count = (int)Math.Ceiling(currencyAsQueryable.Count() / (double)filterDto.TakeEntity);
             var pager = Pager.Builder(count, filterDto.PageId, filterDto.TakeEntity);
-            var list = await asQueryable.Paging(pager).ToListAsync();
+            var list = await currencyAsQueryable.Paging(pager).ToListAsync();
             filterDto.CurrencySale = new List<CurrencySaleDto>();
             foreach (var item in list)
             {
-                var currencySaleItem = await _saleRepository.GetByIdIncludes(item.Id);
+                var currencySaleItem = await _saleRepository.GetCurrencyByIdIncludesCustomerAndBroker(item.Id);
 
                 var sumProfit = await _salePiDetailRepository.GetSumProfitLost(item.Id);
                 filterDto.CurrencySale.Add(new CurrencySaleDto
@@ -122,7 +132,7 @@ namespace CurrencyExchange.Core.Services.Implementations
         private async Task<SalesResult> FillAutomaticCurrSaleDetail(CreateSaleDto saleDto, CurrencySale currencySales)
         {
 
-
+            Boolean isExDecAutomatic ;
             #region Get List Of PiDetails That Is Not Sold Yet
 
             var piDetails = await _piDetailRepository.GetAccountBalanceByDetailsByBrokerId(saleDto.BrokerId);
@@ -134,10 +144,12 @@ namespace CurrencyExchange.Core.Services.Implementations
             var exDecList = new List<ExDecExport>();
             if (saleDto.ExDecExport.Count > 0)
             {
+                isExDecAutomatic = false;
                 exDecList = saleDto.ExDecExport;
             }
             else
             {
+                isExDecAutomatic = true;
                 var lisexDecList = await _declarationRepository.GetExDecAccountBalanceByExDecId();
                 foreach (var item in lisexDecList)
                 {
@@ -149,9 +161,19 @@ namespace CurrencyExchange.Core.Services.Implementations
 
             #region Insert Into  CurrencySalePi And CurrencySaleDetailExDec
 
-            var saleexDecResult = await InserSaleCurrExDec(exDecList, saleDto, currencySales);
+            if (isExDecAutomatic)
+            {
+                var saleexDecResult = await InserSaleCurrExDecAutomatic(exDecList, saleDto, currencySales);
             if (saleexDecResult != SalesResult.Success)
                 return saleexDecResult;
+            }
+            else
+            {
+                var saleexDecResult = await InserSaleCurrExDecManual(exDecList, saleDto, currencySales);
+                if (saleexDecResult != SalesResult.Success)
+                    return saleexDecResult;
+            }
+
 
             var salePiDetailResult = await InserSaleCurrPiDetail(piDetails, saleDto, currencySales);
             if (salePiDetailResult != SalesResult.Success)
@@ -166,7 +188,7 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         #region Insert Into CurrencySaleDetailExDec
 
-        private async Task<SalesResult> InserSaleCurrExDec(List<ExDecExport> exDecList, CreateSaleDto saleDto, CurrencySale currencySales)
+        private async Task<SalesResult> InserSaleCurrExDecAutomatic(List<ExDecExport> exDecList, CreateSaleDto saleDto, CurrencySale currencySales)
         {
             long totalInserted = 0;
             foreach (var exdec in exDecList)
@@ -175,7 +197,7 @@ namespace CurrencyExchange.Core.Services.Implementations
 
                 var exdecEntity = await _declarationRepository.GetEntityById(exdec.Id);
                 var usedPriceOfExdecCode = await _saleExDecRepository.GetSumExCodeUsedById(exdec.Id);
-                var remaindPriceOfExdecCode = exdec.Price - usedPriceOfExdecCode;
+                var remaindPriceOfExdecCode = exdec.Price - ( usedPriceOfExdecCode);
                 //if (exdecEntity.Price < exdec.Price)
                 //{
                 //    return SalesResult.ExDecAccountBalanceIsLowerThanPrice;
@@ -228,6 +250,78 @@ namespace CurrencyExchange.Core.Services.Implementations
                 #endregion
 
                 totalInserted += price;
+                if (totalInserted == saleDto.SalePrice)
+                {
+                    return SalesResult.Success;
+                }
+            }
+
+            return SalesResult.Success;
+        }
+
+        private async Task<SalesResult> InserSaleCurrExDecManual(List<ExDecExport> exDecList, CreateSaleDto saleDto, CurrencySale currencySales)
+        {
+            long totalInserted = 0;
+            foreach (var exdecItem in exDecList)
+            {
+                #region Validation - ExDec Price Is Ok
+
+                var exdecEntity = await _declarationRepository.GetEntityById(exdecItem.Id);
+                var usedPriceOfExdecCode = await _saleExDecRepository.GetSumExCodeUsedById(exdecItem.Id);
+                var remaindPriceOfExdecCode = exdecEntity.Price -  usedPriceOfExdecCode ;
+                //if (exdecEntity.Price < exdec.Price)
+                //{
+                //    return SalesResult.ExDecAccountBalanceIsLowerThanPrice;
+                //}
+
+                //if (exdec.Price < remaindPriceOfExdecCode)
+                //{
+                //    return SalesResult.ExDecAccountBalanceIsLowerThanPrice;
+                //}
+
+                long price;
+
+                if (exdecItem.Price >= remaindPriceOfExdecCode)
+                {
+                    price =   remaindPriceOfExdecCode + (exdecItem.Price - remaindPriceOfExdecCode);
+                }
+                else
+                {
+                    price = exdecItem.Price;
+                }
+
+                //if (exdecItem.Price + totalInserted > saleDto.SalePrice)
+                //{
+                //    price = saleDto.SalePrice - totalInserted;
+                //}
+                #endregion
+
+                #region Insert Into CurrencySaleDetailExDec
+
+                var currencySaleDetailEx = new CurrencySaleDetailExDec
+                {
+                    CurrencySale = currencySales,
+                    Price = price,
+                    ExDeclarationId = exdecItem.Id
+                };
+                await _saleExDecRepository.AddEntity(currencySaleDetailEx);
+                //await _saleExDecRepository.SaveChanges();
+
+                #endregion
+
+
+
+                #region Update Sold In ExDeclaration
+                if (exdecItem.Price + usedPriceOfExdecCode >= exdecEntity.Price)
+                {
+                    var updateSoldExdec = await _declarationRepository.SoldedDeclaration(exdecEntity.Id);
+                    if (!updateSoldExdec)
+                        return SalesResult.CanNotUpdateSoldExDecInDataBase;
+                }
+
+                #endregion
+
+                totalInserted += exdecItem.Price;
                 if (totalInserted == saleDto.SalePrice)
                 {
                     return SalesResult.Success;
@@ -325,11 +419,11 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         private async Task<SalesResult> ValidationBeforCreateCurrencySales(CreateSaleDto createPiDto)
         {
-            var sumExDec = await _declarationRepository.GetSumExDecAccountBalance();
-            if (createPiDto.SalePrice > sumExDec)
-            {
-                return SalesResult.ExDecAccountBalanceIsLowerThanPrice;
-            }
+            //var sumExDec = await _declarationRepository.GetSumExDecAccountBalance();
+            //if (createPiDto.SalePrice > sumExDec)
+            //{
+            //    return SalesResult.ExDecAccountBalanceIsLowerThanPrice;
+            //}
 
             var sumPiDetail = await _piDetailRepository.GetSumBrokerAccountBalance(createPiDto.BrokerId);
             if (createPiDto.SalePrice > sumPiDetail)

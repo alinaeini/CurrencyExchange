@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity ,new()
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity 
     {
         #region Constructor
 

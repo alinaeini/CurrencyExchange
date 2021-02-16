@@ -37,6 +37,7 @@ namespace CurrencyExchange.Ioc.Extentions.Service
             service.AddScoped<IUserRepository, UserRepository>();
             service.AddScoped<IUserRoleRepository, UserRoleRepository>();
             service.AddScoped<IUserRolePermissionRepository, UserRolePermissionRepository>();
+            service.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
             service.AddScoped<IPiRepository, PiRepository>();
             service.AddScoped<IPiDetailRepository, PiDetailRepository>();
             service.AddScoped<IBrokerRepository, BrokerRepository>();

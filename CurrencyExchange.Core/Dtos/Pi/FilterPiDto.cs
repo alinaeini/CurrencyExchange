@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CurrencyExchange.Core.Dtos.Paging;
+using Microsoft.CodeAnalysis.Text;
 
 namespace CurrencyExchange.Core.Dtos.Pi
 {

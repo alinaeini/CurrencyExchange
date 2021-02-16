@@ -16,15 +16,17 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         #region Costructor
 
-        private readonly ICurrencySalePiDetailRepository _piDetailRepository;
+        private readonly ICurrencySalePiDetailRepository _currPiDetailRepository;
         private readonly ICurrencySaleRepository _currencySaleRepository;
         private readonly IPiRepository _piRepository;
+        private readonly IPiDetailRepository _piDetailRepository;
 
-        public CurrencySaleDetailPiService(ICurrencySalePiDetailRepository piDetailRepository, ICurrencySaleRepository currencySaleRepository, IPiRepository piRepository)
+        public CurrencySaleDetailPiService(ICurrencySalePiDetailRepository currPiDetailRepository, ICurrencySaleRepository currencySaleRepository, IPiRepository piRepository, IPiDetailRepository piDetailRepository)
         {
-            _piDetailRepository = piDetailRepository;
+            _currPiDetailRepository = currPiDetailRepository;
             _currencySaleRepository = currencySaleRepository;
             _piRepository = piRepository;
+            _piDetailRepository = piDetailRepository;
         }
 
         #endregion
@@ -33,7 +35,7 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         public async Task<FilterCurrSalePiDto> GetListExDecSalesByPiDetailId(FilterCurrSalePiDto filterDto)
         {
-            var asQueryable = _piDetailRepository
+            var asQueryable = _currPiDetailRepository
                 .GetEntities()
                 .Where(x => x.PeroformaInvoiceDetailId == filterDto.Id)
                 .AsQueryable();
@@ -44,7 +46,7 @@ namespace CurrencyExchange.Core.Services.Implementations
             filterDto.CurrencySaleDetailPi = new List<CurrencySaleDetailPiDto>();
             foreach (var item in list)
             {
-                var currencySaleItem = await _currencySaleRepository.GetByIdIncludes(item.CurrencySaleId);
+                var currencySaleItem = await _currencySaleRepository.GetCurrencyByIdIncludesCustomerAndBroker(item.CurrencySaleId);
 
                 var piDetail = await _piRepository.GetEntityById(item.PeroformaInvoiceDetailId??1);
                 filterDto.CurrencySaleDetailPi.Add(new CurrencySaleDetailPiDto()
@@ -69,10 +71,17 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         public async Task<FilterCurrSalePiDto> GetListPiSalesByCurrencyId(FilterCurrSalePiDto filterDto)
         {
-            var asQueryable = _piDetailRepository
+            var asQueryable = _currPiDetailRepository
                 .GetEntities()
                 .Where(x => x.CurrencySaleId == filterDto.Id)
                 .AsQueryable();
+            if (filterDto.SearchText != null || !(string.IsNullOrEmpty(filterDto.SearchText)))
+            {
+                asQueryable = asQueryable.Include(x => x.PeroformaInvoiceDetails)
+                    .Include(c => c.PeroformaInvoiceDetails.PeroformaInvoice)
+                    .Where(d =>
+                        d.PeroformaInvoiceDetails.PeroformaInvoice.PiCode.Contains(filterDto.SearchText.Trim()));
+            }
 
             var count = (int)Math.Ceiling(asQueryable.Count() / (double)filterDto.TakeEntity);
             var pager = Pager.Builder(count, filterDto.PageId, filterDto.TakeEntity);
@@ -80,9 +89,10 @@ namespace CurrencyExchange.Core.Services.Implementations
             filterDto.CurrencySaleDetailPi = new List<CurrencySaleDetailPiDto>();
             foreach (var item in list)
             {
-                var currencySaleItem = await _currencySaleRepository.GetByIdIncludes(item.CurrencySaleId);
+                var currencySaleItem = await _currencySaleRepository.GetCurrencyByIdIncludesCustomerAndBroker(item.CurrencySaleId);
 
-                var piDetail = await _piRepository.GetEntityById(item.PeroformaInvoiceDetailId ?? 1);
+                var piDetail = await _piDetailRepository.GetEntityById(item.PeroformaInvoiceDetailId ?? 1);
+                var pi = await _piRepository.GetEntityById(piDetail.PeroformaInvoiceId);
                 filterDto.CurrencySaleDetailPi.Add(new CurrencySaleDetailPiDto()
                 {
                     Id = item.Id,
@@ -91,7 +101,8 @@ namespace CurrencyExchange.Core.Services.Implementations
                     CustomerName = currencySaleItem.Customer.Name,
                     Price = item.Price,
                     ProfitLossAmount = item.ProfitLossAmount,
-                    PiCode = piDetail.PiCode
+                    PiCode = pi.PiCode,
+                    PiDetailPrice=piDetail.DepositPrice
                 });
             }
             return filterDto.SetCurrencySaleExDec(filterDto.CurrencySaleDetailPi).SetPaging(pager);
@@ -102,9 +113,10 @@ namespace CurrencyExchange.Core.Services.Implementations
         #region Dispose
         public void Dispose()
         {
-            _piDetailRepository?.Dispose();
+            _currPiDetailRepository?.Dispose();
             _currencySaleRepository?.Dispose();
             _piRepository?.Dispose();
+            _piDetailRepository?.Dispose();
         }
         #endregion
 

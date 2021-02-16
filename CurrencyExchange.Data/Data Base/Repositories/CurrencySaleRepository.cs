@@ -20,7 +20,8 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
         #region CurrencySale Related Methods
 
 
-        public async Task<CurrencySale> GetByIdIncludes(long currSaleId)
+        public async Task<CurrencySale> 
+            GetCurrencyByIdIncludesCustomerAndBroker(long currSaleId)
         {
             return await _context.CurrencySales
                 .Include(x => x.Customer)

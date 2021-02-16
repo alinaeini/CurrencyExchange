@@ -60,12 +60,14 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<List<User>> GetUsersAnyRoles(long userId)
+        public async Task<List<User>> GetActiveUsersExceptCurrentUserIdByCurrentUserId(long userId)
         {
             //var userNotRole = await _context.Users.Where(x => 
             //        !_context.UserRoles.Select(x => x.UserId).Contains(x.Id))
             //            .ToListAsync();
-            var userNotRole = await _context.Users.Where(x => x.Id != userId && x.IsActivated && !x.IsDelete)
+            var userNotRole = await _context.Users
+                        .Where(x => x.Id != userId && 
+                                    x.IsActivated && !x.IsDelete)
                         .ToListAsync();
             return userNotRole;
         }

@@ -14,6 +14,7 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
         #region Constructor
 
         private readonly CurrencyExchangeDbContext _context;
+
         public UserRoleRepository(CurrencyExchangeDbContext context) : base(context)
         {
             _context = context;
@@ -30,43 +31,28 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
 
         public bool CheckAdminRoleByUserId(long userId)
         {
-            return  _context
+            return _context
                 .UserRoles
                 .Any(x => x.UserId == userId && x.Role.Name == "Admin");
         }
 
         public async Task<UserRole> GetUserRoleByUserId(long userId)
-         => await _context
+            => await _context
                 .UserRoles
-                .Include(x=>x.Role)
+                .Include(x => x.Role)
                 .Where(x => x.UserId == userId)
-                .FirstOrDefaultAsync() ;
-            
+                .FirstOrDefaultAsync();
+
+        public async Task<List<UserRole>> GetUserRoleListExceptCurrentUserByUserId(long userId)
+            => await _context.UserRoles
+                    .Where(x => x.UserId != userId)
+                    .ToListAsync();
+
+        //    public async Task<List<UserRole> GetUserRoleListExceptCurrentUserByUserId(long userId)
+        //=> await _context.UserRoles
+        //.Where(x => x.UserId != userId)
+        //.ToListAsync();
+
     }
 
-
-    public class UserRolePermissionRepository : GenericRepository<UserRolePermission>, IUserRolePermissionRepository
-    {
-        #region Constructor
-
-        private readonly CurrencyExchangeDbContext _context;
-        public UserRolePermissionRepository(CurrencyExchangeDbContext context) : base(context)
-        {
-            _context = context;
-        }
-
-        #endregion
-
-        #region All Methods
-
-        public async Task<List<UserRolePermission>> GetUserRolePermissionsByUserRoleId(long userRoleId)
-        {
-            return await _context.UserRolePermissions
-                .Include(x=>x.Permission)
-                .Where(x => x.UserRoleId == userRoleId && !x.IsDelete)
-                .ToListAsync();
-        }
-
-        #endregion
-    }
 }

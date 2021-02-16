@@ -43,12 +43,9 @@ namespace CurrencyExchange.Core.Services.Implementations
                 IsSold = false
             };
             await piDetailRepository.AddEntity(piDetail);
+
+            await _brokerRepository.UpdateBrokerAmount(piDetail.BrokerId, piDetail.DepositPrice, true);
             await piDetailRepository.SaveChanges();
-
-            var updateBrokerAmount = await _brokerRepository.UpdateBrokerAmount(piDetail.BrokerId, piDetail.DepositPrice, true);
-            if (!updateBrokerAmount)
-                return PiDetailResult.CannotUpdateBrokerAmountBalance;
-
             return PiDetailResult.Success;
 
         }

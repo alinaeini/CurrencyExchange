@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using CurrencyExchange.Core.Dtos.Account.RolePermissions;
 
 namespace CurrencyExchange.WebApi.Controllers
 {
@@ -200,11 +201,43 @@ namespace CurrencyExchange.WebApi.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                var userList = await userService.GetUsersThatAnyRoles(User.GetUserId());
+                var userList = await userService.GetActiveUsersExceptCurrentUserIdByUserId(User.GetUserId());
                 if (userList.Count > 0 )
                     return JsonResponseStatus.Success(userList);
             }
             return JsonResponseStatus.Error(new { Info = "کاربر مورد نظر در سیستم یافت نشد" });
+        }
+
+        #endregion
+
+        #region users-permissions
+
+        [HttpPost("users-permissions")]
+        public async Task<IActionResult> GetAllPermissions()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userList = await userService.GetPermissions(User.GetUserId());
+                if (userList.Count > 0)
+                    return JsonResponseStatus.Success(userList);
+            }
+            return JsonResponseStatus.Error(new { Info = "هنوز عنوانهای دسترسی برای کاربران مشخص نشده است" });
+        }
+
+        #endregion
+
+        #region AllUsersAccountPermissions
+
+        [HttpPost("user-account-permission")]
+        public async Task<IActionResult> AllUsersAccountPermissions([FromBody] UserAccountPermissions userAccountPermissions)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userList = await userService.InsertToDatabaseRolesAndPermissions(userAccountPermissions);
+                if (userList == LoginUserResult.Success)
+                    return JsonResponseStatus.Success();
+            }
+            return JsonResponseStatus.Error(new { Info = "هیچ داده ای در سیستم ذخیره نشد" });
         }
 
         #endregion

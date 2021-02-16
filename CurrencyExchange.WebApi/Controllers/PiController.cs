@@ -58,6 +58,12 @@ namespace CurrencyExchange.WebApi.Controllers
             var pi = await _piService.GetPiesByFiltersList(filterPiDto);
             return JsonResponseStatus.Success(pi);
         }
+        //[HttpGet("filter-pi")]
+        //public async Task<IActionResult> GetPi([FromQuery] FilterGenericDto<PiRemaindDto> filterPiDto)
+        //{
+        //    var pi = await _piService.GetPiesByFiltersList(filterPiDto);
+        //    return JsonResponseStatus.Success(pi);
+        //}
 
         #endregion
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CurrencyExchange.Domain.EntityModels.Access;
 using CurrencyExchange.Domain.EntityModels.Account;
 using CurrencyExchange.Domain.RepositoryInterfaces.Generics;
 
@@ -13,7 +14,7 @@ namespace CurrencyExchange.Domain.RepositoryInterfaces
         Task<User> UserExistByCheckUserName(string userName, string password);
         Task<User> GetUserByUserName(string userName);
 
-        Task<List<User>> GetUsersAnyRoles(long userId);
+        Task<List<User>> GetActiveUsersExceptCurrentUserIdByCurrentUserId(long userId);
 
 
     }

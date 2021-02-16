@@ -105,46 +105,27 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Context
 
             #region Seed Data Roles(s)
 
+            var adminRole = new Role()
+            {
+                Id = 1,
+                Name = "Admin",
+                Title = "راهبر سیستم",
+                IsDelete = false,
+                CreateDate = DateTime.Now,
+                LastUpdateDate = DateTime.Now,
+            };
             var roles = new List<Role>()
             {
-                new Role()
-                {
-                    Id = 1,
-                    Name = "Admin",
-                    Title = "راهبر سیستم",
-                    IsDelete = false,
-                    CreateDate = DateTime.Now ,
-                    LastUpdateDate = DateTime.Now,
-                },
+                adminRole,
                 new Role()
                 {
                     Id = 2,
-                    Name = "Manager",
-                    Title = "مدیر سیستم",
+                    Name = "User",
+                    Title = "کاربر",
                     IsDelete = false,
                     CreateDate = DateTime.Now ,
                     LastUpdateDate = DateTime.Now,
-                },
-                new Role()
-                {
-                    Id = 3,
-                    Name = "Fnc",
-                    Title = "کاربر مالی ",
-                    IsDelete = false,
-                    CreateDate = DateTime.Now ,
-                    LastUpdateDate = DateTime.Now,
-                },
-                new Role()
-                {
-                    Id = 4,
-                    Name = "Bsn",
-                    Title = "کاربر بازرگانی",
-                    IsDelete = false,
-                    CreateDate = DateTime.Now ,
-                    LastUpdateDate = DateTime.Now,
-                },
-
-
+                }
 
             };
             modelBuilder.Entity<Role>().HasData(roles);

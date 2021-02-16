@@ -9,7 +9,7 @@ using CurrencyExchange.WebApi.Controllers.Base;
 
 namespace CurrencyExchange.WebApi.Controllers
 {
-    public class SalesController : AppBaseController
+    public class CurrencyController : AppBaseController
     {
         #region Constructor
 
@@ -18,7 +18,7 @@ namespace CurrencyExchange.WebApi.Controllers
         private readonly ICurrencySaleDetailPiService _saleDetailPiService;
 
 
-        public SalesController(ICurrencySaleService saleService, ICurrencySaleDetailExDecService saleDetailExDecService,
+        public CurrencyController(ICurrencySaleService saleService, ICurrencySaleDetailExDecService saleDetailExDecService,
             ICurrencySaleDetailPiService saleDetailPiService)
         {
             _saleService = saleService;

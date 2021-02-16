@@ -23,7 +23,7 @@ namespace CurrencyExchange.Core.Dtos.Sales.CurrencySalePi
         public string PiCode { get; set; }
         public string BrokerName { get; set; }
         public string CustomerName { get; set; }
-
+        public long PiDetailPrice { get; set; }
 
         #endregion
 

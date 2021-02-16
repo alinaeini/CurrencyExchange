@@ -76,21 +76,59 @@ namespace CurrencyExchange.Core.Services.Implementations
                 //if (PayDetails < item.TotalPrice)
                 //{
                 filterPiDto.PiRemaind.Add(new PiRemaindDto()
-                    {
-                        BasePrice = item.BasePrice,
-                        PiCode = item.PiCode,
-                        TotalPrice = item.TotalPrice,
-                        PiDate = item.PiDate,
-                        RemaindPrice = item.TotalPrice - payDetails,
-                        SoldPrice = payDetails,
-                        Id = item.Id
-                    });
+                {
+                    BasePrice = item.BasePrice,
+                    PiCode = item.PiCode,
+                    TotalPrice = item.TotalPrice,
+                    PiDate = item.PiDate,
+                    RemaindPrice = item.TotalPrice - payDetails,
+                    SoldPrice = payDetails,
+                    Id = item.Id
+                });
                 //}
 
             }
 
             return filterPiDto.SetPies(filterPiDto.PiRemaind).SetPaging(pager);
         }
+
+        //public async Task<FilterGenericDto<PiRemaindDto>> GetPiesByFiltersList(FilterGenericDto<PiRemaindDto> filterPiDto)
+        //{
+        //    var asQueryable = piRepository
+        //        .GetEntities()
+        //        .Where(x => !x.IsSold)
+        //        .AsQueryable();
+
+        //    if (filterPiDto.SearchText != null || !(string.IsNullOrWhiteSpace(filterPiDto.SearchText)))
+        //    {
+        //        asQueryable = asQueryable.Where(x => x.PiCode.Contains(filterPiDto.SearchText.Trim()));
+        //    }
+
+        //    var count = (int)Math.Ceiling(asQueryable.Count() / (double)filterPiDto.TakeEntity);
+        //    var pager = Pager.Builder(count, filterPiDto.PageId, filterPiDto.TakeEntity);
+        //    var peroformaInvoices = await asQueryable.Paging(pager).ToListAsync();
+        //    filterPiDto.Entities = new List<PiRemaindDto>();
+        //    foreach (var item in peroformaInvoices)
+        //    {
+        //        var payDetails = await piDetailService.GetTotalAamountReceivedFromTheCustomer(item.Id);
+        //        //if (PayDetails < item.TotalPrice)
+        //        //{
+        //        filterPiDto.Entities.Add(new PiRemaindDto()
+        //        {
+        //            BasePrice = item.BasePrice,
+        //            PiCode = item.PiCode,
+        //            TotalPrice = item.TotalPrice,
+        //            PiDate = item.PiDate,
+        //            RemaindPrice = item.TotalPrice - payDetails,
+        //            SoldPrice = payDetails,
+        //            Id = item.Id
+        //        });
+        //        //}
+
+        //    }
+
+        //    return filterPiDto.SetEntitiesDto(filterPiDto.Entities).SetPaging(pager);
+        //}
 
         #region GetAll
         public async Task<FilterPiDto> GetPiesByFiltersIsSold(FilterPiDto filterPiDto)
