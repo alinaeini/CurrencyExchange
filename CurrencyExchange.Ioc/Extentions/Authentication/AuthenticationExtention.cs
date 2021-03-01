@@ -16,12 +16,12 @@ namespace CurrencyExchange.Ioc.Extentions.Authentication
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = false,
+                        ValidateIssuer = true,
                         ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = "https://localhost:5001",
-                        ValidAudience = "https://localhost:4200",
+                        //ValidAudience = "https://localhost:4200",
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AngularExchangeJwtBearer"))
                     };
                 });

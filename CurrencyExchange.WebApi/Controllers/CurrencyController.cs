@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using CurrencyExchange.Core.Dtos.Customer;
 using CurrencyExchange.Core.Dtos.Sales;
 using CurrencyExchange.Core.Dtos.Sales.CurrencySaleExDec;
 using CurrencyExchange.Core.Dtos.Sales.CurrencySalePi;
@@ -124,12 +125,23 @@ namespace CurrencyExchange.WebApi.Controllers
         #endregion
 
 
+        #region Filter On CurrencySale by Customer id
+
+        [HttpGet("get-currSale-detail-by-customerId/{customerId}")]
+        public async Task<IActionResult> GetFilterCurrencySale(long customerId)
+        {
+            var customerDetail = await _saleService.GetListSalesByCustomerId(customerId);
+            return JsonResponseStatus.Success(customerDetail);
+        }
+
+        #endregion
+
         #region Currency By Customers
 
         [HttpGet("currency-by-customer")]
-        public async Task<IActionResult> GetCustomersSold([FromQuery] FilterCurrSalePiDto filterPiDto)
+        public async Task<IActionResult> GetCustomersSold([FromQuery] FilterCurrencyCustomerDto filterDto)
         {
-            var piDetail = await _saleDetailPiService.GetListPiSalesByCurrencyId(filterPiDto);
+            var piDetail = await _saleService.GetSoldPerCustomers(filterDto);
             return JsonResponseStatus.Success(piDetail);
         }
 

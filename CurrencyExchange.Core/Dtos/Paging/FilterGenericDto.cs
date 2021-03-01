@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using CurrencyExchange.Core.Dtos.Paging;
 
-namespace CurrencyExchange.Core.Dtos.Pi
+namespace CurrencyExchange.Core.Dtos.Paging
 {
     public class FilterGenericDto<TEntity> : BasePaging , IFilterListItems<TEntity>
     {
@@ -9,10 +8,6 @@ namespace CurrencyExchange.Core.Dtos.Pi
         #region Properties
 
         public string SearchText { get; set; }
-        public string FromDate { get; set; }
-        public string ToDate { get; set; }
-        public string FromPrice { get; set; }
-        public string ToPrice { get; set; }
         public List<TEntity> Entities { get; set; }
 
         #endregion
@@ -43,15 +38,4 @@ namespace CurrencyExchange.Core.Dtos.Pi
 
 
     }
-
-    public interface IFilterListItems<TEntity>
-    {
-        public string SearchText { get; set; }
-        public string? FromDate { get; set; }
-        public string? ToDate { get; set; }
-        public string? FromPrice { get; set; }
-        public string? ToPrice { get; set; }
-
-    }
-
 }

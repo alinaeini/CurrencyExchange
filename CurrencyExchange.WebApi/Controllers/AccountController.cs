@@ -94,25 +94,34 @@ namespace CurrencyExchange.WebApi.Controllers
                         var roleName = await userService.GetRoleByUserId(user.Id);
                         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AngularExchangeJwtBearer"));
                         var signinCredential = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                        var claimList = new List<Claim>()
-                        {
-                            new Claim(ClaimTypes.Name, user.UserName),
-                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-                        };
-                        var userIdentity = new ClaimsIdentity(user.Id.ToString());
-                        userIdentity.AddClaims(claimList);
+                        //var claimList = new List<Claim>()
+                        //{
+                        //    new Claim(ClaimTypes.Name, user.UserName),
+                        //    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                        //};
+                        //var userIdentity = new ClaimsIdentity(user.Id.ToString());
+                        //userIdentity.AddClaims(claimList);
+                        //var tokenOptions = new JwtSecurityToken(
+                        //    issuer: "https://localhost:5001/",
+                        //    claims: claimList ,
+                        //    expires: DateTime.Now.AddDays(1),
+                        //    signingCredentials: signinCredential
+                        //);
                         var tokenOptions = new JwtSecurityToken(
-                            issuer: "https://localhost:5001/",
-                            expires: DateTime.Now.AddDays(1),
-                            signingCredentials: signinCredential,
-                            claims: claimList
+                            issuer: "https://localhost:5001",
+                            claims: new List<Claim>
+                            {
+                                new Claim(ClaimTypes.Name, user.UserName),
+                                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                            },
+                            expires: DateTime.Now.AddHours(1),
+                            signingCredentials: signinCredential
                         );
-
                         var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
                         var userPermissions = await userService.GetUserPermissions(user.Id);
                         return JsonResponseStatus.Success(new
                         {
-                            token = tokenString,
+                            token =  tokenString,
                             expireTime = 1,
                             firstName = user.FirstName,
                             lastName = user.LastName,
@@ -130,6 +139,7 @@ namespace CurrencyExchange.WebApi.Controllers
 
         #region Check User Authentication
 
+
         [HttpPost("check-auth")]
         public async Task<IActionResult> CheckUserAuth()
         {
@@ -142,7 +152,7 @@ namespace CurrencyExchange.WebApi.Controllers
                 var returnJson = JsonResponseStatus.Success(new
                 {
                     id = userInfo.Id,
-                    firstName = userInfo.FirstName,
+                    firstName = userInfo.FirstName, 
                     lastName = userInfo.LastName,
                     userName = userInfo.UserName,
                     userRole = roleName,

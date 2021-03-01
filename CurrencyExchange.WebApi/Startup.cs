@@ -7,6 +7,7 @@ using CurrencyExchange.Ioc.Extentions.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.IIS;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -62,13 +63,15 @@ namespace CurrencyExchange.WebApi
             services.AddCorsPolicy();
 
             #endregion
-
+            //services.AddAuthentication(IISServerDefaults.AuthenticationScheme);
             services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+          
+            app.UseDeveloperExceptionPage();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -84,8 +87,9 @@ namespace CurrencyExchange.WebApi
             app.UseStaticFiles();
 
             app.UseCors("EnableCorsEx");
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -28,13 +28,15 @@ namespace CurrencyExchange.Core.Dtos.Sales
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public long SalePricePerUnit { get; set; }
 
-        //[Display(Name = "نوع انتقال")]
-        //[Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        //public CurrencyTransferType TransferType { get; set; }
+  
 
         [Display(Name = "کارمزد انتقال ارز")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public long TransferPrice { get; set; }
+
+        [Display(Name = "نوع انتقال")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        public CurrencyTransferType TransferType { get; set; }
 
 
 

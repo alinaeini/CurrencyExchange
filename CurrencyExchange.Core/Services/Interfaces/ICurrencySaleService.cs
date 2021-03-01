@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CurrencyExchange.Core.Dtos.Customer;
 using CurrencyExchange.Core.Dtos.Sales;
 
 namespace CurrencyExchange.Core.Services.Interfaces
@@ -8,6 +9,8 @@ namespace CurrencyExchange.Core.Services.Interfaces
     {
         Task<SalesResult> Create(CreateSaleDto createPiDto);
         Task<FilterCurrSaleDto> GetListSales(FilterCurrSaleDto filterPiDto);
+        Task<FilterCurrSaleCustomerListDto> GetListSalesByCustomerId(long customerId);
+        Task<FilterCurrencyCustomerDto> GetSoldPerCustomers(FilterCurrencyCustomerDto filterDto);
     }
 }
 

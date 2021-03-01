@@ -18,14 +18,15 @@ namespace CurrencyExchange.Core.Services.Implementations
         #region Costructor
 
         private IPiRepository piRepository;
+        private IPiDetailRepository piDetailRepository;
         private IPiDetailService piDetailService;
 
-        public PiService(IPiRepository piRepository, IPiDetailService detailService)
+        public PiService(IPiRepository piRepository, IPiDetailRepository piDetailRepository, IPiDetailService piDetailService)
         {
             this.piRepository = piRepository;
-            piDetailService = detailService;
+            this.piDetailRepository = piDetailRepository;
+            this.piDetailService = piDetailService;
         }
-
         #endregion
 
         #region Pi Section
@@ -58,7 +59,8 @@ namespace CurrencyExchange.Core.Services.Implementations
         {
             var asQueryable = piRepository
                 .GetEntities()
-                .Where(x => !x.IsSold)
+                .Where(x => x.TotalPrice > (piDetailRepository.GetEntities()
+                    .Where(d => d.PeroformaInvoiceId == x.Id).Sum(x => x.DepositPrice)))
                 .AsQueryable();
 
             if (filterPiDto.SearchText != null || !(string.IsNullOrWhiteSpace(filterPiDto.SearchText)))
@@ -231,6 +233,7 @@ namespace CurrencyExchange.Core.Services.Implementations
         {
             this.piRepository?.Dispose();
             this.piDetailService?.Dispose();
+            this.piDetailRepository?.Dispose();
         }
 
 

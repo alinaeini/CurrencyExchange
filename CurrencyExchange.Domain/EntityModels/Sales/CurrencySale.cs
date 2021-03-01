@@ -60,7 +60,7 @@ namespace CurrencyExchange.Domain.EntityModels.Sales
 
     public enum CurrencyTransferType
     {
-        Cash,
-        Accounting
+        Cash = 1 ,
+        Accounting=2
     }
 }

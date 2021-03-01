@@ -13,14 +13,25 @@ namespace CurrencyExchange.Ioc.Extentions.Cors
             {
                 options.AddPolicy("EnableCorsEx", builder =>
                 {
+                    //builder.SetIsOriginAllowed(_ => true)
+                    //.AllowAnyOrigin()
+                    ////.SetIsOriginAllowed(origin => true)
+                    //.WithOrigins("http://localhost:7075")
+                    //.AllowAnyHeader()
+                    //.AllowAnyMethod()
+                    //.AllowCredentials()
+                    //.Build();
+
+
                     builder.SetIsOriginAllowed(_ => true)
-                        //.AllowAnyOrigin()
-                        //.SetIsOriginAllowed(origin => true)
-                        .WithOrigins("https://localhost:5001")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials()
                         .Build();
+                    //builder.AllowAnyOrigin()
+                    //    .AllowAnyMethod()
+                    //    .AllowAnyHeader();
+                    //.Build();
                 });
             });
             return service;

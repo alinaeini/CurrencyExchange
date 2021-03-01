@@ -1,41 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CurrencyExchange.Core.Dtos.Paging;
 using CurrencyExchange.Core.Dtos.Sales.CurrencySalePi;
+using CurrencyExchange.Core.Dtos.Sales.Interfaces;
 
 namespace CurrencyExchange.Core.Dtos.Sales
 {
-    public class FilterCurrSaleDto : BasePaging
+   
+    public class FilterCurrSaleDto : FilterGenericDto<CurrencySaleDto> ,IFilterCurrSaleDto
     {
-        #region Properties
-
-        public string SearchText { get; set; }
-        public List<CurrencySaleDto> CurrencySale { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        public FilterCurrSaleDto SetPaging(BasePaging paging)
-        {
-            this.PageId = paging.PageId;
-            this.PageCount = paging.PageCount;
-            this.ActivePage = paging.ActivePage;
-            this.StartPage = paging.StartPage;
-            this.EndPage = paging.EndPage;
-            this.TakeEntity = paging.TakeEntity;
-            this.SkipEntity = paging.SkipEntity;
-            return this;
-
-        }
-
-        public FilterCurrSaleDto SetCurrencySale(List<CurrencySaleDto> currencySale)
-        {
-            this.CurrencySale = currencySale;
-            return this;
-
-        }
-
-        #endregion
-
+        public long BrokerId { get; set; }
+        public long CustomerId { get; set; }
+        public bool IsCashed { get; set; }
+        public bool IsAccount { get; set; }
+        //public bool IsProfitAmount { get; set; }
+        //public bool IsLossAmount { get; set; }
+        public string FromDateSale { get; set; }
+        public string ToDateSale { get; set; }
+        public long FromSaleBasePrice { get; set; }
+        public long ToSaleBasePrice { get; set; }
     }
 }

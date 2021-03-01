@@ -26,4 +26,6 @@ namespace CurrencyExchange.Core.Dtos.ExDecalaration
             return this;
         }
     }
+
+
 }

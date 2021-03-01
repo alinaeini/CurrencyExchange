@@ -70,11 +70,11 @@ namespace CurrencyExchange.Core.Services.Implementations
             {
                 filterCustomerDto.CustomerDtos.Add(new CustomerDto
                 {
-                    Title = item.Title,
-                    Name = item.Name,
-                    Phone = item.Phone,
-                    Address = item.Address,
-                    Description = item.Description,
+                    Title = item.Title.SanitizeText(),
+                    Name = item.Name.SanitizeText(),
+                    Phone = item.Phone.SanitizeText(),
+                    Address = item.Address.SanitizeText(),
+                    Description = item.Description.SanitizeText(),
                     Id = item.Id
                 });
             }

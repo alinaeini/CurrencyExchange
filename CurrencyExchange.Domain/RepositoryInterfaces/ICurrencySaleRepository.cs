@@ -8,5 +8,6 @@ namespace CurrencyExchange.Domain.RepositoryInterfaces
     public interface ICurrencySaleRepository:IGenericRepository<CurrencySale>
     {
         Task<CurrencySale> GetCurrencyByIdIncludesCustomerAndBroker(long currSaleId);
+        Task<long> GetTotalCurrencyByCustomerId(long customerId);
     }
 }

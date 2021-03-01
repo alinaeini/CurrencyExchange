@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using CurrencyExchange.Domain.EntityModels.Sales;
 using CurrencyExchange.Domain.RepositoryInterfaces;
 using CurrencyExchange.Infrastructure.Data_Base.Context;
@@ -29,6 +30,10 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
                 .SingleOrDefaultAsync(x => x.Id == currSaleId);
         }
 
+        public async Task<long> GetTotalCurrencyByCustomerId(long customerId)
+        {
+            return await _context.CurrencySales.Where(x => x.CustomerId == customerId).SumAsync(x => x.SalePrice);
+        }
 
         #endregion
 
