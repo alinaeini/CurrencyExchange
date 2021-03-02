@@ -4,14 +4,16 @@ using CurrencyExchange.Infrastructure.Data_Base.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CurrencyExchange.Infrastructure.Migrations
 {
     [DbContext(typeof(CurrencyExchangeDbContext))]
-    partial class CurrencyExchangeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210302055241_AddComany2")]
+    partial class AddComany2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,18 +90,18 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2021, 3, 2, 9, 25, 26, 727, DateTimeKind.Local).AddTicks(724),
+                            CreateDate = new DateTime(2021, 3, 2, 9, 22, 40, 697, DateTimeKind.Local).AddTicks(7466),
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 3, 2, 9, 25, 26, 727, DateTimeKind.Local).AddTicks(798),
+                            LastUpdateDate = new DateTime(2021, 3, 2, 9, 22, 40, 697, DateTimeKind.Local).AddTicks(7505),
                             Name = "Admin",
                             Title = "راهبر سیستم"
                         },
                         new
                         {
                             Id = 2L,
-                            CreateDate = new DateTime(2021, 3, 2, 9, 25, 26, 727, DateTimeKind.Local).AddTicks(1150),
+                            CreateDate = new DateTime(2021, 3, 2, 9, 22, 40, 697, DateTimeKind.Local).AddTicks(7782),
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 3, 2, 9, 25, 26, 727, DateTimeKind.Local).AddTicks(1162),
+                            LastUpdateDate = new DateTime(2021, 3, 2, 9, 22, 40, 697, DateTimeKind.Local).AddTicks(7793),
                             Name = "User",
                             Title = "کاربر"
                         });
@@ -285,11 +287,11 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         {
                             Id = 1L,
                             Address = "ندارد",
-                            CreateDate = new DateTime(2021, 3, 2, 9, 25, 26, 719, DateTimeKind.Local).AddTicks(3569),
+                            CreateDate = new DateTime(2021, 3, 2, 9, 22, 40, 691, DateTimeKind.Local).AddTicks(1615),
                             Description = "ندارد",
                             IsActive = true,
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 3, 2, 9, 25, 26, 724, DateTimeKind.Local).AddTicks(5632),
+                            LastUpdateDate = new DateTime(2021, 3, 2, 9, 22, 40, 695, DateTimeKind.Local).AddTicks(3256),
                             Name = "شرکت تضامنی علی نائیج حقیقی و شرکا",
                             ServiceChargeAccount = 0m,
                             ServiceChargeCash = 0m,
@@ -300,55 +302,17 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         {
                             Id = 2L,
                             Address = "ندارد",
-                            CreateDate = new DateTime(2021, 3, 2, 9, 25, 26, 724, DateTimeKind.Local).AddTicks(8747),
+                            CreateDate = new DateTime(2021, 3, 2, 9, 22, 40, 695, DateTimeKind.Local).AddTicks(6307),
                             Description = "ندارد",
                             IsActive = true,
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 3, 2, 9, 25, 26, 724, DateTimeKind.Local).AddTicks(8792),
+                            LastUpdateDate = new DateTime(2021, 3, 2, 9, 22, 40, 695, DateTimeKind.Local).AddTicks(6351),
                             Name = "شرکت تضامنی محمد رستمی و شرکا",
                             ServiceChargeAccount = 0m,
                             ServiceChargeCash = 0m,
                             Tel = "ندارد",
                             Title = "صرافی نماد"
                         });
-                });
-
-            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Company.CompanyInfo", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Tel")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("WebSite")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CompanyInfo");
                 });
 
             modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Customers.Customer", b =>

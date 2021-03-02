@@ -17,6 +17,7 @@ namespace CurrencyExchange.Ioc.Extentions.Service
             #region Application(Core) Layer Dependancies
 
             service.AddScoped<IUserService, UserService>();
+            service.AddScoped<ICompanyService, CompanyService>();
             service.AddScoped<IPiService, PiService>();
             service.AddScoped<IPiDetailService, PiDetailService>();
             service.AddScoped<IBrokerService, BrokerService>();
@@ -46,6 +47,7 @@ namespace CurrencyExchange.Ioc.Extentions.Service
             service.AddScoped<ICurrencySaleRepository, CurrencySaleRepository>();
             service.AddScoped<ICurrencySalePiDetailRepository, CurrencySalePiDetailRepository>();
             service.AddScoped<ICurrencySaleExDecRepository, CurrencySaleExDecRepository>();
+            service.AddScoped<ICompanyRepository, CompanyRepository>();
             #endregion
 
             return service;

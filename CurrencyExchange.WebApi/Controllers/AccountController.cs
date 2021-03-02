@@ -1,4 +1,5 @@
 ﻿using CurrencyExchange.Core.Dtos.Account;
+using CurrencyExchange.Core.Dtos.Account.RolePermissions;
 using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Core.Utilities.Common;
 using CurrencyExchange.Core.Utilities.Extensions;
@@ -12,7 +13,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using CurrencyExchange.Core.Dtos.Account.RolePermissions;
 
 namespace CurrencyExchange.WebApi.Controllers
 {

@@ -4,6 +4,7 @@ using System.Linq;
 using CurrencyExchange.Domain.EntityModels.Access;
 using CurrencyExchange.Domain.EntityModels.Account;
 using CurrencyExchange.Domain.EntityModels.Broker;
+using CurrencyExchange.Domain.EntityModels.Company;
 using CurrencyExchange.Domain.EntityModels.Customers;
 using CurrencyExchange.Domain.EntityModels.ExchangeDeclaration;
 using CurrencyExchange.Domain.EntityModels.PeroformaInvoices;
@@ -37,6 +38,7 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Context
         public DbSet<CurrencySale> CurrencySales { get; set; }
         public DbSet<CurrencySaleDetailPi> CurrencySaleDetailPis { get; set; }
         public DbSet<CurrencySaleDetailExDec> CurrencySaleDetailExDecs { get; set; }
+        public DbSet<CompanyInfo> CompanyInfo { get; set; }
 
         #endregion
 
