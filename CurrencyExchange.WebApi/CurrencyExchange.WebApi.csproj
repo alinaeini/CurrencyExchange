@@ -15,6 +15,12 @@
   <ItemGroup>
 
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.6.0" />
+
+    <PackageReference Include="Stimulsoft.Dashboards.Web" Version="2021.1.1" />
+
+    <PackageReference Include="Stimulsoft.Reports.Angular.NetCore" Version="2021.1.1" />
+
+    <PackageReference Include="Stimulsoft.Reports.Web.NetCore" Version="2021.1.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2" />
 
@@ -32,6 +38,14 @@
     <ProjectReference Include="..\CurrencyExchange.Core\CurrencyExchange.Core.csproj" />
     <ProjectReference Include="..\CurrencyExchange.Ioc\CurrencyExchange.Ioc.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Packages\" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /y /d &quot;$(ProjectDir)Packages\*.*&quot; &quot;$(ProjectDir)$(OutDir)&quot;" />
+  </Target>
 
 
 </Project>

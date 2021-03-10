@@ -70,7 +70,8 @@ namespace CurrencyExchange.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-          
+
+
             app.UseDeveloperExceptionPage();
             if (env.IsDevelopment())
             {
@@ -82,6 +83,14 @@ namespace CurrencyExchange.WebApi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            #region Set LicenseKey StimulSoft
+
+            var contentRoot = env.ContentRootPath;
+            var licenseFile = System.IO.Path.Combine(contentRoot, "wwwroot\\Reports", "license.key");
+            Stimulsoft.Base.StiLicense.LoadFromFile(licenseFile);
+
+            #endregion
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
