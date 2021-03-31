@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using CurrencyExchange.Domain.EntityModels.Sales;
+using CurrencyExchange.Domain.EntityModels.Currency;
 using CurrencyExchange.Domain.RepositoryInterfaces.Generics;
 
 namespace CurrencyExchange.Domain.RepositoryInterfaces

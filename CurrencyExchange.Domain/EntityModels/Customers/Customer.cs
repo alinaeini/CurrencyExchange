@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using CurrencyExchange.Domain.EntityModels.Common;
-using CurrencyExchange.Domain.EntityModels.Sales;
+using CurrencyExchange.Domain.EntityModels.Currency;
 
 namespace CurrencyExchange.Domain.EntityModels.Customers
 {

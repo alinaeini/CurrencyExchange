@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Utilities.Common;
 using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Core.Utilities.Common;
 using CurrencyExchange.WebApi.Controllers.Base;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Utilities.Common;
 using CurrencyExchange.Core.Dtos.Customer;
 using CurrencyExchange.Core.Dtos.Sales;
 using CurrencyExchange.Core.Dtos.Sales.CurrencySaleExDec;

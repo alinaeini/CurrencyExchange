@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using CurrencyExchange.Domain.EntityModels.Broker;
 using CurrencyExchange.Domain.EntityModels.Common;
 using CurrencyExchange.Domain.EntityModels.Customers;
 
-namespace CurrencyExchange.Domain.EntityModels.Sales
+namespace CurrencyExchange.Domain.EntityModels.Currency
 {
     public class CurrencySale:BaseEntity
     {

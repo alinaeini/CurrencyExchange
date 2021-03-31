@@ -7,6 +7,7 @@ using CurrencyExchange.Ioc.Extentions.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.IIS;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,11 +36,13 @@ namespace CurrencyExchange.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IConfiguration>(
-                new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+                new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile($"appsettings.json")
                     .Build()
             );
 
+            
             #region Application Services
 
             services.RegisterServices();
@@ -82,7 +85,7 @@ namespace CurrencyExchange.WebApi
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-            }
+             }
 
             #region Set LicenseKey StimulSoft
 
@@ -99,6 +102,17 @@ namespace CurrencyExchange.WebApi
             app.UseAuthentication();
             app.UseAuthorization();
 
+            //app.Use(async (context, next) =>
+            //{
+            //    await context.Response.WriteAsync("Before Invoke from 2nd app.Use()\n");
+            //    await next();
+            //    await context.Response.WriteAsync("After Invoke from 2nd app.Use()\n");
+            //});
+
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync("Hello from 1st app.Run()\n");
+            //});
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

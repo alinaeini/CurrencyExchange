@@ -24,7 +24,6 @@ namespace CurrencyExchange.WebApi.Controllers
 
         public ViewerController()
         {
-
         }
 
         //public ViewerController(object data, string reportName, StiRequestParams viewer)
@@ -45,17 +44,15 @@ namespace CurrencyExchange.WebApi.Controllers
         //    this._reportName = reportName;
         //}
         [HttpPost]
-
         public IActionResult InitViewer()
 
         {
-
             var requestParams = StiAngularViewer.GetRequestParams(this);
             var options = new StiAngularViewerOptions();
 
             options.Actions.ViewerEvent = "ViewerEvent";
             options.Localization = "Localization/fa.xml";
- 
+
             options.Appearance.ScrollbarsMode = true;
             options.Appearance.FullScreenMode = true;
             //options.Toolbar.DisplayMode = StiToolbarDisplayMode.Separated;
@@ -65,22 +62,19 @@ namespace CurrencyExchange.WebApi.Controllers
             options.Theme = StiViewerTheme.Office2013WhiteBlue;
 
             return StiAngularViewer.ViewerDataResult(requestParams, options);
-
         }
 
         [HttpPost]
-
         public IActionResult ViewerEvent()
 
         {
-
             var requestParams = StiAngularViewer.GetRequestParams(this);
             var reportName = GetReportName();
-            var data =GetData();
+            var data = GetData();
 
-           var dt  =  JsonConvert.DeserializeObject(data.ToString());
+            var dt = JsonConvert.DeserializeObject(data.ToString());
             //var json = StiJsonConnector.Get();
-            //var dataSet = json.GetDataSet(new StiJsonOptions(data));
+            //var dataSet = json.GetDataSet(new StiJsonOptions(data));÷
 
 
             if (requestParams.Action == StiAction.GetReport)
@@ -89,13 +83,15 @@ namespace CurrencyExchange.WebApi.Controllers
                 var report = StiReport.CreateNewReport();
                 System.Globalization.PersianCalendar pc = new System.Globalization.PersianCalendar();
                 var path = StiAngularHelper.MapPath(this, "wwwroot/Reports/Currency/" + reportName);
-                string Date_shamsi = pc.GetYear(DateTime.Now) + "/" + pc.GetMonth(DateTime.Now) + "/" + pc.GetDayOfMonth(DateTime.Now);
+                string Date_shamsi = pc.GetYear(DateTime.Now) + "/" + pc.GetMonth(DateTime.Now) + "/" +
+                                     pc.GetDayOfMonth(DateTime.Now);
                 report.Load(path);
                 //report.RegData("dt", data.ToString());
                 report.RegData("dt", dt);
                 report.Dictionary.Variables["shamsiDate"].Value = Date_shamsi;
                 return StiAngularViewer.GetReportResult(this, report);
             }
+
             return StiAngularViewer.ProcessRequestResult(this);
         }
 
@@ -111,15 +107,16 @@ namespace CurrencyExchange.WebApi.Controllers
                 JContainer container = JsonConvert.DeserializeObject<JContainer>(json);
                 foreach (JToken token in container.Children())
                 {
-                    if (((JProperty)token).Name == "reportName")
+                    if (((JProperty) token).Name == "reportName")
                     {
-                       return ((JProperty)token).Value.Value<string>();
+                        return ((JProperty) token).Value.Value<string>();
                     }
                 }
             }
 
             return null;
         }
+
         private object GetData()
         {
             var httpContext = new Stimulsoft.System.Web.HttpContext(this.HttpContext);
@@ -131,24 +128,24 @@ namespace CurrencyExchange.WebApi.Controllers
                 JContainer container = JsonConvert.DeserializeObject<JContainer>(json);
                 foreach (JToken token in container.Children())
                 {
-                    if (((JProperty)token).Name == "data")
+                    if (((JProperty) token).Name == "data")
                     {
-                        return ((JProperty)token).Value.Value<object>();
+                        return ((JProperty) token).Value.Value<object>();
                     }
                 }
             }
 
             return null;
         }
-
     }
+
     [Controller]
-    public class CurrencyReportController :ViewerController
+    public class CurrencyReportController : ViewerController
     {
         public CurrencyReportController()
         {
-            
         }
+
         //[HttpPost]
         //public IActionResult GetReportdCurrSales(FilterCurrSaleDto filterPiDto)
         //{

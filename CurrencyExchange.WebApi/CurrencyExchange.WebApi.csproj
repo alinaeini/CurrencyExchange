@@ -35,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CurrencyExchange.Core\CurrencyExchange.Core.csproj" />
-    <ProjectReference Include="..\CurrencyExchange.Ioc\CurrencyExchange.Ioc.csproj" />
+    <ProjectReference Include="..\CurrencyExchange.Core\CurrencyExchange.Application.csproj" />
+    <ProjectReference Include="..\CurrencyExchange.Ioc\CurrencyExchange.Infrastructure.Ioc.csproj" />
   </ItemGroup>
 
   <ItemGroup>

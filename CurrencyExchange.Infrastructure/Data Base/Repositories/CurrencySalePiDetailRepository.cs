@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using CurrencyExchange.Domain.EntityModels.Sales;
+using CurrencyExchange.Domain.EntityModels.Currency;
 using CurrencyExchange.Domain.RepositoryInterfaces;
 using CurrencyExchange.Infrastructure.Data_Base.Context;
 using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;

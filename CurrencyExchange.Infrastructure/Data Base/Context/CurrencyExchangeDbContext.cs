@@ -5,10 +5,10 @@ using CurrencyExchange.Domain.EntityModels.Access;
 using CurrencyExchange.Domain.EntityModels.Account;
 using CurrencyExchange.Domain.EntityModels.Broker;
 using CurrencyExchange.Domain.EntityModels.Company;
+using CurrencyExchange.Domain.EntityModels.Currency;
 using CurrencyExchange.Domain.EntityModels.Customers;
 using CurrencyExchange.Domain.EntityModels.ExchangeDeclaration;
 using CurrencyExchange.Domain.EntityModels.PeroformaInvoices;
-using CurrencyExchange.Domain.EntityModels.Sales;
 using Microsoft.EntityFrameworkCore;
 
 namespace CurrencyExchange.Infrastructure.Data_Base.Context

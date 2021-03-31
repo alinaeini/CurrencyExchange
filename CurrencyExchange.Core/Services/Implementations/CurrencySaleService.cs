@@ -1,7 +1,6 @@
 ﻿using System;
 using CurrencyExchange.Core.Dtos.Sales;
 using CurrencyExchange.Core.Services.Interfaces;
-using CurrencyExchange.Domain.EntityModels.Sales;
 using CurrencyExchange.Domain.RepositoryInterfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +10,7 @@ using CurrencyExchange.Core.Dtos.Paging;
 using CurrencyExchange.Core.Dtos.Sales.CurrencySalePi;
 using CurrencyExchange.Core.Sequrity;
 using CurrencyExchange.Core.Utilities.Extensions;
+using CurrencyExchange.Domain.EntityModels.Currency;
 using CurrencyExchange.Domain.EntityModels.PeroformaInvoices;
 using Microsoft.EntityFrameworkCore;
 

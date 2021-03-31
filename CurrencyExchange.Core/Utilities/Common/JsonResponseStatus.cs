@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace CurrencyExchange.Core.Utilities.Common
+namespace CurrencyExchange.Application.Utilities.Common
 {
-    public static class JsonResponseStatus
+    public static class  JsonResponseStatus
     {
         #region Success
 

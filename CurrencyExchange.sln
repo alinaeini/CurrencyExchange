@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.WebApi", "CurrencyExchange.WebApi\CurrencyExchange.WebApi.csproj", "{939279C7-40AA-4F77-992D-CCF03980D2CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Infrastructure", "CurrencyExchange.Infrastructure\CurrencyExchange.Infrastructure.csproj", "{8D8CAB80-65AD-437C-AD88-B83A248A0307}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Infrastructure.Data", "CurrencyExchange.Infrastructure\CurrencyExchange.Infrastructure.Data.csproj", "{8D8CAB80-65AD-437C-AD88-B83A248A0307}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Core", "CurrencyExchange.Core\CurrencyExchange.Core.csproj", "{12B415E1-7847-4E62-801C-729A75125A8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Application", "CurrencyExchange.Core\CurrencyExchange.Application.csproj", "{12B415E1-7847-4E62-801C-729A75125A8A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Domain", "CurrencyExchange.Domain\CurrencyExchange.Domain.csproj", "{5F483AB2-CAEC-4B9F-BED8-E24E54243155}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Ioc", "CurrencyExchange.Ioc\CurrencyExchange.Ioc.csproj", "{26815BEE-7863-4673-8082-F957F541A255}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyExchange.Infrastructure.Ioc", "CurrencyExchange.Ioc\CurrencyExchange.Infrastructure.Ioc.csproj", "{26815BEE-7863-4673-8082-F957F541A255}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

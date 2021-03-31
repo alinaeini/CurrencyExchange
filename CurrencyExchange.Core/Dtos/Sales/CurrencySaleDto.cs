@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using CurrencyExchange.Domain.EntityModels.Sales;
+using CurrencyExchange.Domain.EntityModels.Currency;
 
 namespace CurrencyExchange.Core.Dtos.Sales
 {

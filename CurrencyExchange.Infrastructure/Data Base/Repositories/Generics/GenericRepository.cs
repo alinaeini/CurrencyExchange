@@ -87,23 +87,7 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics
 
         public virtual async Task SaveChanges()
         {
-            //var str = new List<string>();
-            //foreach (var entry in _context.ChangeTracker.Entries())
-            //{
-
-            //    str.Add("Name :  " + entry.Entity.GetType().Name + "State: " + entry.State.ToString());
-            //}
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-
-           
+            await _context.SaveChangesAsync();
         }
 
         #endregion

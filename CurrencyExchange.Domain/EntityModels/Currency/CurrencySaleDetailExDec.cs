@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using CurrencyExchange.Domain.EntityModels.Common;
 using CurrencyExchange.Domain.EntityModels.ExchangeDeclaration;
 
-namespace CurrencyExchange.Domain.EntityModels.Sales
+namespace CurrencyExchange.Domain.EntityModels.Currency
 {
     public class CurrencySaleDetailExDec :BaseEntity
     {
