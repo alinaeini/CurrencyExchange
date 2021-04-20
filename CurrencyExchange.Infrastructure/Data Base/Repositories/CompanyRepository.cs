@@ -1,12 +1,9 @@
-﻿using System.Dynamic;
-using System.Linq;
-using System.Threading.Tasks;
-using CurrencyExchange.Domain.EntityModels.Company;
+﻿using CurrencyExchange.Domain.EntityModels.Company;
 using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data.Data_Base.Repositories.Generics;
 using CurrencyExchange.Infrastructure.Data_Base.Context;
-using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;
 
-namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
+namespace CurrencyExchange.Infrastructure.Data.Data_Base.Repositories
 {
     public class CompanyRepository : GenericRepository<CompanyInfo>, ICompanyRepository
     {

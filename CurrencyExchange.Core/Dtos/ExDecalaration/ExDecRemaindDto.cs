@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
-namespace CurrencyExchange.Core.Dtos.ExDecalaration
+namespace CurrencyExchange.Application.Dtos.ExDecalaration
 {
     public class ExDecRemaindDto
     {
@@ -31,5 +29,8 @@ namespace CurrencyExchange.Core.Dtos.ExDecalaration
         [Display(Name = "مقدار درهم باقیمانده")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public long RemaindPrice { get; set; }
+
+        [Display(Name = "توضیحات")]
+        public string Description { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Sales.CurrencySaleExDec;
 using CurrencyExchange.Core.Dtos.Sales.CurrencySaleExDec;
 
 namespace CurrencyExchange.Core.Services.Interfaces

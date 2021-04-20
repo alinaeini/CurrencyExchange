@@ -13,7 +13,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Account;
+using CurrencyExchange.Application.Services.Interfaces;
 using CurrencyExchange.Application.Utilities.Common;
+using CurrencyExchange.Application.Utilities.Extensions;
 
 namespace CurrencyExchange.WebApi.Controllers
 {
@@ -113,6 +116,7 @@ namespace CurrencyExchange.WebApi.Controllers
                             claims: new List<Claim>
                             {
                                 new Claim(ClaimTypes.Name, user.UserName),
+                                new Claim(ClaimTypes.SerialNumber, loginUserDtOs.FinancialPeriodId.ToString()),
                                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                             },
                             expires: DateTime.Now.AddHours(1),
@@ -128,7 +132,8 @@ namespace CurrencyExchange.WebApi.Controllers
                             lastName = user.LastName,
                             userId = user.Id,
                             userRole = roleName,
-                            userPermissions= userPermissions
+                            userPermissions= userPermissions,
+                            financialPeriodId = loginUserDtOs.FinancialPeriodId,
                         });
                 }
             }
@@ -147,6 +152,7 @@ namespace CurrencyExchange.WebApi.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var userId = User.GetUserId();
+                var fainancialPeriodId = User.GeFinancialPeriodId();
                 var userInfo = await userService.GetUserById(userId);
                 var roleName = await userService.GetRoleByUserId(userId);
                 var userPermissions = await userService.GetUserPermissions(userId);
@@ -157,7 +163,8 @@ namespace CurrencyExchange.WebApi.Controllers
                     lastName = userInfo.LastName,
                     userName = userInfo.UserName,
                     userRole = roleName,
-                    userPermissions = userPermissions
+                    userPermissions = userPermissions,
+                    financialPeriodId= fainancialPeriodId
                 });
                 return returnJson;
             }

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using CurrencyExchange.Domain.EntityModels.Common;
 
-namespace CurrencyExchange.Core.Dtos.Company
+namespace CurrencyExchange.Application.Dtos.Company
 {
     public class CompanyDto 
     {

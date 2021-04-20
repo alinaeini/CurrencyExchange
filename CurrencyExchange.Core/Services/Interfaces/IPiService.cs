@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Pi;
 using CurrencyExchange.Core.Dtos.Pi;
 using CurrencyExchange.Core.Dtos.Pi.PiDetail;
 

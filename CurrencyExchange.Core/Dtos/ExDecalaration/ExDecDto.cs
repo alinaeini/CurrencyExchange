@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
-namespace CurrencyExchange.Core.Dtos.ExDecalaration
+namespace CurrencyExchange.Application.Dtos.ExDecalaration
 {
     public class ExDecDto
     {
@@ -25,6 +23,9 @@ namespace CurrencyExchange.Core.Dtos.ExDecalaration
         [Display(Name = "تاریخ انقضای اظهار نامه")]
         public DateTime ExpireDate { get; set; }
 
+
+        [Display(Name = "توضیحات")]
+        public string Description { get; set; }
 
         #endregion
 

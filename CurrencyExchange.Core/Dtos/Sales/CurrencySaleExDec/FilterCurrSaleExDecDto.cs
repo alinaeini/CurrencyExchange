@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using CurrencyExchange.Application.Dtos.Paging;
 using CurrencyExchange.Core.Dtos.Paging;
+using CurrencyExchange.Core.Dtos.Sales.CurrencySaleExDec;
 
-namespace CurrencyExchange.Core.Dtos.Sales.CurrencySaleExDec
+namespace CurrencyExchange.Application.Dtos.Sales.CurrencySaleExDec
 {
     public class FilterCurrSaleExDecDto : BasePaging
     {

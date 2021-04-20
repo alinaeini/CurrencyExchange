@@ -2,8 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
-namespace CurrencyExchange.Ioc.Extentions.DataBaseConnection
+namespace CurrencyExchange.Infrastructure.Ioc.Extentions.DataBaseConnection
 {
     public static class ConnectionExtention
     {
@@ -13,9 +14,14 @@ namespace CurrencyExchange.Ioc.Extentions.DataBaseConnection
             service.AddDbContext<CurrencyExchangeDbContext>(options =>
             {
                 var connectionString = "ConnectionStrings:ExchangeCurrConnection:Development";
-                options.UseSqlServer(configuration[connectionString]);
+                options
+                    .UseLoggerFactory(DatabaseLoggerFactory)
+                    .UseSqlServer(configuration[connectionString]);
             });
             return service;
         }
+
+        public static readonly ILoggerFactory DatabaseLoggerFactory
+            = LoggerFactory.Create(builder => { builder.AddConsole(); });
     }
 }

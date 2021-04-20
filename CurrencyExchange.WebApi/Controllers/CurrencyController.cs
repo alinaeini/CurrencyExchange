@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Customer;
+using CurrencyExchange.Application.Dtos.Sales;
+using CurrencyExchange.Application.Dtos.Sales.CurrencySaleExDec;
+using CurrencyExchange.Application.Services.Interfaces;
 using CurrencyExchange.Application.Utilities.Common;
+using CurrencyExchange.Application.Utilities.Extensions;
 using CurrencyExchange.Core.Dtos.Customer;
 using CurrencyExchange.Core.Dtos.Sales;
 using CurrencyExchange.Core.Dtos.Sales.CurrencySaleExDec;
@@ -42,18 +47,18 @@ namespace CurrencyExchange.WebApi.Controllers
                 {
                     case SalesResult.CanNotUpdateSoldExDecInDataBase:
                         return JsonResponseStatus.Error(new
-                            {Info = "هنوز اظهارنامه به لیست فروش رفته ها وارد نشده است "});
+                        { Info = "هنوز اظهارنامه به لیست فروش رفته ها وارد نشده است " });
 
                     case SalesResult.CanNotUpdateSoldPiDetailInDataBase:
-                        return JsonResponseStatus.Error(new {Info = "هنوز PI به لیست فروش رفته ها وارد نشده است "});
+                        return JsonResponseStatus.Error(new { Info = "هنوز PI به لیست فروش رفته ها وارد نشده است " });
 
                     case SalesResult.SumBrokerAccountBalanceIsLowerThanPrice:
                         return JsonResponseStatus.Error(new
-                            {Info = " مقدار انتخاب شده برای فروش از مقدار موجودی کارگزار بیشتر است"});
+                        { Info = " مقدار انتخاب شده برای فروش از مقدار موجودی کارگزار بیشتر است" });
 
                     case SalesResult.ExDecAccountBalanceIsLowerThanPrice:
                         return JsonResponseStatus.Error(new
-                            {Info = "مقدارانتخاب شده برای فروش از مقدار  موجودی اظهارنامه بیشتر است"});
+                        { Info = "مقدارانتخاب شده برای فروش از مقدار  موجودی اظهارنامه بیشتر است" });
                 }
             }
 
@@ -119,8 +124,12 @@ namespace CurrencyExchange.WebApi.Controllers
         [HttpGet("sale-filter-currSale")]
         public async Task<IActionResult> GetFilterCurrencySale([FromQuery] FilterCurrSaleDto filterPiDto)
         {
-            var piDetail = await _saleService.GetListSales(filterPiDto);
-            return JsonResponseStatus.Success(piDetail);
+            if (ModelState.IsValid)
+            {
+                var piDetail = await _saleService.GetListSales(filterPiDto, User.GeFinancialPeriodId());
+                return JsonResponseStatus.Success(piDetail);
+            }
+            return JsonResponseStatus.Error();
         }
 
         #endregion
@@ -131,8 +140,12 @@ namespace CurrencyExchange.WebApi.Controllers
         [HttpGet("get-currSale-detail-by-customerId/{customerId}")]
         public async Task<IActionResult> GetFilterCurrencySale(long customerId)
         {
-            var customerDetail = await _saleService.GetListSalesByCustomerId(customerId);
-            return JsonResponseStatus.Success(customerDetail);
+            if (ModelState.IsValid)
+            {
+                var customerDetail = await _saleService.GetListSalesByCustomerId(customerId, User.GeFinancialPeriodId());
+                return JsonResponseStatus.Success(customerDetail);
+            }
+            return JsonResponseStatus.Error();
         }
 
         #endregion
@@ -142,8 +155,12 @@ namespace CurrencyExchange.WebApi.Controllers
         [HttpGet("currency-by-customer")]
         public async Task<IActionResult> GetCustomersSold([FromQuery] FilterCurrencyCustomerDto filterDto)
         {
-            var piDetail = await _saleService.GetSoldPerCustomers(filterDto);
-            return JsonResponseStatus.Success(piDetail);
+            if (ModelState.IsValid)
+            {
+                var piDetail = await _saleService.GetSoldPerCustomers(filterDto, User.GeFinancialPeriodId());
+                return JsonResponseStatus.Success(piDetail);
+            }
+            return JsonResponseStatus.Error();
         }
 
         #endregion

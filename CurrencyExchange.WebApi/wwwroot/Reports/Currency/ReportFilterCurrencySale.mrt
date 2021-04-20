@@ -7,7 +7,7 @@
     <DataSources isList="true" count="1">
       <dt Ref="2" type="DataTableSource" isKey="true">
         <Alias>dt</Alias>
-        <Columns isList="true" count="10">
+        <Columns isList="true" count="11">
           <value>ORIGINAL,id,id,id,System.String,_x0036_6217d736a6540dda0e3791abaad6920</value>
           <value>ORIGINAL,price,price,price,System.Double,f8cfd4d9375e4fffae723abdb51de23c</value>
           <value>ORIGINAL,profitLossAmount,profitLossAmount,profitLossAmount,System.Double,_x0033_00c92dadd594126bdd0a5bfbab6a1ee</value>
@@ -18,6 +18,7 @@
           <value>ORIGINAL,salePricePerUnit,salePricePerUnit,salePricePerUnit,System.Double,_x0033_50f2f332b4a4856a731be0b62721749</value>
           <value>ORIGINAL,transferPrice,transferPrice,transferPrice,System.Double,_x0039_8c140bffdf24615bd1b8d99fea607fa</value>
           <value>ORIGINAL,transferType,transferType,transferType,System.Int32,_x0031_df4fd09c02c4d73afcd23c528ec3d97</value>
+          <value>currencyType,System.Int32</value>
         </Columns>
         <Dictionary isRef="1" />
         <Key>c382148890ce4eed9fa51a49ed11d937</Key>
@@ -50,8 +51,8 @@
       <Components isList="true" count="4">
         <PageHeaderBand1 Ref="5" type="PageHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,0.4,19,3.4</ClientRectangle>
-          <Components isList="true" count="4">
+          <ClientRectangle>0,0.4,27.7,4</ClientRectangle>
+          <Components isList="true" count="5">
             <Image1 Ref="6" type="Image" isKey="true">
               <Brush>Transparent</Brush>
               <ClientRectangle>0.2,0.2,4.4,1.4</ClientRectangle>
@@ -1543,7 +1544,7 @@ SUVORK5CYII=</ImageBytes>
             </Image1>
             <Text2 Ref="7" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <ClientRectangle>6.6,2.4,6.4,1</ClientRectangle>
+              <ClientRectangle>12.2,2.4,6.4,1.4</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Mitra,18,Bold</Font>
@@ -1558,7 +1559,7 @@ SUVORK5CYII=</ImageBytes>
             </Text2>
             <Text3 Ref="8" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <ClientRectangle>14.8,0.6,1.8,0.6</ClientRectangle>
+              <ClientRectangle>24,0.8,1.8,0.6</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Mitra,9</Font>
@@ -1574,7 +1575,7 @@ SUVORK5CYII=</ImageBytes>
             </Text3>
             <Text4 Ref="10" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <ClientRectangle>16.8,0.6,1.8,0.6</ClientRectangle>
+              <ClientRectangle>25.8,0.8,1.8,0.6</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Mitra,9</Font>
@@ -1587,6 +1588,21 @@ SUVORK5CYII=</ImageBytes>
               <TextBrush>[0:0:0]</TextBrush>
               <Type>Expression</Type>
             </Text4>
+            <Text14 Ref="11" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>21.4,0.8,2.4,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>B Mitra,9</Font>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text14</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>ساعت و تاریخ تهیه گزارش :</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <Type>Expression</Type>
+            </Text14>
           </Components>
           <Conditions isList="true" count="0" />
           <Expressions isList="true" count="0" />
@@ -1594,23 +1610,13 @@ SUVORK5CYII=</ImageBytes>
           <Page isRef="4" />
           <Parent isRef="4" />
         </PageHeaderBand1>
-        <PageFooterBand1 Ref="11" type="PageFooterBand" isKey="true">
-          <Brush>Transparent</Brush>
-          <ClientRectangle>0,24.7,19,3</ClientRectangle>
-          <Components isList="true" count="0" />
-          <Conditions isList="true" count="0" />
-          <Expressions isList="true" count="0" />
-          <Name>PageFooterBand1</Name>
-          <Page isRef="4" />
-          <Parent isRef="4" />
-        </PageFooterBand1>
         <Headerdt Ref="12" type="HeaderBand" isKey="true">
-          <Brush>Transparent</Brush>
-          <ClientRectangle>0,4.6,19,1</ClientRectangle>
-          <Components isList="true" count="8">
+          <Brush>[242:242:242]</Brush>
+          <ClientRectangle>0,5.2,27.7,1</ClientRectangle>
+          <Components isList="true" count="9">
             <Headerdt_brokerName Ref="13" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
-              <Brush>[191:191:191]</Brush>
+              <Brush>[242:242:242]</Brush>
               <ClientRectangle>0,0,2.6,1</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
@@ -1628,8 +1634,8 @@ SUVORK5CYII=</ImageBytes>
             </Headerdt_brokerName>
             <Headerdt_customerName Ref="14" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
-              <Brush>[191:191:191]</Brush>
-              <ClientRectangle>2.6,0,1.8,1</ClientRectangle>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>2.6,0,6,1</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10,Bold</Font>
@@ -1646,8 +1652,8 @@ SUVORK5CYII=</ImageBytes>
             </Headerdt_customerName>
             <Headerdt_salePricePerUnit Ref="15" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
-              <Brush>[191:191:191]</Brush>
-              <ClientRectangle>9.6,0,1.8,1</ClientRectangle>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>16.2,0,2.2,1</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10,Bold</Font>
@@ -1664,8 +1670,8 @@ SUVORK5CYII=</ImageBytes>
             </Headerdt_salePricePerUnit>
             <Headerdt_transferPrice Ref="16" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
-              <Brush>[191:191:191]</Brush>
-              <ClientRectangle>14.4,0,2.6,1</ClientRectangle>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>22.4,0,3.2,1</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10,Bold</Font>
@@ -1682,8 +1688,8 @@ SUVORK5CYII=</ImageBytes>
             </Headerdt_transferPrice>
             <Headerdt_transferType Ref="17" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
-              <Brush>[191:191:191]</Brush>
-              <ClientRectangle>17,0,2,1</ClientRectangle>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>25.5,0,2.2,1</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10,Bold</Font>
@@ -1692,7 +1698,7 @@ SUVORK5CYII=</ImageBytes>
               <Name>Headerdt_transferType</Name>
               <Page isRef="4" />
               <Parent isRef="12" />
-              <Text>نوع انتقال</Text>
+              <Text>نحوه انتقال</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <Type>Expression</Type>
@@ -1700,8 +1706,8 @@ SUVORK5CYII=</ImageBytes>
             </Headerdt_transferType>
             <Headerdt_price Ref="18" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
-              <Brush>[191:191:191]</Brush>
-              <ClientRectangle>7.2,0,2.4,1</ClientRectangle>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>13.6,0,2.6,1</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10,Bold</Font>
@@ -1718,8 +1724,8 @@ SUVORK5CYII=</ImageBytes>
             </Headerdt_price>
             <Headerdt_currSaleDate Ref="19" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
-              <Brush>[191:191:191]</Brush>
-              <ClientRectangle>4.4,0,2.8,1</ClientRectangle>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>10.8,0,2.8,1</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10,Bold</Font>
@@ -1736,8 +1742,8 @@ SUVORK5CYII=</ImageBytes>
             </Headerdt_currSaleDate>
             <Headerdt_profitLossAmount Ref="20" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
-              <Brush>[191:191:191]</Brush>
-              <ClientRectangle>11.4,0,3,1</ClientRectangle>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>18.4,0,4,1</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10,Bold</Font>
@@ -1752,6 +1758,24 @@ SUVORK5CYII=</ImageBytes>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Headerdt_profitLossAmount>
+            <Text11 Ref="21" type="Text" isKey="true">
+              <Border>All;Black;1;Solid;False;4;Black</Border>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>8.6,0,2.2,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>B Nazanin,10,Bold</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text11</Name>
+              <Page isRef="4" />
+              <Parent isRef="12" />
+              <Text>نوع انتقال</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text11>
           </Components>
           <Conditions isList="true" count="0" />
           <Expressions isList="true" count="0" />
@@ -1759,16 +1783,16 @@ SUVORK5CYII=</ImageBytes>
           <Page isRef="4" />
           <Parent isRef="4" />
         </Headerdt>
-        <Datadt Ref="21" type="DataBand" isKey="true">
+        <Datadt Ref="22" type="DataBand" isKey="true">
           <Brush>Transparent</Brush>
           <BusinessObjectGuid isNull="true" />
-          <ClientRectangle>0,6.4,19,1.8</ClientRectangle>
-          <Components isList="true" count="8">
-            <Datadt_currSaleDate Ref="22" type="Text" isKey="true">
+          <ClientRectangle>0,7,27.7,1.8</ClientRectangle>
+          <Components isList="true" count="9">
+            <Datadt_currSaleDate Ref="23" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>4.4,0,2.8,1.8</ClientRectangle>
+              <ClientRectangle>10.8,0,2.8,1.8</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10</Font>
@@ -1776,13 +1800,13 @@ SUVORK5CYII=</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Datadt_currSaleDate</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="22" />
               <Text>{dt.currSaleDate}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </Datadt_currSaleDate>
-            <Datadt_brokerName Ref="23" type="Text" isKey="true">
+            <Datadt_brokerName Ref="24" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
@@ -1794,17 +1818,17 @@ SUVORK5CYII=</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Datadt_brokerName</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="22" />
               <Text>{dt.brokerName}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </Datadt_brokerName>
-            <Datadt_customerName Ref="24" type="Text" isKey="true">
+            <Datadt_customerName Ref="25" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>2.6,0,1.8,1.8</ClientRectangle>
+              <ClientRectangle>2.6,0,6,1.8</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10</Font>
@@ -1812,17 +1836,17 @@ SUVORK5CYII=</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Datadt_customerName</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="22" />
               <Text>{dt.customerName}</Text>
               <TextBrush>Black</TextBrush>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </Datadt_customerName>
-            <Datadt_salePricePerUnit Ref="25" type="Text" isKey="true">
+            <Datadt_salePricePerUnit Ref="26" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>9.6,0,1.8,1.8</ClientRectangle>
+              <ClientRectangle>16.2,0,2.2,1.8</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10</Font>
@@ -1830,20 +1854,26 @@ SUVORK5CYII=</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Datadt_salePricePerUnit</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="22" />
               <Text>{dt.salePricePerUnit}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="26" type="CustomFormat" isKey="true">
-                <StringFormat>###,### ریال</StringFormat>
+              <TextFormat Ref="27" type="CurrencyFormat" isKey="true">
+                <DecimalDigits>0</DecimalDigits>
+                <DecimalSeparator>,</DecimalSeparator>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>4</NegativePattern>
+                <PositivePattern>1</PositivePattern>
+                <Symbol>ريال</Symbol>
+                <UseLocalSetting>False</UseLocalSetting>
               </TextFormat>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </Datadt_salePricePerUnit>
-            <Datadt_transferPrice Ref="27" type="Text" isKey="true">
+            <Datadt_transferPrice Ref="28" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>14.4,0,2.6,1.8</ClientRectangle>
+              <ClientRectangle>22.4,0,3.2,1.8</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10</Font>
@@ -1851,19 +1881,19 @@ SUVORK5CYII=</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Datadt_transferPrice</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="22" />
               <Text>{dt.transferPrice}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="28" type="CustomFormat" isKey="true">
+              <TextFormat Ref="29" type="CustomFormat" isKey="true">
                 <StringFormat>###,### درهم</StringFormat>
               </TextFormat>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </Datadt_transferPrice>
-            <Text1 Ref="29" type="Text" isKey="true">
+            <Text1 Ref="30" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
-              <ClientRectangle>17,0,2,1.8</ClientRectangle>
+              <ClientRectangle>25.5,0,2.2,1.8</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10</Font>
@@ -1871,18 +1901,18 @@ SUVORK5CYII=</ImageBytes>
               <Margins>0,0,0,0</Margins>
               <Name>Text1</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="22" />
               <Text>{Switch(dt.transferType == 1, "تسویه نقدی",  
 dt.transferType == 2, "تسویه تو حسابی")}</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
             </Text1>
-            <Datadt_price Ref="30" type="Text" isKey="true">
+            <Datadt_price Ref="31" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <ClientRectangle>7.2,0,2.4,1.8</ClientRectangle>
+              <ClientRectangle>13.6,0,2.6,1.8</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10</Font>
@@ -1890,36 +1920,62 @@ dt.transferType == 2, "تسویه تو حسابی")}</Text>
               <Margins>0,0,0,0</Margins>
               <Name>Datadt_price</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="22" />
               <Text>{dt.price}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="31" type="CustomFormat" isKey="true">
+              <TextFormat Ref="32" type="CustomFormat" isKey="true">
                 <StringFormat>###,### درهم</StringFormat>
               </TextFormat>
               <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
               <VertAlignment>Center</VertAlignment>
             </Datadt_price>
-            <Datadt_profitLossAmount Ref="32" type="Text" isKey="true">
+            <Text5 Ref="33" type="Text" isKey="true">
               <Border>All;Black;1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <ClientRectangle>11.4,0,3,1.8</ClientRectangle>
+              <ClientRectangle>18.4,0,4,1.8</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>B Nazanin,10</Font>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
-              <Name>Datadt_profitLossAmount</Name>
+              <Name>Text5</Name>
               <Page isRef="4" />
-              <Parent isRef="21" />
+              <Parent isRef="22" />
               <Text>{dt.profitLossAmount}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="33" type="CustomFormat" isKey="true">
-                <StringFormat>###,### ریال</StringFormat>
+              <TextFormat Ref="34" type="CurrencyFormat" isKey="true">
+                <DecimalDigits>0</DecimalDigits>
+                <DecimalSeparator>,</DecimalSeparator>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>4</NegativePattern>
+                <PositivePattern>1</PositivePattern>
+                <State>NegativeInRed</State>
+                <Symbol>ريال</Symbol>
+                <UseLocalSetting>False</UseLocalSetting>
               </TextFormat>
-              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>DataColumn</Type>
               <VertAlignment>Center</VertAlignment>
-            </Datadt_profitLossAmount>
+            </Text5>
+            <Text12 Ref="35" type="Text" isKey="true">
+              <Border>All;Black;1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>8.6,0,2.2,1.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>B Nazanin,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text12</Name>
+              <Page isRef="4" />
+              <Parent isRef="22" />
+              <Text>{Switch(dt.currencyType== 1, "فروش ارز",  
+dt.currencyType == 2, "انتقال به کارگزار" ,
+dt.currencyType == 3, "انتقال به مشتری (متفرقه)" )}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text12>
           </Components>
           <Conditions isList="true" count="0" />
           <DataSourceName>dt</DataSourceName>
@@ -1930,18 +1986,159 @@ dt.transferType == 2, "تسویه تو حسابی")}</Text>
           <Parent isRef="4" />
           <Sort isList="true" count="0" />
         </Datadt>
+        <FooterBand1 Ref="36" type="FooterBand" isKey="true">
+          <Border>All;Black;1;Solid;False;4;Black</Border>
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,9.6,27.7,1.4</ClientRectangle>
+          <Components isList="true" count="6">
+            <Text6 Ref="37" type="Text" isKey="true">
+              <Border>All;Black;1;Solid;False;4;Black</Border>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>13.6,0,2.6,1.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>B Mitra,10,Bold</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text6</Name>
+              <Page isRef="4" />
+              <Parent isRef="36" />
+              <Text>{Sum(Datadt,dt.price)}</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <TextFormat Ref="38" type="CustomFormat" isKey="true">
+                <StringFormat>###,### درهم</StringFormat>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text6>
+            <Text8 Ref="39" type="Text" isKey="true">
+              <Border>All;Black;1;Solid;False;4;Black</Border>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>18.4,0,4,1.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>B Mitra,10,Bold</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text8</Name>
+              <Page isRef="4" />
+              <Parent isRef="36" />
+              <Text>{Sum(Datadt,dt.profitLossAmount)}</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <TextFormat Ref="40" type="CurrencyFormat" isKey="true">
+                <DecimalDigits>0</DecimalDigits>
+                <DecimalSeparator>,</DecimalSeparator>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>4</NegativePattern>
+                <PositivePattern>1</PositivePattern>
+                <Symbol>ريال</Symbol>
+                <UseLocalSetting>False</UseLocalSetting>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text8>
+            <Text7 Ref="41" type="Text" isKey="true">
+              <AutoWidth>True</AutoWidth>
+              <Border>All;Black;1;Solid;False;4;Black</Border>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>16.2,0,2.2,1.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>B Mitra,10,Bold</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text7</Name>
+              <Page isRef="4" />
+              <Parent isRef="36" />
+              <Text>{AvgIf(Datadt,dt.salePricePerUnit,dt.salePricePerUnit&gt;0)}</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <TextFormat Ref="42" type="CurrencyFormat" isKey="true">
+                <DecimalDigits>0</DecimalDigits>
+                <DecimalSeparator>,</DecimalSeparator>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>4</NegativePattern>
+                <PositivePattern>1</PositivePattern>
+                <State>NegativeInRed</State>
+                <Symbol>ريال</Symbol>
+                <UseLocalSetting>False</UseLocalSetting>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text7>
+            <Text9 Ref="43" type="Text" isKey="true">
+              <Border>All;Black;1;Solid;False;4;Black</Border>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>22.4,0,3.2,1.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>B Mitra,10,Bold</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text9</Name>
+              <Page isRef="4" />
+              <Parent isRef="36" />
+              <Text>{Sum(Datadt,dt.transferPrice)}</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <TextFormat Ref="44" type="CustomFormat" isKey="true">
+                <StringFormat>###,### درهم</StringFormat>
+              </TextFormat>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text9>
+            <Text10 Ref="45" type="Text" isKey="true">
+              <Border>All;Black;1;Solid;False;4;Black</Border>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>0,0,13.6,1.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>B Mitra,10,Bold</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text10</Name>
+              <Page isRef="4" />
+              <Parent isRef="36" />
+              <Text>جمع کل :</Text>
+              <TextBrush>[0:0:0]</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text10>
+            <Text13 Ref="46" type="Text" isKey="true">
+              <Border>All;Black;1;Solid;False;4;Black</Border>
+              <Brush>[242:242:242]</Brush>
+              <ClientRectangle>25.5,0,2.2,1.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>B Mitra,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text13</Name>
+              <Page isRef="4" />
+              <Parent isRef="36" />
+              <TextBrush>[0:0:0]</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text13>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Expressions isList="true" count="0" />
+          <Name>FooterBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </FooterBand1>
       </Components>
       <Conditions isList="true" count="0" />
       <Expressions isList="true" count="0" />
       <Guid>47b19cabbe2343298cb8a0cf07e621ce</Guid>
       <Margins>1,1,1,1</Margins>
       <Name>Page1</Name>
-      <PageHeight>29.7</PageHeight>
-      <PageWidth>21</PageWidth>
+      <Orientation>Landscape</Orientation>
+      <PageHeight>21</PageHeight>
+      <PageWidth>29.7</PageWidth>
       <PaperSize>A4</PaperSize>
       <Report isRef="0" />
     </Page1>
-    <Dashboard1 Ref="34" type="Stimulsoft.Dashboard.Components.StiDashboard" isKey="true">
+    <Dashboard1 Ref="47" type="Stimulsoft.Dashboard.Components.StiDashboard" isKey="true">
       <BackColor>Transparent</BackColor>
       <Components isList="true" count="0" />
       <Expressions isList="true" count="0" />
@@ -1961,10 +2158,10 @@ dt.transferType == 2, "تسویه تو حسابی")}</Text>
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>3/10/2021 1:34:24 PM</ReportChanged>
+  <ReportChanged>4/10/2021 11:24:32 PM</ReportChanged>
   <ReportCreated>3/2/2021 7:08:28 PM</ReportCreated>
   <ReportFile>D:\Project\CurrencyExchange\CurrencyExchange\CurrencyExchange.WebApi\wwwroot\Reports\Currency\ReportFilterCurrencySale.mrt</ReportFile>
-  <ReportGuid>5d6f791e381f45f899d7e87b0db96f07</ReportGuid>
+  <ReportGuid>39eb2ad8298b4e73a6dc4dd198874823</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Centimeters</ReportUnit>
   <ReportVersion>2021.1.1.0</ReportVersion>
@@ -1993,7 +2190,7 @@ namespace Reports
 </Script>
   <ScriptLanguage>CSharp</ScriptLanguage>
   <Styles isList="true" count="1">
-    <Style1 Ref="35" type="Stimulsoft.Report.StiChartStyle" isKey="true">
+    <Style1 Ref="48" type="Stimulsoft.Report.StiChartStyle" isKey="true">
       <AxisLabelsColor>140, 140, 140</AxisLabelsColor>
       <AxisLineColor>140, 140, 140</AxisLineColor>
       <AxisTitleColor>140, 140, 140</AxisTitleColor>

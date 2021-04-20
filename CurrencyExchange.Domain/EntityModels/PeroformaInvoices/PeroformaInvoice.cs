@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using CurrencyExchange.Domain.EntityModels.Common;
+using CurrencyExchange.Domain.EntityModels.Customers;
 
 namespace CurrencyExchange.Domain.EntityModels.PeroformaInvoices
 {
@@ -31,11 +33,22 @@ namespace CurrencyExchange.Domain.EntityModels.PeroformaInvoices
         public long BasePrice { get; set; }
 
         public bool IsSold { get; set; }
+
+        [Display(Name = "توضیحات")]
+        //[Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(1000, ErrorMessage = "تعداد کاراکترهای {0} نمیتواند بیشتر از {1} باشد")]
+        public string Description { get; set; }
+
         #endregion
 
         #region Relations
 
         public ICollection<PeroformaInvoiceDetail> PeroformaInvoiceDetails { get; set; }
+
+        [ForeignKey("CommodityCustomerId")]
+        public CommodityCustomer ?CommodityCustomer { get; set; }
+
+        public long ?CommodityCustomerId { get; set; }
 
         #endregion
     }

@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Pi;
+using CurrencyExchange.Application.Services.Interfaces;
 using CurrencyExchange.Core.Dtos.Paging;
-using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Core.Dtos.Pi;
 using CurrencyExchange.Core.Sequrity;
+using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Core.Utilities.Extensions;
 using CurrencyExchange.Domain.EntityModels.PeroformaInvoices;
 using CurrencyExchange.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Core.Services.Implementations
+namespace CurrencyExchange.Application.Services.Implementations
 {
     public class PiService : IPiService
     {
@@ -20,13 +22,16 @@ namespace CurrencyExchange.Core.Services.Implementations
         private IPiRepository piRepository;
         private IPiDetailRepository piDetailRepository;
         private IPiDetailService piDetailService;
+        private ICommodityCustomerRepository customerRepository;
 
-        public PiService(IPiRepository piRepository, IPiDetailRepository piDetailRepository, IPiDetailService piDetailService)
+        public PiService(IPiRepository piRepository, IPiDetailRepository piDetailRepository, IPiDetailService piDetailService, ICommodityCustomerRepository customerRepository)
         {
             this.piRepository = piRepository;
             this.piDetailRepository = piDetailRepository;
             this.piDetailService = piDetailService;
+            this.customerRepository = customerRepository;
         }
+
         #endregion
 
         #region Pi Section
@@ -42,9 +47,11 @@ namespace CurrencyExchange.Core.Services.Implementations
             {
                 BasePrice = createPiDto.BasePrice,
                 PiCode = createPiDto.PiCode.SanitizeText(),
+                Description = createPiDto.Description.SanitizeText(),
                 PiDate = createPiDto.PiDate,
                 TotalPrice = createPiDto.TotalPrice,
-                IsSold = false
+                IsSold = false,
+                CommodityCustomerId = createPiDto.CustomerId
             };
             await piRepository.AddEntity(pi);
             await piRepository.SaveChanges();
@@ -57,17 +64,26 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         public async Task<FilterPiDto> GetPiesByFiltersList(FilterPiDto filterPiDto)
         {
-            var asQueryable = piRepository
-                .GetEntities()
-                .Where(x => x.TotalPrice > (piDetailRepository.GetEntities()
-                    .Where(d => d.PeroformaInvoiceId == x.Id).Sum(x => x.DepositPrice)))
-                .AsQueryable();
 
-            if (filterPiDto.SearchText != null || !(string.IsNullOrWhiteSpace(filterPiDto.SearchText)))
+            IQueryable<PeroformaInvoice> asQueryable ;
+            if (filterPiDto.IsRemaindPriceZero == "1")
             {
-                asQueryable = asQueryable.Where(x => x.PiCode.Contains(filterPiDto.SearchText.Trim()));
+                    asQueryable = piRepository
+                    .GetEntities()
+                    .Where(x => x.TotalPrice !=
+                                (piDetailRepository.GetEntities()
+                                    .Where(d => d.PeroformaInvoiceId == x.Id && !d.IsDelete)
+                                    .Sum(x => x.DepositPrice)))
+                    .AsQueryable();
+            }
+            else
+            {
+                 asQueryable = piRepository
+                    .GetEntities()
+                    .AsQueryable();
             }
 
+            asQueryable = asQueryable.OrderByDescending(x => x.PiDate);
             var count = (int)Math.Ceiling(asQueryable.Count() / (double)filterPiDto.TakeEntity);
             var pager = Pager.Builder(count, filterPiDto.PageId, filterPiDto.TakeEntity);
             var peroformaInvoices = await asQueryable.Paging(pager).ToListAsync();
@@ -75,6 +91,8 @@ namespace CurrencyExchange.Core.Services.Implementations
             foreach (var item in peroformaInvoices)
             {
                 var payDetails = await piDetailService.GetTotalAamountReceivedFromTheCustomer(item.Id);
+                var customer = item.CommodityCustomerId != null ?  await customerRepository.GetEntityById((long)item.CommodityCustomerId) : null;
+                var customerName = customer == null ? null : customer.Name;
                 //if (PayDetails < item.TotalPrice)
                 //{
                 filterPiDto.PiRemaind.Add(new PiRemaindDto()
@@ -85,10 +103,17 @@ namespace CurrencyExchange.Core.Services.Implementations
                     PiDate = item.PiDate,
                     RemaindPrice = item.TotalPrice - payDetails,
                     SoldPrice = payDetails,
-                    Id = item.Id
+                    Id = item.Id,
+                    CustomerName = customerName
                 });
                 //}
 
+            }
+            if (filterPiDto.SearchText != null || !(string.IsNullOrWhiteSpace(filterPiDto.SearchText)))
+            {
+                filterPiDto.PiRemaind = filterPiDto.PiRemaind.Where(x => x.PiCode.Contains(filterPiDto.SearchText.Trim()) ||
+                                                                       x.TotalPrice.ToString().Contains(filterPiDto.SearchText.Trim()) ||
+                                                                       x.RemaindPrice.ToString().Contains(filterPiDto.SearchText.Trim())).ToList();
             }
 
             return filterPiDto.SetPies(filterPiDto.PiRemaind).SetPaging(pager);
@@ -143,7 +168,7 @@ namespace CurrencyExchange.Core.Services.Implementations
             {
                 asQueryable = asQueryable.Where(x => x.PiCode.Contains(filterPiDto.SearchText.Trim()));
             }
-
+            asQueryable = asQueryable.OrderByDescending(x => x.PiDate);
             var count = (int)Math.Ceiling(asQueryable.Count() / (double)filterPiDto.TakeEntity);
             var pager = Pager.Builder(count, filterPiDto.PageId, filterPiDto.TakeEntity);
             var peroformaInvoices = await asQueryable.Paging(pager).ToListAsync();
@@ -185,12 +210,14 @@ namespace CurrencyExchange.Core.Services.Implementations
             return new PiDto()
             {
                 Id = pi.Id,
-                PiCode = pi.PiCode.Trim().SanitizeText(),
+                PiCode = pi.PiCode.Trim(),
                 PiDate = pi.PiDate,
                 BasePrice = pi.BasePrice,
-                TotalPrice = pi.TotalPrice
-                
-        };
+                TotalPrice = pi.TotalPrice,
+                Description = pi.Description.Trim(),
+                CustomerId = pi.CommodityCustomerId != null ?(long)pi.CommodityCustomerId : 0
+
+            };
         }
         #endregion
 
@@ -203,10 +230,12 @@ namespace CurrencyExchange.Core.Services.Implementations
                 return PiResult.CanNotUpdate;
 
             pi.PiCode = piDto.PiCode.Trim().SanitizeText();
+            pi.Description = piDto.Description.Trim().SanitizeText();
             pi.PiDate = piDto.PiDate;
             pi.IsSold = false;
             pi.BasePrice = piDto.BasePrice;
             pi.TotalPrice = piDto.TotalPrice;
+            pi.CommodityCustomerId = piDto.CustomerId;
             piRepository.UpdateEntity(pi);
             await piRepository.SaveChanges();
             return PiResult.Success;
@@ -234,6 +263,7 @@ namespace CurrencyExchange.Core.Services.Implementations
             this.piRepository?.Dispose();
             this.piDetailService?.Dispose();
             this.piDetailRepository?.Dispose();
+            this.customerRepository?.Dispose();
         }
 
 

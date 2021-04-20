@@ -8,7 +8,7 @@ using CurrencyExchange.Domain.RepositoryInterfaces.Generics;
 using CurrencyExchange.Infrastructure.Data_Base.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics
+namespace CurrencyExchange.Infrastructure.Data.Data_Base.Repositories.Generics
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity 
     {
@@ -87,7 +87,16 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics
 
         public virtual async Task SaveChanges()
         {
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
         }
 
         #endregion

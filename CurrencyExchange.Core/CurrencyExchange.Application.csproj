@@ -29,5 +29,26 @@
   <ItemGroup>
     <ProjectReference Include="..\CurrencyExchange.Domain\CurrencyExchange.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\Design Patterns\Behavioral Design Patterns\Chain-of-responsibility\" />
+    <Folder Include="Utilities\Design Patterns\Behavioral Design Patterns\Command\" />
+    <Folder Include="Utilities\Design Patterns\Behavioral Design Patterns\Interpreter\" />
+    <Folder Include="Utilities\Design Patterns\Behavioral Design Patterns\Iterator\" />
+    <Folder Include="Utilities\Design Patterns\Behavioral Design Patterns\Mediator\" />
+    <Folder Include="Utilities\Design Patterns\Behavioral Design Patterns\Memento\" />
+    <Folder Include="Utilities\Design Patterns\Behavioral Design Patterns\Visitor\" />
+    <Folder Include="Utilities\Design Patterns\Behavioral Design Patterns\Template method\" />
+    <Folder Include="Utilities\Design Patterns\Behavioral Design Patterns\Specification\" />
+    <Folder Include="Utilities\Design Patterns\Behavioral Design Patterns\Observer\" />
+    <Folder Include="Utilities\Design Patterns\Behavioral Design Patterns\Null Object\" />
+    <Folder Include="Utilities\Design Patterns\Creational Design Patterns\Object pool\" />
+    <Folder Include="Utilities\Design Patterns\Creational Design Patterns\Prototype\" />
+    <Folder Include="Utilities\Design Patterns\Structural Design Patterns\Decorator\" />
+    <Folder Include="Utilities\Design Patterns\Structural Design Patterns\Facade\" />
+    <Folder Include="Utilities\Design Patterns\Structural Design Patterns\Bridge\" />
+    <Folder Include="Utilities\Design Patterns\Structural Design Patterns\Composite\" />
+    <Folder Include="Utilities\Design Patterns\Structural Design Patterns\FlyWeight\" />
+    <Folder Include="Utilities\Design Patterns\Structural Design Patterns\Proxy\" />
+  </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using CurrencyExchange.Application.Dtos.Paging;
 using CurrencyExchange.Core.Dtos.Paging;
 
 namespace CurrencyExchange.Core.Dtos.Customer

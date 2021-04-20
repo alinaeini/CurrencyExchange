@@ -25,6 +25,8 @@ namespace CurrencyExchange.Core.Dtos.Pi
         [Display(Name = "مانده مبلغ ")]
         public long RemaindPrice { get; set; }
 
+        public string CustomerName { get; set; }
+
         #endregion
     }
 }

@@ -1,17 +1,18 @@
 ﻿using System;
-using CurrencyExchange.Core.Services.Interfaces;
-using CurrencyExchange.Domain.RepositoryInterfaces;
-using System.Threading.Tasks;
-using CurrencyExchange.Core.Dtos.ExDecalaration;
-using CurrencyExchange.Core.Sequrity;
-using CurrencyExchange.Domain.EntityModels.ExchangeDeclaration;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.ExDecalaration;
+using CurrencyExchange.Core.Dtos.ExDecalaration;
 using CurrencyExchange.Core.Dtos.Paging;
+using CurrencyExchange.Core.Sequrity;
+using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Core.Utilities.Extensions;
+using CurrencyExchange.Domain.EntityModels.ExchangeDeclaration;
+using CurrencyExchange.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Core.Services.Implementations
+namespace CurrencyExchange.Application.Services.Implementations
 {
     public class ExDeclarationService : IExDeclarationService
     {
@@ -43,7 +44,8 @@ namespace CurrencyExchange.Core.Services.Implementations
                 ExprireDate = exDeclaration.ExpireDate,
                 IsSold = false,
                 Price = exDeclaration.Price,
-                Qty = exDeclaration.Qty
+                Qty = exDeclaration.Qty,
+                Description = exDeclaration.Description.Trim().SanitizeText()
             };
             await _exDeclarationRepository.AddEntity(exDec);
             await _exDeclarationRepository.SaveChanges();
@@ -60,14 +62,26 @@ namespace CurrencyExchange.Core.Services.Implementations
         {
             var asQueryable = _exDeclarationRepository
                 .GetEntities()
-                .Where(x => !x.IsSold)
+               /// .Where(x => !x.IsSold)
                 .AsQueryable();
-
+            if (filterExDecDto.IsRemaindPriceZero == "1")
+            {
+                asQueryable = asQueryable.Where(x => !x.IsSold);
+            }
             if (filterExDecDto.SearchText != null || !(string.IsNullOrWhiteSpace(filterExDecDto.SearchText)))
             {
-                asQueryable = asQueryable.Where(x => x.ExchangeDeclarationCode.Contains(filterExDecDto.SearchText.Trim()));
+                asQueryable = asQueryable.Where(x => x.ExchangeDeclarationCode.Contains(filterExDecDto.SearchText.Trim()) 
+                                                     || x.Description.Contains(filterExDecDto.SearchText.Trim()));
             }
 
+            if (!string.IsNullOrWhiteSpace(filterExDecDto.FromDateSale) && !string.IsNullOrWhiteSpace(filterExDecDto.ToDateSale))
+            {
+                var from = Convert.ToDateTime(filterExDecDto.FromDateSale);
+                var to = Convert.ToDateTime(filterExDecDto.ToDateSale);
+                asQueryable = asQueryable.Where(x => x.ExprireDate >= from && x.ExprireDate < to);
+            }
+
+            asQueryable = asQueryable.OrderByDescending(x => x.ExprireDate);
             var count = (int)Math.Ceiling(asQueryable.Count() / (double)filterExDecDto.TakeEntity);
             var pager = Pager.Builder(count, filterExDecDto.PageId, filterExDecDto.TakeEntity);
             var exdecs = await asQueryable.Paging(pager).ToListAsync();
@@ -83,7 +97,8 @@ namespace CurrencyExchange.Core.Services.Implementations
                     Qty = item.Qty,
                     SoldPrice = soldExCode ,
                     RemaindPrice = item.Price - soldExCode,
-                    Id = item.Id
+                    Id = item.Id,
+                    Description = item.Description
                 });
             }
 
@@ -99,11 +114,12 @@ namespace CurrencyExchange.Core.Services.Implementations
             var asQueryable = _exDeclarationRepository
                 .GetEntities()
                 .AsQueryable();
+                
             if (filterExDecDto.SearchText != null || !(string.IsNullOrWhiteSpace(filterExDecDto.SearchText)))
             {
                 asQueryable = asQueryable.Where(x => x.ExchangeDeclarationCode.Contains(filterExDecDto.SearchText.Trim()));
             }
-
+            asQueryable = asQueryable.OrderByDescending(x => x.ExprireDate);
             var count = (int)Math.Ceiling(asQueryable.Count() / (double)filterExDecDto.TakeEntity);
             var pager = Pager.Builder(count, filterExDecDto.PageId, filterExDecDto.TakeEntity);
             var exdecs = await asQueryable.Paging(pager).ToListAsync();
@@ -119,7 +135,8 @@ namespace CurrencyExchange.Core.Services.Implementations
                     Qty = item.Qty,
                     SoldPrice = soldExCode,
                     RemaindPrice = item.Price - soldExCode,
-                    Id = item.Id
+                    Id = item.Id,
+                    Description = item.Description
                 });
             }
 
@@ -145,7 +162,8 @@ namespace CurrencyExchange.Core.Services.Implementations
                 ExCode = exDeclaration.ExchangeDeclarationCode,
                 ExpireDate = exDeclaration.ExprireDate,
                 Price = exDeclaration.Price,
-                Qty = exDeclaration.Qty
+                Qty = exDeclaration.Qty,
+                Description = exDeclaration.Description
             };
         }
 
@@ -172,7 +190,8 @@ namespace CurrencyExchange.Core.Services.Implementations
                         SoldPrice = soldExCode ,
                         RemaindPrice = exDeclaration.Price - soldExCode ,
                         Price = exDeclaration.Price,
-                        Qty = exDeclaration.Qty
+                        Qty = exDeclaration.Qty,
+                        Description = exDeclaration.Description
                     });
                 }
             }
@@ -194,6 +213,7 @@ namespace CurrencyExchange.Core.Services.Implementations
                 return ExDeclarationResult.ExDecCanNotUpdate;
 
             exDeclaration.ExchangeDeclarationCode = exDecDto.ExCode.Trim().SanitizeText();
+            exDeclaration.Description = exDecDto.Description.Trim().SanitizeText();
             exDeclaration.ExprireDate = exDecDto.ExpireDate;
             exDeclaration.IsSold = false;
             exDeclaration.Price = exDecDto.Price;

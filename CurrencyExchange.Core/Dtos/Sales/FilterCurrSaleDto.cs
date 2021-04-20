@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CurrencyExchange.Application.Dtos.Paging;
 using CurrencyExchange.Core.Dtos.Paging;
-using CurrencyExchange.Core.Dtos.Sales.CurrencySalePi;
 using CurrencyExchange.Core.Dtos.Sales.Interfaces;
 
-namespace CurrencyExchange.Core.Dtos.Sales
+namespace CurrencyExchange.Application.Dtos.Sales
 {
    
     public class FilterCurrSaleDto : FilterGenericDto<CurrencySaleDto> ,IFilterCurrSaleDto
@@ -19,5 +17,9 @@ namespace CurrencyExchange.Core.Dtos.Sales
         public string ToDateSale { get; set; }
         public long FromSaleBasePrice { get; set; }
         public long ToSaleBasePrice { get; set; }
+        public bool IsCurrencyTypeCurrency { get; set; }
+        public bool IsCurrencyTypeBroker { get; set; }
+        public bool IsCurrencyTypeMissCustomer { get; set; }
+        public bool IsCurrencyTypeCommCustomer { get; set; }
     }
 }

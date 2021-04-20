@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CurrencyExchange.Infrastructure.Migrations
+namespace CurrencyExchange.Infrastructure.Data.Migrations
 {
-    public partial class AddComany : Migration
+    public partial class updatePiaddCommodityCustomerId : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,28 +12,28 @@ namespace CurrencyExchange.Infrastructure.Migrations
                 keyColumn: "Id",
                 keyValue: 1L,
                 columns: new[] { "CreateDate", "LastUpdateDate" },
-                values: new object[] { new DateTime(2021, 3, 2, 9, 21, 54, 869, DateTimeKind.Local).AddTicks(4720), new DateTime(2021, 3, 2, 9, 21, 54, 873, DateTimeKind.Local).AddTicks(5663) });
+                values: new object[] { new DateTime(2021, 4, 20, 13, 19, 52, 462, DateTimeKind.Local).AddTicks(3156), new DateTime(2021, 4, 20, 13, 19, 52, 466, DateTimeKind.Local).AddTicks(6705) });
 
             migrationBuilder.UpdateData(
                 table: "Brokers",
                 keyColumn: "Id",
                 keyValue: 2L,
                 columns: new[] { "CreateDate", "LastUpdateDate" },
-                values: new object[] { new DateTime(2021, 3, 2, 9, 21, 54, 873, DateTimeKind.Local).AddTicks(8711), new DateTime(2021, 3, 2, 9, 21, 54, 873, DateTimeKind.Local).AddTicks(8756) });
+                values: new object[] { new DateTime(2021, 4, 20, 13, 19, 52, 466, DateTimeKind.Local).AddTicks(9823), new DateTime(2021, 4, 20, 13, 19, 52, 466, DateTimeKind.Local).AddTicks(9870) });
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 1L,
                 columns: new[] { "CreateDate", "LastUpdateDate" },
-                values: new object[] { new DateTime(2021, 3, 2, 9, 21, 54, 875, DateTimeKind.Local).AddTicks(9624), new DateTime(2021, 3, 2, 9, 21, 54, 875, DateTimeKind.Local).AddTicks(9653) });
+                values: new object[] { new DateTime(2021, 4, 20, 13, 19, 52, 469, DateTimeKind.Local).AddTicks(9175), new DateTime(2021, 4, 20, 13, 19, 52, 469, DateTimeKind.Local).AddTicks(9251) });
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 2L,
                 columns: new[] { "CreateDate", "LastUpdateDate" },
-                values: new object[] { new DateTime(2021, 3, 2, 9, 21, 54, 875, DateTimeKind.Local).AddTicks(9952), new DateTime(2021, 3, 2, 9, 21, 54, 875, DateTimeKind.Local).AddTicks(9964) });
+                values: new object[] { new DateTime(2021, 4, 20, 13, 19, 52, 469, DateTimeKind.Local).AddTicks(9661), new DateTime(2021, 4, 20, 13, 19, 52, 469, DateTimeKind.Local).AddTicks(9684) });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -43,28 +43,28 @@ namespace CurrencyExchange.Infrastructure.Migrations
                 keyColumn: "Id",
                 keyValue: 1L,
                 columns: new[] { "CreateDate", "LastUpdateDate" },
-                values: new object[] { new DateTime(2021, 3, 2, 9, 19, 8, 321, DateTimeKind.Local).AddTicks(336), new DateTime(2021, 3, 2, 9, 19, 8, 325, DateTimeKind.Local).AddTicks(1760) });
+                values: new object[] { new DateTime(2021, 4, 17, 14, 19, 27, 633, DateTimeKind.Local).AddTicks(1063), new DateTime(2021, 4, 17, 14, 19, 27, 637, DateTimeKind.Local).AddTicks(3541) });
 
             migrationBuilder.UpdateData(
                 table: "Brokers",
                 keyColumn: "Id",
                 keyValue: 2L,
                 columns: new[] { "CreateDate", "LastUpdateDate" },
-                values: new object[] { new DateTime(2021, 3, 2, 9, 19, 8, 325, DateTimeKind.Local).AddTicks(4715), new DateTime(2021, 3, 2, 9, 19, 8, 325, DateTimeKind.Local).AddTicks(4752) });
+                values: new object[] { new DateTime(2021, 4, 17, 14, 19, 27, 637, DateTimeKind.Local).AddTicks(6554), new DateTime(2021, 4, 17, 14, 19, 27, 637, DateTimeKind.Local).AddTicks(6602) });
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 1L,
                 columns: new[] { "CreateDate", "LastUpdateDate" },
-                values: new object[] { new DateTime(2021, 3, 2, 9, 19, 8, 327, DateTimeKind.Local).AddTicks(3846), new DateTime(2021, 3, 2, 9, 19, 8, 327, DateTimeKind.Local).AddTicks(3873) });
+                values: new object[] { new DateTime(2021, 4, 17, 14, 19, 27, 640, DateTimeKind.Local).AddTicks(606), new DateTime(2021, 4, 17, 14, 19, 27, 640, DateTimeKind.Local).AddTicks(659) });
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 2L,
                 columns: new[] { "CreateDate", "LastUpdateDate" },
-                values: new object[] { new DateTime(2021, 3, 2, 9, 19, 8, 327, DateTimeKind.Local).AddTicks(4143), new DateTime(2021, 3, 2, 9, 19, 8, 327, DateTimeKind.Local).AddTicks(4153) });
+                values: new object[] { new DateTime(2021, 4, 17, 14, 19, 27, 640, DateTimeKind.Local).AddTicks(979), new DateTime(2021, 4, 17, 14, 19, 27, 640, DateTimeKind.Local).AddTicks(993) });
         }
     }
 }

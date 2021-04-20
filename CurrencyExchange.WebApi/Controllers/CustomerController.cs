@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Customer;
+using CurrencyExchange.Application.Services.Interfaces;
 using CurrencyExchange.Application.Utilities.Common;
 using CurrencyExchange.Core.Dtos.Customer;
 using CurrencyExchange.Core.Services.Interfaces;

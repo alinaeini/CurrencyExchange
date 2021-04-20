@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using CurrencyExchange.Domain.EntityModels.Currency;
 
-namespace CurrencyExchange.Core.Dtos.Sales
+namespace CurrencyExchange.Application.Dtos.Sales
 {
     public class CurrencySaleDto
     {
@@ -36,7 +36,12 @@ namespace CurrencyExchange.Core.Dtos.Sales
 
         [Display(Name = "نوع انتقال")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+
         public CurrencyTransferType TransferType { get; set; }
+
+        [Display(Name = " نوع انتقال ارز")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        public CurrencyType CurrencyType { get; set; }
 
 
 

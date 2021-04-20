@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace CurrencyExchange.Core.Dtos.Pi
+namespace CurrencyExchange.Application.Dtos.Pi
 {
     public class PiDto
     {
@@ -19,6 +19,13 @@ namespace CurrencyExchange.Core.Dtos.Pi
         [Display(Name = "مبلغ کل فروش رفته ")]
         public long TotalPrice { get; set; }
 
+
+        [Display(Name = "توضیحات")]
+        [MaxLength(1000, ErrorMessage = "تعداد کاراکترهای {0} نمیتواند بیشتر از {1} باشد")]
+        public string Description { get; set; }
+
+        [Display(Name = "کد مشتری کالا")]
+        public long CustomerId { get; set; }
 
         #endregion
     }

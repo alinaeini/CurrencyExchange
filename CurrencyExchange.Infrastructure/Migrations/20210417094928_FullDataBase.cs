@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CurrencyExchange.Infrastructure.Migrations
+namespace CurrencyExchange.Infrastructure.Data.Migrations
 {
-    public partial class CreateDb : Migration
+    public partial class FullDataBase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,6 +29,45 @@ namespace CurrencyExchange.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Brokers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CommodityCustomers",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommodityCustomers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CompanyInfo",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CompanyName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Tel = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    WebSite = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompanyInfo", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,6 +101,7 @@ namespace CurrencyExchange.Infrastructure.Migrations
                     Qty = table.Column<long>(type: "bigint", nullable: false),
                     ExprireDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsSold = table.Column<bool>(type: "bit", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -72,7 +112,45 @@ namespace CurrencyExchange.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MenuItems",
+                name: "FinancialPeriods",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PriodName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FromDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ToDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FinancialPeriods", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MiscellaneousCustomers",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MiscellaneousCustomers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Permissions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -86,33 +164,13 @@ namespace CurrencyExchange.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MenuItems", x => x.Id);
+                    table.PrimaryKey("PK_Permissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MenuItems_MenuItems_ParentId",
+                        name: "FK_Permissions_Permissions_ParentId",
                         column: x => x.ParentId,
-                        principalTable: "MenuItems",
+                        principalTable: "Permissions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PeroformaInvoices",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PiCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PiDate = table.Column<DateTime>(type: "datetime2", maxLength: 100, nullable: false),
-                    TotalPrice = table.Column<long>(type: "bigint", maxLength: 100, nullable: false),
-                    BasePrice = table.Column<long>(type: "bigint", maxLength: 100, nullable: false),
-                    IsSold = table.Column<bool>(type: "bit", nullable: false),
-                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PeroformaInvoices", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -155,6 +213,34 @@ namespace CurrencyExchange.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PeroformaInvoices",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PiCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    PiDate = table.Column<DateTime>(type: "datetime2", maxLength: 100, nullable: false),
+                    TotalPrice = table.Column<long>(type: "bigint", maxLength: 100, nullable: false),
+                    BasePrice = table.Column<long>(type: "bigint", maxLength: 100, nullable: false),
+                    IsSold = table.Column<bool>(type: "bit", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    CommodityCustomerId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PeroformaInvoices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PeroformaInvoices_CommodityCustomers_CommodityCustomerId",
+                        column: x => x.CommodityCustomerId,
+                        principalTable: "CommodityCustomers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CurrencySales",
                 columns: table => new
                 {
@@ -168,6 +254,7 @@ namespace CurrencyExchange.Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     BrokerId = table.Column<long>(type: "bigint", nullable: false),
                     CustomerId = table.Column<long>(type: "bigint", nullable: false),
+                    CurrencyType = table.Column<int>(type: "int", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -185,6 +272,35 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         name: "FK_CurrencySales_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRoles",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    RoleId = table.Column<long>(type: "bigint", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -222,35 +338,6 @@ namespace CurrencyExchange.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserRoles",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    RoleId = table.Column<long>(type: "bigint", nullable: false),
-                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRoles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserRoles_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserRoles_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CurrencySaleDetailExDecs",
                 columns: table => new
                 {
@@ -276,6 +363,35 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         name: "FK_CurrencySaleDetailExDecs_ExDeclarations_ExDeclarationId",
                         column: x => x.ExDeclarationId,
                         principalTable: "ExDeclarations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRolePermissions",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserRoleId = table.Column<long>(type: "bigint", nullable: false),
+                    PermissionId = table.Column<long>(type: "bigint", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRolePermissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRolePermissions_Permissions_PermissionId",
+                        column: x => x.PermissionId,
+                        principalTable: "Permissions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRolePermissions_UserRoles_UserRoleId",
+                        column: x => x.UserRoleId,
+                        principalTable: "UserRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -311,42 +427,13 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "UserRolePermissions",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserRoleId = table.Column<long>(type: "bigint", nullable: false),
-                    MenuItemId = table.Column<long>(type: "bigint", nullable: false),
-                    IsDelete = table.Column<bool>(type: "bit", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRolePermissions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserRolePermissions_MenuItems_MenuItemId",
-                        column: x => x.MenuItemId,
-                        principalTable: "MenuItems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserRolePermissions_UserRoles_UserRoleId",
-                        column: x => x.UserRoleId,
-                        principalTable: "UserRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "Brokers",
                 columns: new[] { "Id", "Address", "AmountBalanceBroker", "CreateDate", "Description", "IsActive", "IsDelete", "LastUpdateDate", "Name", "ServiceChargeAccount", "ServiceChargeCash", "Tel", "Title" },
                 values: new object[,]
                 {
-                    { 1L, "ندارد", null, new DateTime(2021, 2, 7, 14, 45, 23, 158, DateTimeKind.Local).AddTicks(5946), "ندارد", true, false, new DateTime(2021, 2, 7, 14, 45, 23, 162, DateTimeKind.Local).AddTicks(7633), "شرکت تضامنی علی نائیج حقیقی و شرکا", 0m, 0m, "ندارد", "صرافی اریکه" },
-                    { 2L, "ندارد", null, new DateTime(2021, 2, 7, 14, 45, 23, 163, DateTimeKind.Local).AddTicks(373), "ندارد", true, false, new DateTime(2021, 2, 7, 14, 45, 23, 163, DateTimeKind.Local).AddTicks(414), "شرکت تضامنی محمد رستمی و شرکا", 0m, 0m, "ندارد", "صرافی نماد" }
+                    { 1L, "ندارد", null, new DateTime(2021, 4, 17, 14, 19, 27, 633, DateTimeKind.Local).AddTicks(1063), "ندارد", true, false, new DateTime(2021, 4, 17, 14, 19, 27, 637, DateTimeKind.Local).AddTicks(3541), "شرکت تضامنی علی نائیج حقیقی و شرکا", 0m, 0m, "ندارد", "صرافی اریکه" },
+                    { 2L, "ندارد", null, new DateTime(2021, 4, 17, 14, 19, 27, 637, DateTimeKind.Local).AddTicks(6554), "ندارد", true, false, new DateTime(2021, 4, 17, 14, 19, 27, 637, DateTimeKind.Local).AddTicks(6602), "شرکت تضامنی محمد رستمی و شرکا", 0m, 0m, "ندارد", "صرافی نماد" }
                 });
 
             migrationBuilder.InsertData(
@@ -354,10 +441,8 @@ namespace CurrencyExchange.Infrastructure.Migrations
                 columns: new[] { "Id", "CreateDate", "IsDelete", "LastUpdateDate", "Name", "Title" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(8986), false, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9012), "Admin", "راهبر سیستم" },
-                    { 2L, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9087), false, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9094), "Manager", "مدیر سیستم" },
-                    { 3L, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9100), false, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9104), "Fnc", "کاربر مالی " },
-                    { 4L, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9108), false, new DateTime(2021, 2, 7, 14, 45, 23, 164, DateTimeKind.Local).AddTicks(9112), "Bsn", "کاربر بازرگانی" }
+                    { 1L, new DateTime(2021, 4, 17, 14, 19, 27, 640, DateTimeKind.Local).AddTicks(606), false, new DateTime(2021, 4, 17, 14, 19, 27, 640, DateTimeKind.Local).AddTicks(659), "Admin", "راهبر سیستم" },
+                    { 2L, new DateTime(2021, 4, 17, 14, 19, 27, 640, DateTimeKind.Local).AddTicks(979), false, new DateTime(2021, 4, 17, 14, 19, 27, 640, DateTimeKind.Local).AddTicks(993), "User", "کاربر" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -391,8 +476,8 @@ namespace CurrencyExchange.Infrastructure.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MenuItems_ParentId",
-                table: "MenuItems",
+                name: "IX_Permissions_ParentId",
+                table: "Permissions",
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
@@ -406,9 +491,14 @@ namespace CurrencyExchange.Infrastructure.Migrations
                 column: "PeroformaInvoiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserRolePermissions_MenuItemId",
+                name: "IX_PeroformaInvoices_CommodityCustomerId",
+                table: "PeroformaInvoices",
+                column: "CommodityCustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRolePermissions_PermissionId",
                 table: "UserRolePermissions",
-                column: "MenuItemId");
+                column: "PermissionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRolePermissions_UserRoleId",
@@ -429,10 +519,19 @@ namespace CurrencyExchange.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CompanyInfo");
+
+            migrationBuilder.DropTable(
                 name: "CurrencySaleDetailExDecs");
 
             migrationBuilder.DropTable(
                 name: "CurrencySaleDetailPis");
+
+            migrationBuilder.DropTable(
+                name: "FinancialPeriods");
+
+            migrationBuilder.DropTable(
+                name: "MiscellaneousCustomers");
 
             migrationBuilder.DropTable(
                 name: "UserRolePermissions");
@@ -447,7 +546,7 @@ namespace CurrencyExchange.Infrastructure.Migrations
                 name: "PeroformaInvoiceDetails");
 
             migrationBuilder.DropTable(
-                name: "MenuItems");
+                name: "Permissions");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
@@ -466,6 +565,9 @@ namespace CurrencyExchange.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "CommodityCustomers");
         }
     }
 }

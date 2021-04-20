@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Account;
+using CurrencyExchange.Application.Services.Interfaces;
 using CurrencyExchange.Core.Dtos.Account;
 using CurrencyExchange.Core.Dtos.Account.RolePermissions;
 using CurrencyExchange.Core.Sequrity;
@@ -12,7 +14,7 @@ using CurrencyExchange.Domain.EntityModels.Account;
 using CurrencyExchange.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Core.Services.Implementations
+namespace CurrencyExchange.Application.Services.Implementations
 {
     public class UserService : IUserService
     {
@@ -167,18 +169,28 @@ namespace CurrencyExchange.Core.Services.Implementations
                 {
                     foreach (var item in userPermissions)
                     {
-                        getPermissions.Add(new PermissionDto
-                            { Id = item.Id, ParentId = item.ParentId, DisplayTitle = item.PersianName });
+                        if (item.ParentId == null)
+                        {
+                            var childList = item.Permissions;
+                            getPermissions.Add(new PermissionDto {Id = item.Id, ParentId = null, DisplayTitle = item.PersianName});
+                            foreach (var subitem in childList)
+                            {
+                                getPermissions.Add(new PermissionDto { Id = subitem.Id, ParentId = item.Id, DisplayTitle = subitem.PersianName });
+                            }
+                        }
                     }
+
+
                 }
                 return getPermissions;
             }
 
-            #endregion
 
-            #region Permission - Add 
+        #endregion
 
-            public async Task<LoginUserResult> InsertToDatabaseRolesAndPermissions(UserAccountPermissions userAccountPermissions)
+        #region Permission - Add 
+
+        public async Task<LoginUserResult> InsertToDatabaseRolesAndPermissions(UserAccountPermissions userAccountPermissions)
             {
                 #region AddDataToUserRoleAndRolePErmissions
 

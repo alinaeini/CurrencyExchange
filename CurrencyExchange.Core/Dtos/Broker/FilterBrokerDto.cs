@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CurrencyExchange.Application.Dtos.Paging;
 using CurrencyExchange.Core.Dtos.Paging;
 
 namespace CurrencyExchange.Core.Dtos.Broker

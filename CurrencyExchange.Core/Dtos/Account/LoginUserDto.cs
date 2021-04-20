@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CurrencyExchange.Core.Dtos.Account
+namespace CurrencyExchange.Application.Dtos.Account
 {
     public class LoginUserDto
     {
@@ -14,6 +14,9 @@ namespace CurrencyExchange.Core.Dtos.Account
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(100, ErrorMessage = "تعداد کاراکتر های {0} نمیتواند بیشتر از {1} باشد")]
         public string Password { get; set; }
+
+        public string FinancialPeriodId { get; set; }
+
     }
     public enum LoginUserResult
     {

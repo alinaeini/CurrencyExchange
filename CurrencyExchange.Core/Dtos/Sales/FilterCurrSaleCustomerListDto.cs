@@ -1,6 +1,7 @@
-﻿using CurrencyExchange.Core.Dtos.Paging;
+﻿using CurrencyExchange.Application.Dtos.Paging;
+using CurrencyExchange.Core.Dtos.Paging;
 
-namespace CurrencyExchange.Core.Dtos.Sales
+namespace CurrencyExchange.Application.Dtos.Sales
 {
     public class FilterCurrSaleCustomerListDto : FilterGenericDto<CurrencySaleDto>
     {

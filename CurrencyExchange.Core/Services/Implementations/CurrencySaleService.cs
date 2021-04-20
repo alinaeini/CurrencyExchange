@@ -1,20 +1,23 @@
 ﻿using System;
-using CurrencyExchange.Core.Dtos.Sales;
-using CurrencyExchange.Core.Services.Interfaces;
-using CurrencyExchange.Domain.RepositoryInterfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Customer;
+using CurrencyExchange.Application.Dtos.Sales;
+using CurrencyExchange.Application.Services.Interfaces;
+using CurrencyExchange.Application.Utilities.Design_Patterns.Behavioral_Design_Patterns.Sterategy.Currency;
 using CurrencyExchange.Core.Dtos.Customer;
 using CurrencyExchange.Core.Dtos.Paging;
-using CurrencyExchange.Core.Dtos.Sales.CurrencySalePi;
+using CurrencyExchange.Core.Dtos.Sales;
 using CurrencyExchange.Core.Sequrity;
 using CurrencyExchange.Core.Utilities.Extensions;
 using CurrencyExchange.Domain.EntityModels.Currency;
 using CurrencyExchange.Domain.EntityModels.PeroformaInvoices;
+using CurrencyExchange.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Core.Services.Implementations
+namespace CurrencyExchange.Application.Services.Implementations
 {
     public class CurrencySaleService : ICurrencySaleService
     {
@@ -28,8 +31,11 @@ namespace CurrencyExchange.Core.Services.Implementations
         private readonly IPiDetailRepository _piDetailRepository;
         private readonly IBrokerRepository _brokerRepository;
         private readonly ICustomerRepository _customerRepository;
+        private readonly IMiscellaneousCustomerRepository _miscellaneousCustomerRepository;
+        private readonly ICommodityCustomerRepository _commodityCustomerRepository;
+        private readonly IFinancialPeriodRepository _financialPeriodRepository;
 
-        public CurrencySaleService(ICurrencySaleRepository saleRepository, ICurrencySalePiDetailRepository salePiDetailRepository, ICurrencySaleExDecRepository saleExDecRepository, IExDeclarationRepository declarationRepository, IPiDetailRepository piDetailRepository, IBrokerRepository brokerRepository, ICustomerRepository customerRepository)
+        public CurrencySaleService(ICurrencySaleRepository saleRepository, ICurrencySalePiDetailRepository salePiDetailRepository, ICurrencySaleExDecRepository saleExDecRepository, IExDeclarationRepository declarationRepository, IPiDetailRepository piDetailRepository, IBrokerRepository brokerRepository, ICustomerRepository customerRepository, IMiscellaneousCustomerRepository miscellaneousCustomerRepository, ICommodityCustomerRepository commodityCustomerRepository, IFinancialPeriodRepository financialPeriodRepository)
         {
             _saleRepository = saleRepository;
             _salePiDetailRepository = salePiDetailRepository;
@@ -38,6 +44,9 @@ namespace CurrencyExchange.Core.Services.Implementations
             _piDetailRepository = piDetailRepository;
             _brokerRepository = brokerRepository;
             _customerRepository = customerRepository;
+            _miscellaneousCustomerRepository = miscellaneousCustomerRepository;
+            _commodityCustomerRepository = commodityCustomerRepository;
+            _financialPeriodRepository = financialPeriodRepository;
         }
 
         #endregion
@@ -46,13 +55,13 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         public async Task<SalesResult> Create(CreateSaleDto createPiDto)
         {
-            var result = await ValidationBeforCreateCurrencySales(createPiDto);
-            if (result == SalesResult.Success)
-            {
+            //var result = await ValidationBeforCreateCurrencySales(createPiDto);
+            //if (result == SalesResult.Success)
+            //{
 
-                #region Create Currency Sale
+            #region Create Currency Sale
 
-                var currencySale = new CurrencySale()
+            var currencySale = new CurrencySale()
                 {
                     SaleDate = createPiDto.SaleDate,
                     SalePrice = createPiDto.SalePrice,
@@ -61,249 +70,110 @@ namespace CurrencyExchange.Core.Services.Implementations
                     CustomerId = createPiDto.CustomerId,
                     TransferType = (CurrencyTransferType)createPiDto.TransferType,
                     TransferPrice = createPiDto.TransferPrice,
-                    Description = createPiDto.Description
+                    Description = createPiDto.Description,
+                    CurrencyType = (CurrencyType)createPiDto.CurrencyType
                 };
                 await _saleRepository.AddEntity(currencySale);
-                #endregion
+            #endregion
 
-                #region Insert Data To CurrencySalesDetail By System
+            #region Insert Data To CurrencySalesDetail By System
 
-                var resulTask = await FillAutomaticCurrSaleDetail(createPiDto, currencySale);
-                if (resulTask != SalesResult.Success)
+                var result = await FillAutomaticCurrencySaleDetailExDecsAndCurrencySaleDetailPis(createPiDto, currencySale);
+                if (result != SalesResult.Success)
                 {
 
-                    return resulTask;
+                    return result;
                 }
 
-                #endregion
-            }
+
+
+            #endregion
+            //}
 
 
             await _saleRepository.SaveChanges();
             return result;
         }
 
-        #endregion
-
-        #region Filter Currency Sale 
-
-        public async Task<FilterCurrSaleDto> GetListSales(FilterCurrSaleDto filterDto)
-        {
-            var currencyAsQueryable = _saleRepository
-                .GetEntities()
-                .AsQueryable();
-
-            #region Set Filters
-
-            #region Filter - SearchText
-
-            if (filterDto.SearchText != null || !(string.IsNullOrEmpty(filterDto.SearchText)))
-            {
-                currencyAsQueryable = currencyAsQueryable
-                    .Include(x => x.Customer)
-                    .Include(c => c.Broker)
-                    .Where(x => x.Customer.Name.Contains(filterDto.SearchText.Trim()) ||
-                                x.Customer.Title.Contains(filterDto.SearchText.Trim()) ||
-                                x.Broker.Name.Contains(filterDto.SearchText.Trim())
-                    );
-
-            }
-
-            #endregion
-
-            #region Filter - Transfer Type(s)
-
-            if (filterDto.IsAccount)
-                currencyAsQueryable = currencyAsQueryable.Where(x => x.TransferType == CurrencyTransferType.Accounting);
-            if (filterDto.IsCashed)
-                currencyAsQueryable = currencyAsQueryable.Where(x => x.TransferType == CurrencyTransferType.Cash);
-
-            #endregion
-
-            #region Filter - From To Sale Date 
-
-            if (!string.IsNullOrWhiteSpace(filterDto.FromDateSale))
-                currencyAsQueryable = currencyAsQueryable.Where(x => x.SaleDate >= Convert.ToDateTime(filterDto.FromDateSale));
-            if (!string.IsNullOrWhiteSpace(filterDto.ToDateSale))
-                currencyAsQueryable = currencyAsQueryable.Where(x => x.SaleDate < Convert.ToDateTime(filterDto.ToDateSale));
-
-            #endregion
-
-            #region Filter - From To Price
-
-            if (filterDto.FromSaleBasePrice != 0)
-                currencyAsQueryable = currencyAsQueryable.Where(s => s.SalePricePerUnit >= filterDto.FromSaleBasePrice);
-
-            if (filterDto.ToSaleBasePrice != 0)
-                currencyAsQueryable = currencyAsQueryable.Where(s => s.SalePricePerUnit <= filterDto.ToSaleBasePrice);
-
-            #endregion
-
-            #region Filter - Broker
-            if (filterDto.BrokerId > 0)
-                currencyAsQueryable = currencyAsQueryable.Where(s => s.BrokerId == filterDto.BrokerId);
-            #endregion
-
-            #region Filter - Customer
-
-            if (filterDto.CustomerId > 0)
-                currencyAsQueryable = currencyAsQueryable.Where(s => s.CustomerId == filterDto.CustomerId);
-
-            #endregion
-
-            #endregion
-
-            var count = (int)Math.Ceiling(currencyAsQueryable.Count() / (double)filterDto.TakeEntity);
-            var pager = Pager.Builder(count, filterDto.PageId, filterDto.TakeEntity);
-            var list = await currencyAsQueryable.Paging(pager).ToListAsync();
-            filterDto.Entities = new List<CurrencySaleDto>();
-            foreach (var item in list)
-            {
-                var currencySaleItem = await _saleRepository.GetCurrencyByIdIncludesCustomerAndBroker(item.Id);
-
-                var sumProfit = await _salePiDetailRepository.GetSumProfitLost(item.Id);
-                filterDto.Entities.Add(new CurrencySaleDto
-                {
-                    Id = item.Id,
-                    BrokerName = currencySaleItem.Broker.Name + " (" + currencySaleItem.Broker.Title + ") ",
-                    CurrSaleDate = currencySaleItem.SaleDate,
-                    CustomerName = currencySaleItem.Customer.Name,
-                    Price = item.SalePrice,
-                    ProfitLossAmount = sumProfit,
-                    SalePricePerUnit = item.SalePricePerUnit,
-                    TransferPrice = item.TransferPrice,
-                    TransferType = item.TransferType
-                });
-            }
-            return (FilterCurrSaleDto) filterDto.SetEntitiesDto(filterDto.Entities).SetPaging(pager);
-        }
-
-        #endregion
-
-        #region Filter Currency Sale By CustomerId
-
-        public async Task<FilterCurrSaleCustomerListDto> GetListSalesByCustomerId(long customerId)
-        {
-            var filterOutput = new FilterCurrSaleCustomerListDto();
-            var currencyAsQueryable = _saleRepository
-                .GetEntities()
-                .Where(x=>x.CustomerId == customerId)
-                .AsQueryable();
-
-            var count = (int)Math.Ceiling(currencyAsQueryable.Count() / (double)filterOutput.TakeEntity);
-            var pager = Pager.Builder(count, filterOutput.PageId, filterOutput.TakeEntity);
-            var list = await currencyAsQueryable.Paging(pager).ToListAsync();
-            filterOutput.Entities = new List<CurrencySaleDto>();
-            foreach (var item in list)
-            {
-                var currencySaleItem = await _saleRepository.GetCurrencyByIdIncludesCustomerAndBroker(item.Id);
-
-                var sumProfit = await _salePiDetailRepository.GetSumProfitLost(item.Id);
-                filterOutput.Entities.Add(new CurrencySaleDto
-                {
-                    Id = item.Id,
-                    BrokerName = currencySaleItem.Broker.Name + " (" + currencySaleItem.Broker.Title + ") ",
-                    CurrSaleDate = currencySaleItem.SaleDate,
-                    CustomerName = currencySaleItem.Customer.Name,
-                    Price = item.SalePrice,
-                    ProfitLossAmount = sumProfit,
-                    SalePricePerUnit = item.SalePricePerUnit,
-                    TransferPrice = item.TransferPrice,
-                });
-            }
-            return (FilterCurrSaleCustomerListDto) filterOutput.SetEntitiesDto(filterOutput.Entities).SetPaging(pager);
-        }
-
-        #endregion
-
-        #region Filter Currency Sold Per Custoemr 
-        public async Task<FilterCurrencyCustomerDto> GetSoldPerCustomers(FilterCurrencyCustomerDto filterDto)
-        {
-            var asQueryableEntity = _customerRepository
-                .GetEntities()
-                .Include(x=>x.CurrencySale)
-                .Where(c=> c.CurrencySale.Any(x=>x.CustomerId == c.Id))
-                .AsQueryable();
-            if (filterDto.SearchText != null || !(string.IsNullOrEmpty(filterDto.SearchText)))
-            {
-                asQueryableEntity = asQueryableEntity.Where(x => x.Title.Contains(filterDto.SearchText.Trim()) ||
-                                                                 x.Name.Contains(filterDto.SearchText.Trim()));
-            }
-            var count = (int)Math.Ceiling(asQueryableEntity.Count() / (double)filterDto.TakeEntity);
-            var pager = Pager.Builder(count, filterDto.PageId, filterDto.TakeEntity);
-            var list = await asQueryableEntity.Paging(pager).ToListAsync();
-            filterDto.Entities = new List<CurrencyCustomerDto>();
-            foreach (var item in list)
-            {
-                var totalBuy = await _saleRepository.GetTotalCurrencyByCustomerId(item.Id);
-                if (totalBuy > 0)
-                    filterDto.Entities.Add(new CurrencyCustomerDto()
-                    {
-                        Title = item.Title.SanitizeText(),
-                        Name = item.Name.SanitizeText(),
-                        Phone = item.Phone.SanitizeText(),
-                        Address = item.Address.SanitizeText(),
-                        Id = item.Id,
-                        SoldAmount = totalBuy
-                    });
-            }
-            return (FilterCurrencyCustomerDto)filterDto.SetEntitiesDto(filterDto.Entities).SetPaging(pager);
-        }
-        #endregion
 
         #region Utility Methods
 
         #region FillAutomaticCurrSaleDetail
 
-        private async Task<SalesResult> FillAutomaticCurrSaleDetail(CreateSaleDto saleDto, CurrencySale currencySales)
+        private async Task<SalesResult> FillAutomaticCurrencySaleDetailExDecsAndCurrencySaleDetailPis(CreateSaleDto saleDto, CurrencySale currencySales)
         {
 
-            Boolean isExDecAutomatic;
-            #region Get List Of PiDetails That Is Not Sold Yet
+            #region Get List Of ExDeclaration (Is Not Sold Yet)
 
-            var piDetails = await _piDetailRepository.GetAccountBalanceByDetailsByBrokerId(saleDto.BrokerId);
-
-            #endregion
-
-            #region Get List Of ExDeclaration List That Is Not Sold Yet
-
-            var exDecList = new List<ExDecExport>();
-            if (saleDto.ExDecExport.Count > 0)
+            if (saleDto.CurrencyType == CurrencyType.CarrencySales)
             {
-                isExDecAutomatic = false;
-                exDecList = saleDto.ExDecExport;
-            }
-            else
-            {
-                isExDecAutomatic = true;
-                var lisexDecList = await _declarationRepository.GetExDecAccountBalanceByExDecId();
-                foreach (var item in lisexDecList)
+                Boolean isExDecAutomatic;
+                var exDecList = new List<ExDecExport>();
+                if (saleDto.ExDecExport.Count > 0)
                 {
-                    exDecList.Add(new ExDecExport { Id = item.Id, Price = item.Price, ExCode = item.ExchangeDeclarationCode });
+                    isExDecAutomatic = false;
+                    exDecList = saleDto.ExDecExport;
                 }
+                else
+                {
+                    isExDecAutomatic = true;
+                    var lisexDecList = await _declarationRepository.GetExDecAccountBalanceByExDecId();
+                    foreach (var item in lisexDecList)
+                    {
+                        exDecList.Add(new ExDecExport { Id = item.Id, Price = item.Price, ExCode = item.ExchangeDeclarationCode });
+                    }
+                }
+
+                #region Insert Into CurrencySaleDetailExDec
+
+                if (isExDecAutomatic)
+                {
+                    var saleexDecResult = await InserSaleCurrExDecAutomatic(exDecList, saleDto, currencySales);
+                    if (saleexDecResult != SalesResult.Success)
+                        return saleexDecResult;
+                }
+                else
+                {
+                    var saleexDecResult = await InserSaleCurrExDecManual(exDecList, saleDto, currencySales);
+                    if (saleexDecResult != SalesResult.Success)
+                        return saleexDecResult;
+                }
+                #endregion
             }
 
             #endregion
 
-            #region Insert Into  CurrencySalePi And CurrencySaleDetailExDec
+            #region Get List Of PiDetails (Is Not Sold Yet)
 
-            if (isExDecAutomatic)
-            {
-                var saleexDecResult = await InserSaleCurrExDecAutomatic(exDecList, saleDto, currencySales);
-                if (saleexDecResult != SalesResult.Success)
-                    return saleexDecResult;
-            }
-            else
-            {
-                var saleexDecResult = await InserSaleCurrExDecManual(exDecList, saleDto, currencySales);
-                if (saleexDecResult != SalesResult.Success)
-                    return saleexDecResult;
-            }
+            var brokerId = saleDto.CurrencyType == CurrencyType.CurrencyTransferFromTheBroker ? saleDto.CustomerId : saleDto.BrokerId;
 
+            var piDetails = await _piDetailRepository.GetAccountBalanceByDetailsByBrokerId(brokerId);
+
+            #region Insert Into  CurrencySalePi 
 
             var salePiDetailResult = await InserSaleCurrPiDetail(piDetails, saleDto, currencySales);
             if (salePiDetailResult != SalesResult.Success)
+            {
                 return salePiDetailResult;
+            }
+            if (saleDto.CurrencyType == CurrencyType.CurrencyTransferFromTheBroker)
+            {
+                var updateStartBrokerAmount = await _brokerRepository.UpdateBrokerAmount(saleDto.CustomerId, saleDto.SalePrice + saleDto.TransferPrice, false);
+                if (!updateStartBrokerAmount)
+                    return SalesResult.CannotUpdateBrokerAmountBalance;
+
+                var updateBrokerAmount = await _brokerRepository.UpdateBrokerAmount(saleDto.BrokerId, saleDto.SalePrice, true);
+                if (!updateBrokerAmount)
+                    return SalesResult.CannotUpdateBrokerAmountBalance;
+            }
+            else
+            {
+                var updateBrokerAmount = await _brokerRepository.UpdateBrokerAmount(saleDto.BrokerId, saleDto.SalePrice + saleDto.TransferPrice, false);
+                if (!updateBrokerAmount)
+                    return SalesResult.CannotUpdateBrokerAmountBalance;
+            }
+
+            #endregion
 
             #endregion
 
@@ -499,13 +369,13 @@ namespace CurrencyExchange.Core.Services.Implementations
 
                 #endregion
 
-                #region MyRegion
+                #region Insert Data To CurrencySaleDetailPi
 
                 var currencySaleDetailPi = new CurrencySaleDetailPi()
                 {
                     CurrencySale = currencySales,
                     Price = price,
-                    ProfitLossAmount = profit,
+                    ProfitLossAmount = saleDto.CurrencyType == CurrencyType.CarrencySales ? profit : 0,
                     PeroformaInvoiceDetailId = piDetailDto.Id
                 };
                 await _salePiDetailRepository.AddEntity(currencySaleDetailPi);
@@ -522,9 +392,12 @@ namespace CurrencyExchange.Core.Services.Implementations
                         return SalesResult.CanNotUpdateSoldPiDetailInDataBase;
                 }
 
-                var updateBrokerAmount = await _brokerRepository.UpdateBrokerAmount(saleDto.BrokerId, price, false);
-                if (!updateBrokerAmount)
-                    return SalesResult.CannotUpdateBrokerAmountBalance;
+
+
+
+
+
+
                 #endregion
 
                 totalInserted += price;
@@ -539,7 +412,7 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         #endregion
 
-        #region Validation(s)
+        #region  (s)
 
         #region Validation Befor Create CurrencySale -master
 
@@ -565,6 +438,212 @@ namespace CurrencyExchange.Core.Services.Implementations
         #endregion
 
         #endregion
+        #endregion
+
+        #region Filter Currency Sale 
+
+        public async Task<FilterCurrSaleDto> GetListSales(FilterCurrSaleDto filterDto, long financialPeriodId)
+        {
+            var financial = await _financialPeriodRepository.GetEntityById(financialPeriodId);
+            var currencyAsQueryable = _saleRepository
+                .GetEntities()
+                .Where(x=>x.SaleDate >= financial.FromDate && x.SaleDate <financial.ToDate)
+                .AsQueryable();
+
+            #region Set Filters
+
+            #region Filter - SearchText
+
+            if (filterDto.SearchText != null || !(string.IsNullOrEmpty(filterDto.SearchText)))
+            {
+                currencyAsQueryable = currencyAsQueryable
+                    .Include(x => x.Customer)
+                    .Include(c => c.Broker)
+                    .Where(x => x.Customer.Name.Contains(filterDto.SearchText.Trim()) ||
+                                x.Customer.Title.Contains(filterDto.SearchText.Trim()) ||
+                                x.Broker.Name.Contains(filterDto.SearchText.Trim())
+                    );
+
+            }
+
+            #endregion
+
+            #region Filter - Transfer Type(s)
+
+            if (filterDto.IsAccount)
+                currencyAsQueryable = currencyAsQueryable.Where(x => x.TransferType == CurrencyTransferType.Accounting);
+            if (filterDto.IsCashed)
+                currencyAsQueryable = currencyAsQueryable.Where(x => x.TransferType == CurrencyTransferType.Cash);
+
+            #endregion
+
+            #region Filter - Currency Type(s)
+
+            var currencyTypeList = new List<CurrencyType>();
+
+            if (filterDto.IsCurrencyTypeCurrency)
+                currencyTypeList.Add(CurrencyType.CarrencySales);
+            if (filterDto.IsCurrencyTypeBroker)
+                currencyTypeList.Add(CurrencyType.CurrencyTransferFromTheBroker);
+            if (filterDto.IsCurrencyTypeMissCustomer)
+                currencyTypeList.Add(CurrencyType.CurrencyTransferFromTheMiscellaneousCustomer);
+            if (filterDto.IsCurrencyTypeCommCustomer)
+                currencyTypeList.Add(CurrencyType.CurrencyTransferFromTheCommodityCustomer);
+            if (currencyTypeList.Count > 0)
+            {
+                currencyAsQueryable = currencyAsQueryable.Where(x => currencyTypeList.Contains(x.CurrencyType));
+            }
+           
+
+            #endregion
+
+            #region Filter - From To Sale Date
+
+            if (!string.IsNullOrWhiteSpace(filterDto.FromDateSale) && !string.IsNullOrWhiteSpace(filterDto.ToDateSale))
+            {
+                var from = Convert.ToDateTime(filterDto.FromDateSale);
+                var to = Convert.ToDateTime(filterDto.ToDateSale);
+                currencyAsQueryable = currencyAsQueryable.Where(x => x.SaleDate >= from && x.SaleDate < to );
+                //currencyAsQueryable = currencyAsQueryable.Where(x => x.SaleDate < DateTime.Today);
+            }
+
+
+            #endregion
+
+            #region Filter - From To Price
+
+            if (filterDto.FromSaleBasePrice != 0)
+                currencyAsQueryable = currencyAsQueryable.Where(s => s.SalePricePerUnit >= filterDto.FromSaleBasePrice);
+
+            if (filterDto.ToSaleBasePrice != 0)
+                currencyAsQueryable = currencyAsQueryable.Where(s => s.SalePricePerUnit <= filterDto.ToSaleBasePrice);
+
+            #endregion
+
+            #region Filter - Broker
+            if (filterDto.BrokerId > 0)
+                currencyAsQueryable = currencyAsQueryable.Where(s => s.BrokerId == filterDto.BrokerId);
+            #endregion
+
+            #region Filter - Customer
+
+            if (filterDto.CustomerId > 0)
+                currencyAsQueryable = currencyAsQueryable.Where(s => s.CustomerId == filterDto.CustomerId);
+
+            #endregion
+
+            #endregion
+
+            currencyAsQueryable = currencyAsQueryable.OrderByDescending(x => x.SaleDate);
+            var count = (int)Math.Ceiling(currencyAsQueryable.Count() / (double)filterDto.TakeEntity);
+            var pager = Pager.Builder(count, filterDto.PageId, filterDto.TakeEntity);
+            var list =  currencyAsQueryable.Paging(pager).ToList();
+            filterDto.Entities = new List<CurrencySaleDto>();
+            foreach (var item in list)
+            {
+                var context = new ContextCurrencyType();
+
+                #region Sterategy Pattern
+
+                switch ((CurrencyType)item.CurrencyType)
+                {
+                    case CurrencyType.CarrencySales:
+                        filterDto.Entities.Add(await context.SetCurrency(new MoveToCustomerCurrencyType(), _saleRepository, _salePiDetailRepository, item));
+                        // code block
+                        break;
+                    case CurrencyType.CurrencyTransferFromTheBroker:
+                        filterDto.Entities.Add(await context.SetCurrency(new MoveToBrokerCurrencyType(_brokerRepository), _saleRepository, _salePiDetailRepository, item)) ;
+                        // code block
+                        break;
+                    case CurrencyType.CurrencyTransferFromTheMiscellaneousCustomer:
+                        filterDto.Entities.Add(await context.SetCurrency(new MoveToMissCustomerCurrencyType(_miscellaneousCustomerRepository), _saleRepository, _salePiDetailRepository, item));
+                        break;
+                    case CurrencyType.CurrencyTransferFromTheCommodityCustomer:
+                        filterDto.Entities.Add(await context.SetCurrency(new MoveToCommCustomerCurrencyType(_commodityCustomerRepository), _saleRepository, _salePiDetailRepository, item));
+                        break;
+                }
+
+                #endregion
+            }
+            return (FilterCurrSaleDto) filterDto.SetEntitiesDto(filterDto.Entities).SetPaging(pager);
+        }
+
+        #endregion
+
+        #region Filter Currency Sale By CustomerId
+
+        public async Task<FilterCurrSaleCustomerListDto> GetListSalesByCustomerId(long customerId, long financialPeriodId)
+        {
+            var financial =await _financialPeriodRepository.GetEntityById(financialPeriodId);
+            var filterOutput = new FilterCurrSaleCustomerListDto();
+            var currencyAsQueryable = _saleRepository
+                .GetEntities()
+                .Where(x=>x.CustomerId == customerId && 
+                          (x.SaleDate >= financial.FromDate && x.SaleDate < financial.ToDate))
+                .AsQueryable();
+            currencyAsQueryable = currencyAsQueryable.OrderByDescending(x => x.SaleDate);
+            var count = (int)Math.Ceiling(currencyAsQueryable.Count() / (double)filterOutput.TakeEntity);
+            var pager = Pager.Builder(count, filterOutput.PageId, filterOutput.TakeEntity);
+            var list = await currencyAsQueryable.Paging(pager).ToListAsync();
+            filterOutput.Entities = new List<CurrencySaleDto>();
+            foreach (var item in list)
+            {
+                var currencySaleItem = await _saleRepository.GetCurrencyByIdIncludesCustomerAndBroker(item.Id);
+
+                var sumProfit = await _salePiDetailRepository.GetSumProfitLost(item.Id);
+                filterOutput.Entities.Add(new CurrencySaleDto
+                {
+                    Id = item.Id,
+                    BrokerName = currencySaleItem.Broker.Name + " (" + currencySaleItem.Broker.Title + ") ",
+                    CurrSaleDate = currencySaleItem.SaleDate,
+                    CustomerName = currencySaleItem.Customer.Name,
+                    Price = item.SalePrice,
+                    ProfitLossAmount = sumProfit,
+                    SalePricePerUnit = item.SalePricePerUnit,
+                    TransferPrice = item.TransferPrice,
+                });
+            }
+            return (FilterCurrSaleCustomerListDto) filterOutput.SetEntitiesDto(filterOutput.Entities).SetPaging(pager);
+        }
+
+        #endregion
+
+        #region Filter Currency Sold Per Custoemr 
+        public async Task<FilterCurrencyCustomerDto> GetSoldPerCustomers(FilterCurrencyCustomerDto filterDto,long financialPeriodId)
+        {
+            var asQueryableEntity = _customerRepository
+                .GetEntities()
+                .Include(x=>x.CurrencySale)
+                .Where(c=> c.CurrencySale.Any(x=>x.CustomerId == c.Id))
+                .AsQueryable();
+            if (filterDto.SearchText != null || !(string.IsNullOrEmpty(filterDto.SearchText)))
+            {
+                asQueryableEntity = asQueryableEntity.Where(x => x.Title.Contains(filterDto.SearchText.Trim()) ||
+                                                                 x.Name.Contains(filterDto.SearchText.Trim()));
+            }
+            var count = (int)Math.Ceiling(asQueryableEntity.Count() / (double)filterDto.TakeEntity);
+            var pager = Pager.Builder(count, filterDto.PageId, filterDto.TakeEntity);
+            var list = await asQueryableEntity.Paging(pager).ToListAsync();
+            filterDto.Entities = new List<CurrencyCustomerDto>();
+            foreach (var item in list)
+            {
+                var totalBuy = await _saleRepository.GetTotalCurrencyByCustomerId(item.Id,financialPeriodId);
+                if (totalBuy > 0)
+                    filterDto.Entities.Add(new CurrencyCustomerDto()
+                    {
+                        Title = item.Title.SanitizeText(),
+                        Name = item.Name.SanitizeText(),
+                        Phone = item.Phone.SanitizeText(),
+                        Address = item.Address.SanitizeText(),
+                        Id = item.Id,
+                        SoldAmount = totalBuy
+                    });
+            }
+            return (FilterCurrencyCustomerDto)filterDto.SetEntitiesDto(filterDto.Entities).SetPaging(pager);
+        }
+        #endregion
+
+        
 
         #region Dispose
 
@@ -577,9 +656,14 @@ namespace CurrencyExchange.Core.Services.Implementations
             _piDetailRepository?.Dispose();
             _brokerRepository?.Dispose();
             _customerRepository?.Dispose();
+            _miscellaneousCustomerRepository?.Dispose();
+            _commodityCustomerRepository?.Dispose();
+            _financialPeriodRepository?.Dispose();
+
         }
 
         #endregion
 
     }
+
 }

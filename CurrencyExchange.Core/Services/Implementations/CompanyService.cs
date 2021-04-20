@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using CurrencyExchange.Core.Dtos.Company;
+using AngleSharp.Html;
+using CurrencyExchange.Application.Dtos.Company;
+using CurrencyExchange.Application.Services.Interfaces;
 using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Core.Services.Implementations
+namespace CurrencyExchange.Application.Services.Implementations
 {
     public class CompanyService : ICompanyService
     {
@@ -52,5 +52,67 @@ namespace CurrencyExchange.Core.Services.Implementations
         }
 
         #endregion
+    }
+
+    
+    public class FinancialPeriodService : IFinancialPeriodService
+    {
+        #region Constructor
+
+        private IFinancialPeriodRepository _financialPeriodRepository;
+
+        public FinancialPeriodService(IFinancialPeriodRepository financialPeriodRepository)
+        {
+            _financialPeriodRepository = financialPeriodRepository;
+        }
+
+        #endregion
+
+        #region Methods
+
+        public async Task<List<FinancialPeriodDto>> GetFinancialList()
+        {
+            var result = new List<FinancialPeriodDto>();
+            var list =await _financialPeriodRepository.GetEntities().ToListAsync();
+            foreach (var item in list)
+            {
+                result.Add(new FinancialPeriodDto
+                {
+                    FinancialPeriodId = item.Id,
+                    FromDate = item.FromDate,
+                    ToDate = item.ToDate,
+                    PriodName = item.PriodName
+                });
+            }
+
+            return result;
+        }
+
+        public async Task<FinancialPeriodDto> GetById(long id)
+        {
+            var item = await _financialPeriodRepository.GetEntityById(id);
+
+            return new FinancialPeriodDto
+            {
+                FinancialPeriodId = item.Id,
+                FromDate = item.FromDate,
+                ToDate = item.ToDate,
+                PriodName = item.PriodName
+            };
+        }
+
+        #endregion
+
+        #region Dispose
+        public void Dispose()
+        {
+           _financialPeriodRepository?.Dispose();
+        }
+
+        #endregion
+
+
+
+
     }
 }

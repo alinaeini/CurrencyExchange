@@ -2,28 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Pi.PiDetail;
+using CurrencyExchange.Application.Services.Interfaces;
 using CurrencyExchange.Core.Dtos.Paging;
 using CurrencyExchange.Core.Dtos.Pi.PiDetail;
-using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Core.Utilities.Extensions;
 using CurrencyExchange.Domain.EntityModels.PeroformaInvoices;
 using CurrencyExchange.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Core.Services.Implementations
+namespace CurrencyExchange.Application.Services.Implementations
 {
     public class PiDetailService : IPiDetailService
     {
         #region Costructor
 
         private IPiDetailRepository piDetailRepository;
+        private IPiRepository piRepository;
         private IBrokerRepository _brokerRepository;
+        private ICommodityCustomerRepository customerRepository;
 
 
-        public PiDetailService(IPiDetailRepository piDetailRepository, IBrokerRepository brokerRepository)
+        public PiDetailService(IPiDetailRepository piDetailRepository, IPiRepository piRepository, IBrokerRepository brokerRepository, ICommodityCustomerRepository customerRepository)
         {
             this.piDetailRepository = piDetailRepository;
+            this.piRepository = piRepository;
             _brokerRepository = brokerRepository;
+            this.customerRepository = customerRepository;
         }
 
         #endregion
@@ -64,6 +69,7 @@ namespace CurrencyExchange.Core.Services.Implementations
             //{
             //    asQueryable = asQueryable.Where(x => x.PiCode.Contains(filterPiDto.SearchText.Trim()));
             //}
+            
             var count = (int)Math.Ceiling(asQueryable.Count() / (double)filterPiDetailDto.TakeEntity);
             var pager = Pager.Builder(count, filterPiDetailDto.PageId, filterPiDetailDto.TakeEntity);
             var list = await asQueryable.Paging(pager).ToListAsync();
@@ -83,6 +89,60 @@ namespace CurrencyExchange.Core.Services.Implementations
             return filterPiDetailDto.SetPiDetails(filterPiDetailDto.PiDetailDtos).SetPaging(pager);
         }
 
+
+        public async Task<FilterPiDetailCompleteDto> GetPiPayList(FilterPiDetailCompleteDto filterPiDetailDto)
+        {
+            var asQueryable = piDetailRepository
+                .GetEntities()
+                .AsQueryable();
+            #region Filter - From To Sale Date
+
+            if (!string.IsNullOrWhiteSpace(filterPiDetailDto.FromDateSale) && !string.IsNullOrWhiteSpace(filterPiDetailDto.ToDateSale))
+            {
+                var from = Convert.ToDateTime(filterPiDetailDto.FromDateSale);
+                var to = Convert.ToDateTime(filterPiDetailDto.ToDateSale);
+                asQueryable = asQueryable.Where(x => x.DepositDate >= from && x.DepositDate < to);
+                //currencyAsQueryable = currencyAsQueryable.Where(x => x.SaleDate < DateTime.Today);
+            }
+
+
+            #endregion
+            asQueryable = asQueryable.OrderByDescending(x => x.DepositDate);
+            var count = (int)Math.Ceiling(asQueryable.Count() / (double)filterPiDetailDto.TakeEntity);
+            var pager = Pager.Builder(count, filterPiDetailDto.PageId, filterPiDetailDto.TakeEntity);
+            var list =  asQueryable.Paging(pager).ToList();
+            filterPiDetailDto.PiDetailDtos = new List<PiDetailCompleteDto>();
+            foreach (var item in list)
+            {
+                var broker = await _brokerRepository.GetEntityById(item.BrokerId);
+                var pi =await piRepository.GetEntityById(item.PeroformaInvoiceId);
+                var customer = pi.CommodityCustomerId != null ? await customerRepository.GetEntityById((long)pi.CommodityCustomerId) : null;
+                var customerName = customer == null ? null : customer.Name;
+                filterPiDetailDto.PiDetailDtos.Add(new PiDetailCompleteDto()
+                {
+                    BrokerId = item.BrokerId,
+                    PiId = item.PeroformaInvoiceId,
+                    DepositDate = item.DepositDate,
+                    DepositPrice = item.DepositPrice,
+                    Id = item.Id,
+                    IsSold = item.IsSold,
+                    BrokerName = broker.Name + "(" +broker.Title+")",
+                    PiCode = pi.PiCode,
+                    TotalPrice = pi.TotalPrice,
+                    CustomerName = customerName
+                });
+            }
+            if (filterPiDetailDto.SearchText != null || !(string.IsNullOrWhiteSpace(filterPiDetailDto.SearchText)))
+            {
+                filterPiDetailDto.PiDetailDtos = filterPiDetailDto.PiDetailDtos.Where(x => x.PiCode.Contains(filterPiDetailDto.SearchText.Trim()) ||
+                        x.BrokerName.Contains(filterPiDetailDto.SearchText.Trim())||
+                        x.DepositPrice.ToString().Contains(filterPiDetailDto.SearchText.Trim()) || 
+                        x.TotalPrice.ToString().Contains(filterPiDetailDto.SearchText) || 
+                        x.CustomerName.Contains(filterPiDetailDto.SearchText.Trim()))
+                    .ToList();
+            }
+            return filterPiDetailDto.SetPiDetails(filterPiDetailDto.PiDetailDtos).SetPaging(pager);
+        }
         #endregion
 
         #region Get Pi Detail By ID
@@ -183,6 +243,8 @@ namespace CurrencyExchange.Core.Services.Implementations
         {
             this.piDetailRepository?.Dispose();
             this._brokerRepository?.Dispose();
+            this.piRepository?.Dispose();
+            this.customerRepository?.Dispose();
         }
 
         #endregion

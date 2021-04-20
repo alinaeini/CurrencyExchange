@@ -5,7 +5,7 @@ using CurrencyExchange.Domain.RepositoryInterfaces.Generics;
 
 namespace CurrencyExchange.Domain.RepositoryInterfaces
 {
-    public interface ICustomerRepository: IGenericRepository<Customer>
+    public interface ICustomerRepository : IGenericRepository<Customer>
     {
         bool IsNameExist(string name);
     }

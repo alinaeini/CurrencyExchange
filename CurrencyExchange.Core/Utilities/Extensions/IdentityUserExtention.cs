@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 
-namespace CurrencyExchange.Core.Utilities.Extensions
+namespace CurrencyExchange.Application.Utilities.Extensions
 {
     public static class IdentityUserExtention
     {
@@ -14,5 +14,9 @@ namespace CurrencyExchange.Core.Utilities.Extensions
             }
             return default(long);
         }
+
+
     }
 }
+ 
+

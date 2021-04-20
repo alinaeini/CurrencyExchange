@@ -19,6 +19,7 @@ namespace CurrencyExchange.Domain.EntityModels.Access
         public long? ParentId { get; set; }
         public  Permission Parent { get; set; }
         public ICollection<UserRolePermission> RolePermissions { get; set; }
+        public ICollection<Permission> Permissions { get; set; }
     }
 
 

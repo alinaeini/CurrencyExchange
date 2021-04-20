@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Account;
 using CurrencyExchange.Core.Dtos.Account;
 using CurrencyExchange.Core.Dtos.Account.RolePermissions;
-using CurrencyExchange.Domain.EntityModels.Access;
 
-namespace CurrencyExchange.Core.Services.Interfaces
+namespace CurrencyExchange.Application.Services.Interfaces
 {
     public interface IUserService : IDisposable
     {

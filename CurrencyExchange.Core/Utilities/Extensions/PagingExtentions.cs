@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using CurrencyExchange.Application.Dtos.Paging;
 using CurrencyExchange.Core.Dtos.Paging;
 
 namespace CurrencyExchange.Core.Utilities.Extensions

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace CurrencyExchange.Core.Dtos.Pi.PiDetail
+namespace CurrencyExchange.Application.Dtos.Pi.PiDetail
 {
     public class PiDetailDto
     {

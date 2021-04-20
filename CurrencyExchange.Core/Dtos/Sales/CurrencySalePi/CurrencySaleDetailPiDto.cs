@@ -25,6 +25,9 @@ namespace CurrencyExchange.Core.Dtos.Sales.CurrencySalePi
         public string CustomerName { get; set; }
         public long PiDetailPrice { get; set; }
 
+        public long SellPriceCurrency { get; set; }
+        public long SellPriceCommodity { get; set; }
+
         #endregion
 
     }

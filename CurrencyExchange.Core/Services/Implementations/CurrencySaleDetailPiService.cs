@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 using CurrencyExchange.Core.Dtos.Paging;
 using CurrencyExchange.Core.Dtos.Sales.CurrencySalePi;
 using CurrencyExchange.Core.Services.Interfaces;
@@ -9,7 +10,7 @@ using CurrencyExchange.Core.Utilities.Extensions;
 using CurrencyExchange.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Core.Services.Implementations
+namespace CurrencyExchange.Application.Services.Implementations
 {
     public class CurrencySaleDetailPiService : ICurrencySaleDetailPiService
     {
@@ -35,11 +36,19 @@ namespace CurrencyExchange.Core.Services.Implementations
 
         public async Task<FilterCurrSalePiDto> GetListExDecSalesByPiDetailId(FilterCurrSalePiDto filterDto)
         {
+
+            var piDetailIdList = _piDetailRepository
+                .GetEntities()
+                .Where(x => x.PeroformaInvoiceId == filterDto.Id)
+                .Select(x => x.Id);
             var asQueryable = _currPiDetailRepository
                 .GetEntities()
-                .Where(x => x.PeroformaInvoiceDetailId == filterDto.Id)
+                .Include(X => X.CurrencySale)
+                .Where(x => piDetailIdList.Contains((long)x.PeroformaInvoiceDetailId))
                 .AsQueryable();
 
+            //var listOfRoleId = user.Roles.Select(r => r.RoleId);
+            //var roles = db.Roles.Where(r => listOfRoleId.Contains(r.RoleId));
             var count = (int)Math.Ceiling(asQueryable.Count() / (double)filterDto.TakeEntity);
             var pager = Pager.Builder(count, filterDto.PageId, filterDto.TakeEntity);
             var list = await asQueryable.Paging(pager).ToListAsync();
@@ -48,7 +57,7 @@ namespace CurrencyExchange.Core.Services.Implementations
             {
                 var currencySaleItem = await _currencySaleRepository.GetCurrencyByIdIncludesCustomerAndBroker(item.CurrencySaleId);
 
-                var piDetail = await _piRepository.GetEntityById(item.PeroformaInvoiceDetailId??1);
+                var peroformaInvoice = await _piRepository.GetEntityById(filterDto.Id);
                 filterDto.CurrencySaleDetailPi.Add(new CurrencySaleDetailPiDto()
                 {
                     Id = item.Id,
@@ -57,7 +66,9 @@ namespace CurrencyExchange.Core.Services.Implementations
                     CustomerName = currencySaleItem.Customer.Name,
                     Price = item.Price,
                     ProfitLossAmount = item.ProfitLossAmount,
-                    PiCode = piDetail.PiCode
+                    PiCode = peroformaInvoice.PiCode,
+                    SellPriceCurrency = item.CurrencySale.SalePricePerUnit,
+                    SellPriceCommodity = peroformaInvoice.BasePrice
                 });
             }
             return filterDto.SetCurrencySaleExDec(filterDto.CurrencySaleDetailPi).SetPaging(pager);
@@ -73,6 +84,7 @@ namespace CurrencyExchange.Core.Services.Implementations
         {
             var asQueryable = _currPiDetailRepository
                 .GetEntities()
+                .Include( X=>X.CurrencySale)
                 .Where(x => x.CurrencySaleId == filterDto.Id)
                 .AsQueryable();
             if (filterDto.SearchText != null || !(string.IsNullOrEmpty(filterDto.SearchText)))
@@ -89,6 +101,7 @@ namespace CurrencyExchange.Core.Services.Implementations
             filterDto.CurrencySaleDetailPi = new List<CurrencySaleDetailPiDto>();
             foreach (var item in list)
             {
+                
                 var currencySaleItem = await _currencySaleRepository.GetCurrencyByIdIncludesCustomerAndBroker(item.CurrencySaleId);
 
                 var piDetail = await _piDetailRepository.GetEntityById(item.PeroformaInvoiceDetailId ?? 1);
@@ -102,7 +115,10 @@ namespace CurrencyExchange.Core.Services.Implementations
                     Price = item.Price,
                     ProfitLossAmount = item.ProfitLossAmount,
                     PiCode = pi.PiCode,
-                    PiDetailPrice=piDetail.DepositPrice
+                    PiDetailPrice=piDetail.DepositPrice,
+                    SellPriceCurrency = item.CurrencySale.SalePricePerUnit,
+                    SellPriceCommodity = pi.BasePrice
+
                 });
             }
             return filterDto.SetCurrencySaleExDec(filterDto.CurrencySaleDetailPi).SetPaging(pager);

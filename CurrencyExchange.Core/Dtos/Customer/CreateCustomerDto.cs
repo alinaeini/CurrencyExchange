@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CurrencyExchange.Core.Dtos.Customer
+namespace CurrencyExchange.Application.Dtos.Customer
 {
     public class CreateCustomerDto
     {

@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
-using CurrencyExchange.Core.Dtos.Paging;
+using CurrencyExchange.Application.Dtos.Paging;
 
-namespace CurrencyExchange.Core.Dtos.ExDecalaration
+namespace CurrencyExchange.Application.Dtos.ExDecalaration
 {
     public class FilterExDecDto : BasePaging
     {
         public string SearchText { get; set; }
+        public string FromDateSale { get; set; }
+        public string ToDateSale { get; set; }
+        public string IsRemaindPriceZero { get; set; }
         public List<ExDecRemaindDto> ExDecRemaind { get; set; }
 
         public FilterExDecDto SetPaging(BasePaging paging)

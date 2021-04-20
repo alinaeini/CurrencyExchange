@@ -1,18 +1,13 @@
 using System.IO;
-using System.Text;
-using CurrencyExchange.Ioc.Extentions.Authentication;
+using CurrencyExchange.Infrastructure.Ioc.Extentions.Authentication;
+using CurrencyExchange.Infrastructure.Ioc.Extentions.DataBaseConnection;
+using CurrencyExchange.Infrastructure.Ioc.Extentions.Service;
 using CurrencyExchange.Ioc.Extentions.Cors;
-using CurrencyExchange.Ioc.Extentions.DataBaseConnection;
-using CurrencyExchange.Ioc.Extentions.Service;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Server.IIS;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 
 
 namespace CurrencyExchange.WebApi
@@ -87,17 +82,16 @@ namespace CurrencyExchange.WebApi
                 app.UseHsts();
              }
 
-            #region Set LicenseKey StimulSoft
-
-            var contentRoot = env.ContentRootPath;
-            var licenseFile = System.IO.Path.Combine(contentRoot, "wwwroot\\Reports", "license.key");
-            Stimulsoft.Base.StiLicense.LoadFromFile(licenseFile);
-
-            #endregion
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            #region Set LicenseKey StimulSoft
+
+            //var contentRoot = env.ContentRootPath;
+            //var licenseFile = System.IO.Path.Combine(contentRoot, "wwwroot\\Reports", "license.key");
+            //Stimulsoft.Base.StiLicense.LoadFromFile(licenseFile);
+
+            #endregion
             app.UseCors("EnableCorsEx");
             app.UseAuthentication();
             app.UseAuthorization();

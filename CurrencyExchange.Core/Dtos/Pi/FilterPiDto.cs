@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using CurrencyExchange.Application.Dtos.Paging;
 using CurrencyExchange.Core.Dtos.Paging;
-using Microsoft.CodeAnalysis.Text;
+using CurrencyExchange.Core.Dtos.Pi;
 
-namespace CurrencyExchange.Core.Dtos.Pi
+namespace CurrencyExchange.Application.Dtos.Pi
 {
     public class FilterPiDto : BasePaging
     {
         #region Properties
        
         public string SearchText { get; set; }
+        public string IsRemaindPriceZero { get; set; }
         public List<PiRemaindDto> PiRemaind { get; set; }
 
         #endregion

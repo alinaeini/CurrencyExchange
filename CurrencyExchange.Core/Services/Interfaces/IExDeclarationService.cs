@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.ExDecalaration;
 using CurrencyExchange.Core.Dtos.ExDecalaration;
 
 namespace CurrencyExchange.Core.Services.Interfaces

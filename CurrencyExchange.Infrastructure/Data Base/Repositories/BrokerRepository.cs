@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using CurrencyExchange.Domain.EntityModels.Broker;
 using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data.Data_Base.Repositories.Generics;
 using CurrencyExchange.Infrastructure.Data_Base.Context;
-using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
+namespace CurrencyExchange.Infrastructure.Data.Data_Base.Repositories
 {
     public class BrokerRepository : GenericRepository<Broker>, IBrokerRepository
     {

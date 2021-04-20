@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using CurrencyExchange.Domain.EntityModels.PeroformaInvoices;
 using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data.Data_Base.Repositories.Generics;
 using CurrencyExchange.Infrastructure.Data_Base.Context;
-using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;
 
-namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
+namespace CurrencyExchange.Infrastructure.Data.Data_Base.Repositories
 {
     public class PiRepository : GenericRepository<PeroformaInvoice>, IPiRepository
     {

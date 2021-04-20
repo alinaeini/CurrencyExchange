@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Customer;
+using CurrencyExchange.Application.Services.Interfaces;
 using CurrencyExchange.Core.Dtos.Customer;
 using CurrencyExchange.Core.Dtos.Paging;
 using CurrencyExchange.Core.Sequrity;
-using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Core.Utilities.Extensions;
 using CurrencyExchange.Domain.EntityModels.Customers;
 using CurrencyExchange.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Core.Services.Implementations
+namespace CurrencyExchange.Application.Services.Implementations
 {
     public class CustomerService : ICustomerService
     {

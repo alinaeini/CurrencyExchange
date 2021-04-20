@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using CurrencyExchange.Domain.EntityModels.Currency;
 using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data.Data_Base.Repositories.Generics;
 using CurrencyExchange.Infrastructure.Data_Base.Context;
-using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
+namespace CurrencyExchange.Infrastructure.Data.Data_Base.Repositories
 {
     public class CurrencySalePiDetailRepository : GenericRepository<CurrencySaleDetailPi>, ICurrencySalePiDetailRepository
     {
@@ -25,15 +25,29 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
 
         public async Task<long> GetSumPiCodeUsedById(long piId)
         {
+            //var financial = await _context.FinancialPeriods.FirstOrDefaultAsync(x => x.Id == financialPeriodId);
             return await _context.CurrencySaleDetailPis
                 .Where(entity => entity.PeroformaInvoiceDetailId == piId)
+                                 //&& (entity.CurrencySale.SaleDate >= financial.FromDate && entity.CurrencySale.SaleDate < financial.ToDate))
                 .SumAsync(entity => entity.Price);
         }
 
         public async Task<long> GetSumProfitLost(long currId)
         {
+            //var financial = await _context.FinancialPeriods.FirstOrDefaultAsync(x => x.Id == financialPeriodId);
+            return await _context.CurrencySaleDetailPis 
+                .Include(x=>x.CurrencySale)
+                .Where(entity => entity.CurrencySaleId == currId )
+                    //&& (entity.CurrencySale.SaleDate >= financial.FromDate && entity.CurrencySale.SaleDate < financial.ToDate))
+                .SumAsync(entity => entity.ProfitLossAmount);
+        }
+        public async Task<long> GetSumProfitLost(long currId,long financialPeriodId)
+        {
+            var financial = await _context.FinancialPeriods.FirstOrDefaultAsync(x => x.Id == financialPeriodId);
             return await _context.CurrencySaleDetailPis
-                .Where(entity => entity.CurrencySaleId == currId)
+                .Include(x => x.CurrencySale)
+                .Where(entity => entity.CurrencySaleId == currId
+                && (entity.CurrencySale.SaleDate >= financial.FromDate && entity.CurrencySale.SaleDate < financial.ToDate))
                 .SumAsync(entity => entity.ProfitLossAmount);
         }
 

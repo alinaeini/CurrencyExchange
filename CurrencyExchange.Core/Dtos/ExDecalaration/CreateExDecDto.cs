@@ -24,6 +24,9 @@ namespace CurrencyExchange.Core.Dtos.ExDecalaration
         public DateTime ExpireDate { get; set; }
 
 
+        [Display(Name = "توضیحات")]
+        public string Description { get; set; }
+
         #endregion
     }
 }

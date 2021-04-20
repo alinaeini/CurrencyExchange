@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using CurrencyExchange.Domain.EntityModels.Currency;
 using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data.Data_Base.Repositories.Generics;
 using CurrencyExchange.Infrastructure.Data_Base.Context;
-using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
+namespace CurrencyExchange.Infrastructure.Data.Data_Base.Repositories
 {
     public class CurrencySaleExDecRepository : GenericRepository<CurrencySaleDetailExDec>, ICurrencySaleExDecRepository
     {
@@ -36,10 +36,13 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
         #region GetExDecList
 
 
-        public async Task<List<CurrencySaleDetailExDec>> GetExDecList(long currSaleId)
+        public async Task<List<CurrencySaleDetailExDec>> GetExDecList(long currSaleId, long financialPeriodId)
         {
+            var financial = await _context.FinancialPeriods.FirstOrDefaultAsync(x => x.Id == financialPeriodId);
             return await _context.CurrencySaleDetailExDecs
-                .Where(x=>x.CurrencySaleId== currSaleId)
+                .Include(x=>x.CurrencySale)
+                .Where(x=>x.CurrencySaleId== currSaleId &&
+                           (x.CurrencySale.SaleDate >= financial.FromDate && x.CurrencySale.SaleDate < financial.ToDate))
                 .ToListAsync();
         }
 

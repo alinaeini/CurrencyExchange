@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Customer;
 using CurrencyExchange.Core.Dtos.Customer;
 
-namespace CurrencyExchange.Core.Services.Interfaces
+namespace CurrencyExchange.Application.Services.Interfaces
 {
     public interface ICustomerService:IDisposable
     {

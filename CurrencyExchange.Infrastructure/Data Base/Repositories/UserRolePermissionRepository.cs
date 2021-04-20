@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using CurrencyExchange.Domain.EntityModels.Access;
 using CurrencyExchange.Domain.RepositoryInterfaces;
+using CurrencyExchange.Infrastructure.Data.Data_Base.Repositories.Generics;
 using CurrencyExchange.Infrastructure.Data_Base.Context;
-using CurrencyExchange.Infrastructure.Data_Base.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
+namespace CurrencyExchange.Infrastructure.Data.Data_Base.Repositories
 {
     public class UserRolePermissionRepository : GenericRepository<UserRolePermission>, IUserRolePermissionRepository
     {
@@ -28,6 +28,7 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Repositories
             return await _context.UserRolePermissions
                 .Include(x=>x.Permission)
                 .Where(x => x.UserRoleId == userRoleId && !x.IsDelete)
+                .OrderBy(x=>x.PermissionId)
                 .ToListAsync();
         }
 

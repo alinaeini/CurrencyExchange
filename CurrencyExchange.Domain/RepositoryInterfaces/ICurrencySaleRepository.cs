@@ -7,7 +7,8 @@ namespace CurrencyExchange.Domain.RepositoryInterfaces
 {
     public interface ICurrencySaleRepository:IGenericRepository<CurrencySale>
     {
-        Task<CurrencySale> GetCurrencyByIdIncludesCustomerAndBroker(long currSaleId);
-        Task<long> GetTotalCurrencyByCustomerId(long customerId);
+        public Task<CurrencySale> GetCurrencyByIdIncludesCustomerAndBroker(long currSaleId);
+        public Task<CurrencySale> GetCurrencyByIdIncludesBroker(long currSaleId);
+        public Task<long> GetTotalCurrencyByCustomerId(long customerId ,long financialPeriodId);
     }
 }

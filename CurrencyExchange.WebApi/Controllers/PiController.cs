@@ -1,4 +1,7 @@
 ﻿using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.Pi;
+using CurrencyExchange.Application.Dtos.Pi.PiDetail;
+using CurrencyExchange.Application.Services.Interfaces;
 using CurrencyExchange.Application.Utilities.Common;
 using CurrencyExchange.Core.Dtos.Pi;
 using CurrencyExchange.Core.Dtos.Pi.PiDetail;
@@ -167,6 +170,19 @@ namespace CurrencyExchange.WebApi.Controllers
         public async Task<IActionResult> GetPiDetail([FromQuery] FilterPiDetailDto filterPiDetailDto)
         {
             var piDetail = await _piDetailService.GetPiesByFiltersList(filterPiDetailDto);
+            return JsonResponseStatus.Success(piDetail);
+        }
+
+        #endregion
+
+
+        #region Filter Pi Detail List
+
+
+        [HttpGet("filter-pi-detail-pay-list")]
+        public async Task<IActionResult> GetPiDetailPayList([FromQuery] FilterPiDetailCompleteDto filterPiDetailDto)
+        {
+            var piDetail = await _piDetailService.GetPiPayList(filterPiDetailDto);
             return JsonResponseStatus.Success(piDetail);
         }
 

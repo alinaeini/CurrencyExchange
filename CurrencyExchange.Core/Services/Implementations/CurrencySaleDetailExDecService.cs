@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Schema;
+using CurrencyExchange.Application.Dtos.Sales.CurrencySaleExDec;
 using CurrencyExchange.Core.Dtos.Paging;
-using CurrencyExchange.Core.Dtos.Pi.PiDetail;
 using CurrencyExchange.Core.Dtos.Sales.CurrencySaleExDec;
-using CurrencyExchange.Core.Dtos.Sales.CurrencySalePi;
 using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Core.Utilities.Extensions;
 using CurrencyExchange.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CurrencyExchange.Core.Services.Implementations
+namespace CurrencyExchange.Application.Services.Implementations
 {
     public class CurrencySaleDetailExDecService : ICurrencySaleDetailExDecService
     {

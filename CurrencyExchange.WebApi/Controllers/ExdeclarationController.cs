@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using CurrencyExchange.Application.Dtos.ExDecalaration;
 using CurrencyExchange.Application.Utilities.Common;
 using CurrencyExchange.Core.Dtos.ExDecalaration;
 using CurrencyExchange.Core.Services.Interfaces;

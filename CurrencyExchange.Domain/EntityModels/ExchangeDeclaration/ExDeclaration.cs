@@ -27,6 +27,10 @@ namespace CurrencyExchange.Domain.EntityModels.ExchangeDeclaration
 
         public bool IsSold { get; set; }
 
+
+        [Display(Name = "توضیحات")]
+        public string Description { get; set; }
+
         #endregion
 
         #region Relatoins

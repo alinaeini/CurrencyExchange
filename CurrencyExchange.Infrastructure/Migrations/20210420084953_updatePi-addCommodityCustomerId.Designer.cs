@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CurrencyExchange.Infrastructure.Migrations
+namespace CurrencyExchange.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(CurrencyExchangeDbContext))]
-    [Migration("20210302055338_AddComany3")]
-    partial class AddComany3
+    [Migration("20210420084953_updatePi-addCommodityCustomerId")]
+    partial class updatePiaddCommodityCustomerId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -90,18 +90,18 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2021, 3, 2, 9, 23, 37, 683, DateTimeKind.Local).AddTicks(2976),
+                            CreateDate = new DateTime(2021, 4, 20, 13, 19, 52, 469, DateTimeKind.Local).AddTicks(9175),
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 3, 2, 9, 23, 37, 683, DateTimeKind.Local).AddTicks(3005),
+                            LastUpdateDate = new DateTime(2021, 4, 20, 13, 19, 52, 469, DateTimeKind.Local).AddTicks(9251),
                             Name = "Admin",
                             Title = "راهبر سیستم"
                         },
                         new
                         {
                             Id = 2L,
-                            CreateDate = new DateTime(2021, 3, 2, 9, 23, 37, 683, DateTimeKind.Local).AddTicks(3262),
+                            CreateDate = new DateTime(2021, 4, 20, 13, 19, 52, 469, DateTimeKind.Local).AddTicks(9661),
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 3, 2, 9, 23, 37, 683, DateTimeKind.Local).AddTicks(3272),
+                            LastUpdateDate = new DateTime(2021, 4, 20, 13, 19, 52, 469, DateTimeKind.Local).AddTicks(9684),
                             Name = "User",
                             Title = "کاربر"
                         });
@@ -287,11 +287,11 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         {
                             Id = 1L,
                             Address = "ندارد",
-                            CreateDate = new DateTime(2021, 3, 2, 9, 23, 37, 677, DateTimeKind.Local).AddTicks(1184),
+                            CreateDate = new DateTime(2021, 4, 20, 13, 19, 52, 462, DateTimeKind.Local).AddTicks(3156),
                             Description = "ندارد",
                             IsActive = true,
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 3, 2, 9, 23, 37, 681, DateTimeKind.Local).AddTicks(997),
+                            LastUpdateDate = new DateTime(2021, 4, 20, 13, 19, 52, 466, DateTimeKind.Local).AddTicks(6705),
                             Name = "شرکت تضامنی علی نائیج حقیقی و شرکا",
                             ServiceChargeAccount = 0m,
                             ServiceChargeCash = 0m,
@@ -302,11 +302,11 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         {
                             Id = 2L,
                             Address = "ندارد",
-                            CreateDate = new DateTime(2021, 3, 2, 9, 23, 37, 681, DateTimeKind.Local).AddTicks(3828),
+                            CreateDate = new DateTime(2021, 4, 20, 13, 19, 52, 466, DateTimeKind.Local).AddTicks(9823),
                             Description = "ندارد",
                             IsActive = true,
                             IsDelete = false,
-                            LastUpdateDate = new DateTime(2021, 3, 2, 9, 23, 37, 681, DateTimeKind.Local).AddTicks(3871),
+                            LastUpdateDate = new DateTime(2021, 4, 20, 13, 19, 52, 466, DateTimeKind.Local).AddTicks(9870),
                             Name = "شرکت تضامنی محمد رستمی و شرکا",
                             ServiceChargeAccount = 0m,
                             ServiceChargeCash = 0m,
@@ -344,9 +344,181 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("WebSite")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.HasKey("Id");
 
                     b.ToTable("CompanyInfo");
+                });
+
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Currency.CurrencySale", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<long>("BrokerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrencyType")
+                        .HasColumnType("int");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("SaleDate")
+                        .HasMaxLength(100)
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("SalePrice")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SalePricePerUnit")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TransferPrice")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("TransferType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrokerId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("CurrencySales");
+                });
+
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Currency.CurrencySaleDetailExDec", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("CurrencySaleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ExDeclarationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrencySaleId");
+
+                    b.HasIndex("ExDeclarationId");
+
+                    b.ToTable("CurrencySaleDetailExDecs");
+                });
+
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Currency.CurrencySaleDetailPi", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("CurrencySaleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("PeroformaInvoiceDetailId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProfitLossAmount")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrencySaleId");
+
+                    b.HasIndex("PeroformaInvoiceDetailId");
+
+                    b.ToTable("CurrencySaleDetailPis");
+                });
+
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Customers.CommodityCustomer", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CommodityCustomers");
                 });
 
             modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Customers.Customer", b =>
@@ -391,6 +563,48 @@ namespace CurrencyExchange.Infrastructure.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Customers.MiscellaneousCustomer", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MiscellaneousCustomers");
+                });
+
             modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.ExchangeDeclaration.ExDeclaration", b =>
                 {
                     b.Property<long>("Id")
@@ -400,6 +614,9 @@ namespace CurrencyExchange.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExchangeDeclarationCode")
                         .IsRequired()
@@ -428,6 +645,38 @@ namespace CurrencyExchange.Infrastructure.Migrations
                     b.ToTable("ExDeclarations");
                 });
 
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.FinancialPeriod.FinancialPeriod", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PriodName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FinancialPeriods");
+                });
+
             modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.PeroformaInvoices.PeroformaInvoice", b =>
                 {
                     b.Property<long>("Id")
@@ -439,8 +688,15 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("CommodityCustomerId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
@@ -465,6 +721,8 @@ namespace CurrencyExchange.Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CommodityCustomerId");
 
                     b.ToTable("PeroformaInvoices");
                 });
@@ -509,133 +767,10 @@ namespace CurrencyExchange.Infrastructure.Migrations
                     b.ToTable("PeroformaInvoiceDetails");
                 });
 
-            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Sales.CurrencySale", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<long>("BrokerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("CustomerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("SaleDate")
-                        .HasMaxLength(100)
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("SalePrice")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("SalePricePerUnit")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("TransferPrice")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("TransferType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BrokerId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("CurrencySales");
-                });
-
-            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Sales.CurrencySaleDetailExDec", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("CurrencySaleId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ExDeclarationId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("Price")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurrencySaleId");
-
-                    b.HasIndex("ExDeclarationId");
-
-                    b.ToTable("CurrencySaleDetailExDecs");
-                });
-
-            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Sales.CurrencySaleDetailPi", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("CurrencySaleId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("PeroformaInvoiceDetailId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("Price")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ProfitLossAmount")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurrencySaleId");
-
-                    b.HasIndex("PeroformaInvoiceDetailId");
-
-                    b.ToTable("CurrencySaleDetailPis");
-                });
-
             modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Access.Permission", b =>
                 {
                     b.HasOne("CurrencyExchange.Domain.EntityModels.Access.Permission", "Parent")
-                        .WithMany()
+                        .WithMany("Permissions")
                         .HasForeignKey("ParentId");
 
                     b.Navigation("Parent");
@@ -679,6 +814,70 @@ namespace CurrencyExchange.Infrastructure.Migrations
                     b.Navigation("UserRole");
                 });
 
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Currency.CurrencySale", b =>
+                {
+                    b.HasOne("CurrencyExchange.Domain.EntityModels.Broker.Broker", "Broker")
+                        .WithMany("CurrencySales")
+                        .HasForeignKey("BrokerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CurrencyExchange.Domain.EntityModels.Customers.Customer", "Customer")
+                        .WithMany("CurrencySale")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Broker");
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Currency.CurrencySaleDetailExDec", b =>
+                {
+                    b.HasOne("CurrencyExchange.Domain.EntityModels.Currency.CurrencySale", "CurrencySale")
+                        .WithMany("CurrencySaleDetailExDecs")
+                        .HasForeignKey("CurrencySaleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CurrencyExchange.Domain.EntityModels.ExchangeDeclaration.ExDeclaration", "ExDeclaration")
+                        .WithMany("CurrencySaleDetailExDecs")
+                        .HasForeignKey("ExDeclarationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CurrencySale");
+
+                    b.Navigation("ExDeclaration");
+                });
+
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Currency.CurrencySaleDetailPi", b =>
+                {
+                    b.HasOne("CurrencyExchange.Domain.EntityModels.Currency.CurrencySale", "CurrencySale")
+                        .WithMany("CurrencySaleDetailPies")
+                        .HasForeignKey("CurrencySaleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CurrencyExchange.Domain.EntityModels.PeroformaInvoices.PeroformaInvoiceDetail", "PeroformaInvoiceDetails")
+                        .WithMany("CurrencySaleDetailPi")
+                        .HasForeignKey("PeroformaInvoiceDetailId");
+
+                    b.Navigation("CurrencySale");
+
+                    b.Navigation("PeroformaInvoiceDetails");
+                });
+
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.PeroformaInvoices.PeroformaInvoice", b =>
+                {
+                    b.HasOne("CurrencyExchange.Domain.EntityModels.Customers.CommodityCustomer", "CommodityCustomer")
+                        .WithMany("PeroformaInvoices")
+                        .HasForeignKey("CommodityCustomerId");
+
+                    b.Navigation("CommodityCustomer");
+                });
+
             modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.PeroformaInvoices.PeroformaInvoiceDetail", b =>
                 {
                     b.HasOne("CurrencyExchange.Domain.EntityModels.Broker.Broker", "Broker")
@@ -698,63 +897,10 @@ namespace CurrencyExchange.Infrastructure.Migrations
                     b.Navigation("PeroformaInvoice");
                 });
 
-            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Sales.CurrencySale", b =>
-                {
-                    b.HasOne("CurrencyExchange.Domain.EntityModels.Broker.Broker", "Broker")
-                        .WithMany("CurrencySales")
-                        .HasForeignKey("BrokerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CurrencyExchange.Domain.EntityModels.Customers.Customer", "Customer")
-                        .WithMany("CurrencySale")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Broker");
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Sales.CurrencySaleDetailExDec", b =>
-                {
-                    b.HasOne("CurrencyExchange.Domain.EntityModels.Sales.CurrencySale", "CurrencySale")
-                        .WithMany("CurrencySaleDetailExDecs")
-                        .HasForeignKey("CurrencySaleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CurrencyExchange.Domain.EntityModels.ExchangeDeclaration.ExDeclaration", "ExDeclaration")
-                        .WithMany("CurrencySaleDetailExDecs")
-                        .HasForeignKey("ExDeclarationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CurrencySale");
-
-                    b.Navigation("ExDeclaration");
-                });
-
-            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Sales.CurrencySaleDetailPi", b =>
-                {
-                    b.HasOne("CurrencyExchange.Domain.EntityModels.Sales.CurrencySale", "CurrencySale")
-                        .WithMany("CurrencySaleDetailPies")
-                        .HasForeignKey("CurrencySaleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CurrencyExchange.Domain.EntityModels.PeroformaInvoices.PeroformaInvoiceDetail", "PeroformaInvoiceDetails")
-                        .WithMany("CurrencySaleDetailPi")
-                        .HasForeignKey("PeroformaInvoiceDetailId");
-
-                    b.Navigation("CurrencySale");
-
-                    b.Navigation("PeroformaInvoiceDetails");
-                });
-
             modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Access.Permission", b =>
                 {
+                    b.Navigation("Permissions");
+
                     b.Navigation("RolePermissions");
                 });
 
@@ -780,6 +926,18 @@ namespace CurrencyExchange.Infrastructure.Migrations
                     b.Navigation("PeroformaInvoiceDetails");
                 });
 
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Currency.CurrencySale", b =>
+                {
+                    b.Navigation("CurrencySaleDetailExDecs");
+
+                    b.Navigation("CurrencySaleDetailPies");
+                });
+
+            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Customers.CommodityCustomer", b =>
+                {
+                    b.Navigation("PeroformaInvoices");
+                });
+
             modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Customers.Customer", b =>
                 {
                     b.Navigation("CurrencySale");
@@ -798,13 +956,6 @@ namespace CurrencyExchange.Infrastructure.Migrations
             modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.PeroformaInvoices.PeroformaInvoiceDetail", b =>
                 {
                     b.Navigation("CurrencySaleDetailPi");
-                });
-
-            modelBuilder.Entity("CurrencyExchange.Domain.EntityModels.Sales.CurrencySale", b =>
-                {
-                    b.Navigation("CurrencySaleDetailExDecs");
-
-                    b.Navigation("CurrencySaleDetailPies");
                 });
 #pragma warning restore 612, 618
         }

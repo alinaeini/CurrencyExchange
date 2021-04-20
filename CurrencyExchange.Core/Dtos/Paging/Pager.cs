@@ -1,4 +1,6 @@
-﻿ namespace CurrencyExchange.Core.Dtos.Paging
+﻿ using CurrencyExchange.Application.Dtos.Paging;
+
+ namespace CurrencyExchange.Core.Dtos.Paging
 {
     public  class Pager
     {

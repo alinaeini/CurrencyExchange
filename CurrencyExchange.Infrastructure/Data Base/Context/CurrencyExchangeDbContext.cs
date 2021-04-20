@@ -8,6 +8,7 @@ using CurrencyExchange.Domain.EntityModels.Company;
 using CurrencyExchange.Domain.EntityModels.Currency;
 using CurrencyExchange.Domain.EntityModels.Customers;
 using CurrencyExchange.Domain.EntityModels.ExchangeDeclaration;
+using CurrencyExchange.Domain.EntityModels.FinancialPeriod;
 using CurrencyExchange.Domain.EntityModels.PeroformaInvoices;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,8 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Context
         public DbSet<UserRolePermission> UserRolePermissions { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<MiscellaneousCustomer> MiscellaneousCustomers { get; set; }
+        public DbSet<CommodityCustomer> CommodityCustomers { get; set; }
         public DbSet<Broker> Brokers { get; set; }
         public DbSet<PeroformaInvoice> PeroformaInvoices { get; set; } 
         public DbSet<PeroformaInvoiceDetail> PeroformaInvoiceDetails { get; set; }
@@ -39,6 +42,7 @@ namespace CurrencyExchange.Infrastructure.Data_Base.Context
         public DbSet<CurrencySaleDetailPi> CurrencySaleDetailPis { get; set; }
         public DbSet<CurrencySaleDetailExDec> CurrencySaleDetailExDecs { get; set; }
         public DbSet<CompanyInfo> CompanyInfo { get; set; }
+        public DbSet<FinancialPeriod> FinancialPeriods { get; set; }
 
         #endregion
 

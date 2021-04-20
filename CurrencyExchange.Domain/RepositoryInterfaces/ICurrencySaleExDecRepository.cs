@@ -9,6 +9,6 @@ namespace CurrencyExchange.Domain.RepositoryInterfaces
     {
         Task<long> GetSumExCodeUsedById(long exDecId);
 
-        public Task<List<CurrencySaleDetailExDec>> GetExDecList(long currSaleId);
+        public Task<List<CurrencySaleDetailExDec>> GetExDecList(long currSaleId, long financialPeriodId);
     }
 }

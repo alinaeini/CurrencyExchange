@@ -1,4 +1,4 @@
-﻿namespace CurrencyExchange.Core.Dtos.Paging
+﻿namespace CurrencyExchange.Application.Dtos.Paging
 {
     public class BasePaging
     {

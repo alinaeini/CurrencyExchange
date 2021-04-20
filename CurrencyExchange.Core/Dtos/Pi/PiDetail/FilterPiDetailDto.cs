@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using CurrencyExchange.Application.Dtos.Paging;
 using CurrencyExchange.Core.Dtos.Paging;
 
-namespace CurrencyExchange.Core.Dtos.Pi.PiDetail
+namespace CurrencyExchange.Application.Dtos.Pi.PiDetail
 {
     public class FilterPiDetailDto : BasePaging
     {

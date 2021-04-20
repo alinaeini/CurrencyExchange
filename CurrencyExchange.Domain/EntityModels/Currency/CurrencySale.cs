@@ -27,7 +27,7 @@ namespace CurrencyExchange.Domain.EntityModels.Currency
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public long SalePricePerUnit { get; set; }
 
-        [Display(Name = "نوع انتقال")]
+        [Display(Name = "نحوه انتقال ارز")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public CurrencyTransferType TransferType { get; set; }
 
@@ -43,6 +43,10 @@ namespace CurrencyExchange.Domain.EntityModels.Currency
         public long BrokerId { get; set; }
        
         public long CustomerId { get; set; }
+
+        [Display(Name = " نوع انتقال ارز")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        public CurrencyType CurrencyType { get; set; }
 
         #endregion
 
@@ -61,5 +65,13 @@ namespace CurrencyExchange.Domain.EntityModels.Currency
     {
         Cash = 1 ,
         Accounting=2
+    }
+
+    public enum CurrencyType
+    {
+        CarrencySales = 1,
+        CurrencyTransferFromTheBroker = 2,
+        CurrencyTransferFromTheMiscellaneousCustomer = 3,
+        CurrencyTransferFromTheCommodityCustomer = 4 
     }
 }
