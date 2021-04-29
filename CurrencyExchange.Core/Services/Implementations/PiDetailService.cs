@@ -72,7 +72,7 @@ namespace CurrencyExchange.Application.Services.Implementations
             
             var count = (int)Math.Ceiling(asQueryable.Count() / (double)filterPiDetailDto.TakeEntity);
             var pager = Pager.Builder(count, filterPiDetailDto.PageId, filterPiDetailDto.TakeEntity);
-            var list = await asQueryable.Paging(pager).ToListAsync();
+            var list =  asQueryable.Paging(pager).ToList();
             filterPiDetailDto.PiDetailDtos = new List<PiDetailDto>();
             foreach (var item in list)
             {
@@ -137,8 +137,8 @@ namespace CurrencyExchange.Application.Services.Implementations
                 filterPiDetailDto.PiDetailDtos = filterPiDetailDto.PiDetailDtos.Where(x => x.PiCode.Contains(filterPiDetailDto.SearchText.Trim()) ||
                         x.BrokerName.Contains(filterPiDetailDto.SearchText.Trim())||
                         x.DepositPrice.ToString().Contains(filterPiDetailDto.SearchText.Trim()) || 
-                        x.TotalPrice.ToString().Contains(filterPiDetailDto.SearchText) || 
-                        x.CustomerName.Contains(filterPiDetailDto.SearchText.Trim()))
+                        x.TotalPrice.ToString().Contains(filterPiDetailDto.SearchText))
+                        //|| x.CustomerName.Contains(filterPiDetailDto.SearchText.Trim())
                     .ToList();
             }
             return filterPiDetailDto.SetPiDetails(filterPiDetailDto.PiDetailDtos).SetPaging(pager);

@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Core.Dtos.Broker;
 using CurrencyExchange.Core.Dtos.Paging;
 using CurrencyExchange.Core.Sequrity;
+using CurrencyExchange.Core.Services.Interfaces;
 using CurrencyExchange.Core.Utilities.Extensions;
 using CurrencyExchange.Domain.EntityModels.Broker;
 using CurrencyExchange.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
-namespace CurrencyExchange.Core.Services.Implementations
+namespace CurrencyExchange.Application.Services.Implementations
 {
     public class BrokerService:IBrokerService
     {
@@ -43,11 +42,12 @@ namespace CurrencyExchange.Core.Services.Implementations
             {
                 Title = brokerDto.Title.SanitizeText(),
                 Address = brokerDto.Address.SanitizeText(),
-                Description = brokerDto.Description.SanitizeText(),
+                Description = brokerDto.Description.SanitizeText(),  
                 Name = brokerDto.Name.SanitizeText(),
                 Tel = brokerDto.Tel.SanitizeText(),
                 ServiceChargeAccount = brokerDto.ServiceChargeAccount,
-                ServiceChargeCash = brokerDto.ServiceChargeCash
+                ServiceChargeCash = brokerDto.ServiceChargeCash,
+                AmountBalanceBroker = 0
             };
             await brokerRepository.AddEntity(broker);
             await brokerRepository.SaveChanges();
